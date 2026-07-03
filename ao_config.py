@@ -126,6 +126,16 @@ AO_EXCLUSION_DURES = [
     "gestion de l'etablissement",
     "sensibilisation",
     "prevention et la gestion des dechets",
+    # 2e lot de faux positifs signales (assainissement/reseaux, maintenance d'equipements,
+    # reservation de creche, maintenance materiel medical). Termes cibles sur l'activite
+    # (anti-regression : n'ecartent pas un vrai nettoyage de parking / de creche).
+    "assainissement",
+    "maintenance corrective",
+    "maintenance constructeur",
+    "restauration hospitaliere",
+    "equipements de logistique",
+    "environnements patients",
+    "reservation de places",
 ]
 
 # Exclusions SOUPLES : ecartent seulement si AUCUN mot-cle nettoyage fort n'est present.

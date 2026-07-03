@@ -12,14 +12,20 @@ HORS_CIBLE = [
     "Restauration collective AG2R LA MONDIALE",
     "Gestion de l'etablissement d'accueil petite enfance Marcel Bontemps",
     "Accompagnement a la sensibilisation des publics pour la prevention et la gestion des dechets",
+    # 2e lot
+    "Accord-cadre de prestations d'entretien des installations d'assainissement des parcs de stationnement",
+    "Maintenance corrective des equipements de logistique et de restauration hospitaliere",
+    "Reservation de places en creche dans un etablissement d'accueil du jeune enfant",
+    "Maintenance constructeur propre aux equipements des environnements patients et residents",
 ]
 
-# Vrais AO nettoyage — le dernier est un piege (creche + gestion des dechets).
+# Vrais AO nettoyage — pieges volontaires (creche + gestion des dechets ; parking a nettoyer).
 LEGITIMES = [
     "Nettoyage des locaux de l'ecole primaire",
     "Prestations de proprete et entretien des locaux administratifs",
     "Nettoyage des batiments communaux et vitrerie",
     "Nettoyage de la creche municipale et gestion des dechets menagers",
+    "Entretien menager et nettoyage du parking souterrain de la mairie",
 ]
 
 
