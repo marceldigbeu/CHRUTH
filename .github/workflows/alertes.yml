@@ -1,0 +1,95 @@
+name: CHRUTH - Alertes AO (cloud)
+
+# Envoie les alertes email des nouveaux AO nettoyage IDF sans dependre d'un PC allume.
+#
+# PREREQUIS (a configurer une seule fois dans GitHub :
+#   Settings > Secrets and variables > Actions) :
+#
+#   Secrets :
+#     CHRUTH_SMTP_USER      = adresse Gmail expediteur
+#     CHRUTH_SMTP_PASSWORD  = mot de passe d'application Gmail (16 caracteres)
+#     CHRUTH_ALERTE_DEST    = destinataires separes par des virgules
+#                             (ex: contact@chruth.fr,destinataire1@exemple.fr)
+#   Variable (optionnelle) :
+#     CHRUTH_NOTIFICATIONS  = OFF pour suspendre les envois sans toucher au code
+#
+# L'etat (base SQLite -> anti-doublon des alertes) est conserve sur la branche
+# dediee "ao-state" (un seul commit, force-push : pas de pollution de l'historique).
+#
+# NB : les workflows planifies ne se declenchent que depuis la branche par defaut.
+#      Il faut donc fusionner ce fichier sur main pour que le cron fonctionne.
+
+on:
+  schedule:
+    # Toutes les heures de 06h a 18h UTC, du lundi au vendredi
+    # (~08h-20h heure de Paris en ete, ~07h-19h en hiver).
+    - cron: '0 6-18 * * 1-5'
+  workflow_dispatch: {}   # bouton "Run workflow" pour un test manuel immediat
+
+concurrency:
+  group: chruth-alertes
+  cancel-in-progress: false   # ne jamais interrompre un run (course d'ecriture sur la base)
+
+permissions:
+  contents: write   # necessaire pour pousser l'etat sur la branche ao-state
+
+jobs:
+  alertes:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Recuperer le code
+        uses: actions/checkout@v4
+
+      - name: Installer Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+          cache: pip
+
+      - name: Installer les dependances
+        run: pip install -r requirements.txt
+
+      - name: Restaurer la base (branche ao-state)
+        run: |
+          mkdir -p data logs
+          git fetch origin ao-state || true
+          if git rev-parse --verify origin/ao-state >/dev/null 2>&1; then
+            git show origin/ao-state:ao_chruth.sqlite > data/ao_chruth.sqlite
+            echo "Base restauree depuis ao-state."
+          else
+            echo "Aucune base existante : premier run (tout AO CHAUD/TIEDE sera notifie)."
+          fi
+
+      - name: Etat des notifications (variable optionnelle)
+        run: |
+          if [ "${{ vars.CHRUTH_NOTIFICATIONS }}" = "OFF" ]; then
+            echo OFF > alertes_actives.flag
+            echo "Notifications DESACTIVEES (variable CHRUTH_NOTIFICATIONS=OFF)."
+          else
+            echo "Notifications actives."
+          fi
+
+      - name: Collecte BOAMP
+        run: python ao_collect_boamp.py
+
+      - name: Envoi des alertes email
+        env:
+          CHRUTH_SMTP_USER: ${{ secrets.CHRUTH_SMTP_USER }}
+          CHRUTH_SMTP_PASSWORD: ${{ secrets.CHRUTH_SMTP_PASSWORD }}
+          CHRUTH_ALERTE_DEST: ${{ secrets.CHRUTH_ALERTE_DEST }}
+        run: python ao_alertes.py
+
+      - name: Sauvegarder la base (branche ao-state)
+        if: always()   # persister l'etat meme si une etape ulterieure echoue
+        run: |
+          if [ ! -f data/ao_chruth.sqlite ]; then
+            echo "Pas de base a sauvegarder."; exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          BLOB=$(git hash-object -w data/ao_chruth.sqlite)
+          TREE=$(printf '100644 blob %s\tao_chruth.sqlite\n' "$BLOB" | git mktree)
+          COMMIT=$(echo "etat base AO $(date -u +%FT%TZ)" | git commit-tree "$TREE")
+          git push -f origin "$COMMIT:refs/heads/ao-state"
+          echo "Base sauvegardee sur ao-state."

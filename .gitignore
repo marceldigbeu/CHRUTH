@@ -1,0 +1,45 @@
+# Données et sorties volumineuses / régénérables
+data/
+output/
+logs/
+*.sqlite
+*.sqlite-journal
+CHRUTH_PROJET_ORGANISE/
+**/__pycache__/
+*.pyc
+.pytest_cache/
+*.log
+# Gabarit binaire conservé (exception)
+!assets/AO_CHRUTH_TEMPLATE.xlsm
+
+# Environnement virtuel
+venv/
+
+# Notebook genere (regenerable via outils/build_notebook_unifie.py)
+CHRUTH_Pipeline_Unifiee.ipynb
+
+# Runtime ruflo (data/logs/sessions regenerables, ne pas versionner)
+
+
+# Secrets alertes email (ne JAMAIS committer)
+alertes_secrets.json
+# Liste de destinataires des alertes (emails = donnees perso)
+destinataires.txt
+# Etat ON/OFF des notifications (runtime, pilote par le bouton du cockpit)
+alertes_actives.flag
+
+# Cles API (app Streamlit) - ne JAMAIS committer
+.env
+
+# Donnees CRM (suivi commercial / clients) - ne pas committer
+crm/
+
+# Suivi des envois de messages (Mission 3 - perf) - CSV persistant
+suivi/
+output/segments_variantes.json
+
+# Scratch orchestration subagent-driven (briefs, reports, diffs)
+.superpowers/
+
+# Scratch/brouillons Python hors projet
+_scratch/

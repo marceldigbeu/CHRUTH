@@ -1,0 +1,969 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guide AO CHRUTH - BOAMP, IA et Excel</title>
+  <style>
+    :root {
+      --bg: #f3f6f9;
+      --paper: #ffffff;
+      --ink: #182230;
+      --muted: #5f6b7a;
+      --line: #cfd8e3;
+      --navy: #014289;
+      --blue: #014289;
+      --blue-2: #0b5f9d;
+      --green: #117a4b;
+      --amber: #9a6100;
+      --red: #b42318;
+      --soft-blue: #e7f1f8;
+      --soft-green: #eaf7ef;
+      --soft-amber: #fff4d8;
+      --soft-red: #fdebea;
+      --soft-gray: #eef2f5;
+      --check: #d9ead3;
+      --shadow: 0 8px 18px rgba(1, 66, 137, 0.08);
+    }
+
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      margin: 0;
+      font-family: Arial, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: var(--bg);
+      line-height: 1.55;
+    }
+
+    header {
+      background: #fff;
+      color: var(--ink);
+      border-top: 12px solid var(--navy);
+      border-bottom: 1px solid var(--line);
+      padding: 0;
+    }
+
+    .wrap {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+    }
+
+    .eyebrow {
+      margin: 0 0 6px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .06em;
+      color: var(--navy);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(27px, 4vw, 42px);
+      line-height: 1.1;
+      letter-spacing: 0;
+    }
+
+    header p {
+      max-width: 900px;
+      margin: 10px 0 0;
+      color: var(--muted);
+      font-size: 16px;
+    }
+
+    .model-head {
+      width: min(1180px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 22px 0 18px;
+      color: var(--ink);
+    }
+
+    .model-strip {
+      display: grid;
+      grid-template-columns: minmax(180px, 1.5fr) repeat(3, minmax(120px, .7fr));
+      gap: 1px;
+      background: var(--line);
+      border: 1px solid var(--line);
+      margin-top: 16px;
+    }
+
+    .model-cell {
+      background: #fff;
+      padding: 9px 10px;
+      min-height: 48px;
+    }
+
+    .model-cell.label {
+      background: var(--navy);
+      color: #fff;
+      font-weight: 800;
+    }
+
+    .model-cell small {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      margin-bottom: 2px;
+    }
+
+    .model-cell strong {
+      color: var(--navy);
+      font-size: 14px;
+    }
+
+    .model-check {
+      color: var(--green);
+      font-weight: 900;
+    }
+
+    nav {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: #fff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    nav .wrap {
+      display: flex;
+      gap: 0;
+      overflow-x: auto;
+      padding: 0;
+    }
+
+    nav a {
+      flex: 0 0 auto;
+      color: var(--navy);
+      text-decoration: none;
+      font-weight: 800;
+      font-size: 12px;
+      border-right: 1px solid var(--line);
+      background: #f8fafc;
+      padding: 10px 12px;
+      border-radius: 0;
+    }
+
+    nav a:hover { background: var(--navy); color: #fff; }
+
+    main {
+      width: min(1180px, calc(100% - 32px));
+      margin: 20px auto 50px;
+    }
+
+    section {
+      background: var(--paper);
+      border: 1px solid var(--line);
+      border-radius: 0;
+      box-shadow: var(--shadow);
+      padding: 0;
+      margin: 18px 0;
+      overflow: hidden;
+    }
+
+    section > * {
+      margin-left: 20px;
+      margin-right: 20px;
+    }
+
+    section > h2 {
+      margin-left: 0;
+      margin-right: 0;
+      padding: 10px 20px;
+      background: var(--navy);
+      color: #fff;
+      border-bottom: 1px solid var(--line);
+    }
+
+    section > :last-child {
+      margin-bottom: 20px;
+    }
+
+    h2 {
+      margin: 0 0 12px;
+      color: var(--navy);
+      font-size: 19px;
+      line-height: 1.2;
+    }
+
+    h3 {
+      margin: 22px 0 8px;
+      color: var(--navy);
+      font-size: 15px;
+      text-transform: uppercase;
+      letter-spacing: .02em;
+    }
+
+    p { margin: 8px 0; }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(12, 1fr);
+      gap: 14px;
+      margin-top: 16px;
+    }
+
+    .tile {
+      grid-column: span 3;
+      border: 1px solid var(--line);
+      border-radius: 0;
+      padding: 15px;
+      background: #fff;
+      min-height: 120px;
+    }
+
+    .tile strong {
+      display: block;
+      color: var(--navy);
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .tile p {
+      margin: 0;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 16px;
+    }
+
+    .btn {
+      display: inline-block;
+      text-decoration: none;
+      font-weight: 800;
+      border-radius: 0;
+      padding: 9px 12px;
+      border: 1px solid var(--blue);
+      color: #fff;
+      background: var(--blue);
+    }
+
+    .btn.secondary {
+      color: var(--blue);
+      background: #fff;
+    }
+
+    .notice {
+      border-left: 5px solid var(--blue);
+      background: var(--soft-blue);
+      padding: 13px 14px;
+      border-radius: 0;
+      margin: 14px 0;
+    }
+
+    .notice.warn {
+      border-left-color: var(--amber);
+      background: var(--soft-amber);
+    }
+
+    .notice.danger {
+      border-left-color: var(--red);
+      background: var(--soft-red);
+    }
+
+    .notice.ok {
+      border-left-color: var(--green);
+      background: var(--soft-green);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      font-size: 13px;
+    }
+
+    th, td {
+      border: 1px solid var(--line);
+      padding: 8px 9px;
+      vertical-align: top;
+      text-align: left;
+    }
+
+    th {
+      background: var(--navy);
+      color: var(--navy);
+      color: #fff;
+      font-weight: 800;
+    }
+
+    code, pre {
+      font-family: Consolas, "Courier New", monospace;
+    }
+
+    code {
+      background: var(--soft-gray);
+      padding: 2px 5px;
+      border-radius: 0;
+    }
+
+    pre {
+      overflow-x: auto;
+      background: #263746;
+      color: #e5e7eb;
+      padding: 14px;
+      border-radius: 0;
+      margin: 12px 0;
+    }
+
+    ol.steps {
+      counter-reset: step;
+      list-style: none;
+      padding: 0;
+      margin: 14px 0 0;
+    }
+
+    ol.steps li {
+      counter-increment: step;
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: 12px;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--line);
+    }
+
+    ol.steps li:last-child { border-bottom: 0; }
+
+    ol.steps li::before {
+      content: counter(step);
+      width: 32px;
+      height: 32px;
+      border-radius: 0;
+      display: grid;
+      place-items: center;
+      background: var(--navy);
+      color: #fff;
+      font-weight: 800;
+    }
+
+    .tag {
+      display: inline-block;
+      border-radius: 0;
+      padding: 3px 8px;
+      font-size: 12px;
+      font-weight: 800;
+      margin: 2px 4px 2px 0;
+      border: 1px solid transparent;
+    }
+
+    .hot { background: var(--soft-green); color: var(--green); border-color: #a7dfbd; }
+    .warm { background: var(--soft-amber); color: var(--amber); border-color: #f3d28a; }
+    .check { background: var(--soft-blue); color: var(--blue); border-color: #b7d6ff; }
+    .cold { background: var(--soft-gray); color: #344054; border-color: var(--line); }
+
+    details {
+      border: 1px solid var(--line);
+      border-radius: 0;
+      padding: 10px 12px;
+      margin: 10px 0;
+      background: #fff;
+    }
+
+    summary {
+      cursor: pointer;
+      font-weight: 800;
+      color: var(--navy);
+    }
+
+    .small {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    footer {
+      color: var(--muted);
+      text-align: center;
+      padding: 24px;
+      border-top: 1px solid var(--line);
+      background: #fff;
+    }
+
+    @media (max-width: 900px) {
+      .tile { grid-column: span 6; }
+      section { padding: 18px; }
+    }
+
+    @media (max-width: 620px) {
+      .tile { grid-column: span 12; }
+      table { font-size: 13px; }
+      th, td { padding: 8px; }
+      ol.steps li { grid-template-columns: 34px 1fr; }
+    }
+    /* --- Ergonomie & dynamisme (amelioration progressive, sans dependance) --- */
+    #progress {
+      position: fixed; top: 0; left: 0; height: 3px; width: 0; z-index: 50;
+      background: linear-gradient(90deg, var(--blue), var(--green));
+      transition: width .1s linear;
+    }
+
+    nav a { transition: background .18s ease, color .18s ease; }
+    nav a.active { background: var(--navy); color: #fff; }
+
+    .tile { transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+    .tile:hover { transform: translateY(-4px); box-shadow: var(--shadow); border-color: var(--blue); }
+
+    .btn { transition: transform .15s ease, filter .15s ease; }
+    .btn:hover { transform: translateY(-2px); filter: brightness(1.06); }
+    .btn.secondary:hover { background: var(--soft-blue); }
+
+    tbody tr td { transition: background .15s ease; }
+    tbody tr:hover td { background: var(--soft-blue); }
+
+    details { transition: box-shadow .18s ease, border-color .18s ease; }
+    details[open], details:hover { border-color: var(--blue); box-shadow: var(--shadow); }
+
+    ol.steps li::before { transition: transform .18s ease, background .18s ease; }
+    ol.steps li:hover::before { transform: scale(1.08); background: var(--blue-2); }
+
+    /* revelation au scroll (ajoutee par JS ; sans JS tout reste visible) */
+    .reveal { opacity: 0; transform: translateY(18px); transition: opacity .5s ease, transform .5s ease; }
+    .reveal.in { opacity: 1; transform: none; }
+
+    /* profondeur d'en-tete */
+    header { background: radial-gradient(1200px 220px at 12% -60%, var(--soft-blue), #fff 62%); }
+
+    /* bouton haut de page */
+    #totop {
+      position: fixed; right: 18px; bottom: 18px; z-index: 40;
+      width: 44px; height: 44px; border: 1px solid var(--blue);
+      background: var(--blue); color: #fff; font-size: 20px; line-height: 1; cursor: pointer;
+      box-shadow: var(--shadow); opacity: 0; pointer-events: none;
+      transition: opacity .25s ease, transform .2s ease, filter .15s ease;
+    }
+    #totop.show { opacity: 1; pointer-events: auto; }
+    #totop:hover { transform: translateY(-3px); filter: brightness(1.1); }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .tile:hover, .btn:hover, #totop:hover { transform: none; }
+    }
+  </style>
+</head>
+<body>
+  <div id="progress" aria-hidden="true"></div>
+  <header>
+    <div class="model-head">
+      <p class="eyebrow">CHRUTH Data - Guide appels d'offres</p>
+      <h1>Utiliser Excel pour trouver, vérifier et suivre les AO utiles à CHRUTH</h1>
+      <p>Ce guide explique comment lire le fichier <strong>AO_CHRUTH.xlsx</strong>, vérifier les informations trouvées par la pipeline BOAMP, prioriser les appels d'offres et suivre les contacts sans se perdre dans Excel.</p>
+      <div class="model-strip" aria-label="Synthèse du guide">
+        <div class="model-cell label">
+          Synthèse référent
+        </div>
+        <div class="model-cell">
+          <small>Check</small>
+          <strong class="model-check">Guide prêt</strong>
+        </div>
+        <div class="model-cell">
+          <small>Version</small>
+          <strong>02 Juil 2026</strong>
+        </div>
+        <div class="model-cell">
+          <small>Fichier principal</small>
+          <strong>AO_CHRUTH.xlsx</strong>
+        </div>
+      </div>
+      <div class="actions">
+        <a class="btn" href="output/AO_CHRUTH.xlsx">Ouvrir AO_CHRUTH.xlsx</a>
+        <a class="btn secondary" href="LANCER_UPDATE_AO_CHRUTH.bat">Lancer la mise à jour AO</a>
+        <a class="btn secondary" href="GUIDE_AO_CHRUTH.md">Voir le guide Markdown</a>
+      </div>
+    </div>
+  </header>
+
+  <nav>
+    <div class="wrap">
+      <a href="#objectif">Objectif</a>
+      <a href="#simple">Parcours simple</a>
+      <a href="#onglets">Onglets</a>
+      <a href="#colonnes">Colonnes</a>
+      <a href="#verification">Vérifier un AO</a>
+      <a href="#messages">Messages IA</a>
+      <a href="#maj">Mise à jour</a>
+      <a href="#scoring">Scoring</a>
+      <a href="#limites">Limites</a>
+    </div>
+  </nav>
+
+  <main>
+    <section id="objectif">
+      <h2>1. Objectif du fichier</h2>
+      <p>Le fichier Excel sert de base de travail pour les appels d'offres. La pipeline récupère des AO depuis BOAMP, extrait les champs utiles, calcule une priorité, puis place tout dans un tableur vérifiable.</p>
+      <div class="grid">
+        <div class="tile">
+          <strong>Collecter</strong>
+          <p>Lire BOAMP avec une limite de volume pour éviter une base trop lourde.</p>
+        </div>
+        <div class="tile">
+          <strong>Classer</strong>
+          <p>Repérer les AO nettoyage, hygiène, entretien des locaux et zones utiles.</p>
+        </div>
+        <div class="tile">
+          <strong>Vérifier</strong>
+          <p>Garder un lien source dans chaque ligne pour contrôler l'information.</p>
+        </div>
+        <div class="tile">
+          <strong>Suivre</strong>
+          <p>Renseigner le statut contact, les relances, les réponses et les rendez-vous.</p>
+        </div>
+      </div>
+      <div class="notice ok">
+        <strong>Règle principale :</strong> l'IA et Python préparent le travail, mais la décision finale se fait après vérification du lien source.
+      </div>
+    </section>
+
+    <section id="simple">
+      <h2>2. Parcours simple pour quelqu'un qui ne maîtrise pas Excel</h2>
+      <ol class="steps">
+        <li>
+          <div>
+            <strong>Ouvrir le fichier</strong>
+            <p>Double-cliquer sur <code>output\AO_CHRUTH.xlsx</code> ou utiliser le bouton en haut de cette page.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Aller directement dans <code>AO_CHAUDS</code></strong>
+            <p>C'est l'onglet prioritaire. Il contient les AO que le score considère comme les plus intéressants.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Cliquer sur <code>url_avis</code></strong>
+            <p>Le lien ouvre la page source. Il faut vérifier l'objet, l'acheteur, la date limite, le budget et les conditions.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Lire <code>resume_commercial</code></strong>
+            <p>Cette colonne résume pourquoi l'AO peut être utile pour CHRUTH.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Mettre à jour le suivi</strong>
+            <p>Dans <code>CRM_Suivi</code>, remplir le statut, la date d'appel, la date de relance, la réponse et le commentaire.</p>
+          </div>
+        </li>
+      </ol>
+      <div class="notice warn">
+        Ne commencez pas par <code>AO_Tous</code> si vous êtes débutant. Cet onglet est complet mais plus dense. Commencez par <code>AO_CHAUDS</code>, puis <code>AO_Ile_de_France</code>.
+      </div>
+    </section>
+
+    <section id="onglets">
+      <h2>3. Comprendre les onglets Excel</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Onglet</th>
+            <th>À quoi il sert</th>
+            <th>Quand l'utiliser</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>Synthese</code></td>
+            <td>Vue rapide des volumes, AO chauds, budgets et contacts disponibles.</td>
+            <td>Au début, pour savoir ce que la mise à jour a trouvé.</td>
+          </tr>
+          <tr>
+            <td><code>AO_CHAUDS</code></td>
+            <td>AO les plus prioritaires selon le score CHRUTH.</td>
+            <td>Premier onglet à traiter pour la prospection.</td>
+          </tr>
+          <tr>
+            <td><code>AO_Ile_de_France</code></td>
+            <td>AO situés dans les départements IDF.</td>
+            <td>À utiliser pour prioriser la proximité avec CHRUTH.</td>
+          </tr>
+          <tr>
+            <td><code>AO_A_VERIFIER</code></td>
+            <td>AO incomplets mais potentiellement intéressants.</td>
+            <td>Quand il faut ouvrir le lien source ou télécharger le DCE.</td>
+          </tr>
+          <tr>
+            <td><code>CRM_Suivi</code></td>
+            <td>Suivi des appels, relances, réponses et rendez-vous.</td>
+            <td>Après vérification d'un AO.</td>
+          </tr>
+          <tr>
+            <td><code>Scoring</code></td>
+            <td>Règles de calcul du score.</td>
+            <td>Quand on veut comprendre pourquoi un AO est chaud ou tiède.</td>
+          </tr>
+          <tr>
+            <td><code>Logs_Update</code></td>
+            <td>Historique des mises à jour.</td>
+            <td>Pour vérifier qu'une collecte a bien tourné.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="colonnes">
+      <h2>4. Colonnes à regarder en priorité</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Colonne</th>
+            <th>Lecture simple</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>priorite</code></td>
+            <td><span class="tag hot">CHAUD</span> <span class="tag warm">TIEDE</span> <span class="tag cold">FROID</span> <span class="tag check">A_VERIFIER</span></td>
+            <td>Traiter d'abord <code>CHAUD</code>, puis <code>TIEDE</code>.</td>
+          </tr>
+          <tr>
+            <td><code>url_avis</code></td>
+            <td>Lien vers l'avis public.</td>
+            <td>Cliquer pour vérifier les informations.</td>
+          </tr>
+          <tr>
+            <td><code>budget_statut</code></td>
+            <td>Dit si le budget est détecté ou à vérifier.</td>
+            <td>Ne jamais considérer un budget comme sûr si le statut est <code>A_VERIFIER_BUDGET</code>.</td>
+          </tr>
+          <tr>
+            <td><code>statut_extraction</code></td>
+            <td>Qualité des informations extraites.</td>
+            <td>Si <code>DCE_A_TELECHARGER</code>, consulter les documents avant contact.</td>
+          </tr>
+          <tr>
+            <td><code>resume_commercial</code></td>
+            <td>Résumé opérationnel de l'AO.</td>
+            <td>Lire avant d'appeler ou d'envoyer un email.</td>
+          </tr>
+          <tr>
+            <td><code>proposition_message</code></td>
+            <td>Brouillon d'email.</td>
+            <td>Relire et personnaliser avant envoi.</td>
+          </tr>
+          <tr>
+            <td><code>script_appel</code></td>
+            <td>Aide pour appeler l'acheteur.</td>
+            <td>S'en servir comme trame, pas comme texte rigide.</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="verification">
+      <h2>5. Vérifier un AO avant de contacter</h2>
+      <ol class="steps">
+        <li>
+          <div>
+            <strong>Ouvrir le lien source</strong>
+            <p>Dans la ligne Excel, cliquer sur <code>url_avis</code>.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Comparer l'objet</strong>
+            <p>Vérifier que l'objet correspond bien au nettoyage, à l'hygiène, à l'entretien des locaux ou à une prestation proche.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Vérifier la date limite</strong>
+            <p>Si la date limite est trop proche, l'AO peut être difficile à traiter.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Contrôler le budget</strong>
+            <p>Si <code>budget_statut</code> vaut <code>A_VERIFIER_BUDGET</code>, chercher le budget dans l'avis ou le DCE.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Vérifier les coordonnées</strong>
+            <p>Email, téléphone, SIRET et adresse peuvent être absents ou partiels. Les corriger dans Excel si nécessaire.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Décider l'action</strong>
+            <p>Dans <code>CRM_Suivi</code>, passer le statut à <code>A contacter</code>, <code>Contacte</code>, <code>A relancer</code> ou <code>Non pertinent</code>.</p>
+          </div>
+        </li>
+      </ol>
+    </section>
+
+    <section id="messages">
+      <h2>6. Rédiger un message par AO (IA structurée)</h2>
+      <p>Pour chaque AO intéressant (<span class="tag hot">CHAUD</span> ou <span class="tag warm">TIEDE</span>), l'outil rédige un <strong>email + un script d'appel structurés</strong>, à destination de l'acheteur, prêts à relire et à envoyer. Trois endroits où le retrouver :</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Où</th>
+            <th>Quoi</th>
+            <th>Pour qui</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Cockpit <code>AO_CHRUTH.xlsm</code></td>
+            <td>Colonnes <em>Brouillon email / script (IA)</em> dans l'onglet des AO.</td>
+            <td>Usage courant, tout dans Excel.</td>
+          </tr>
+          <tr>
+            <td>Mail d'alerte</td>
+            <td>Chaque nouvel AO CHAUD/TIÈDE arrive dans l'email de veille <strong>avec son brouillon</strong> (email + script) sous le tableau.</td>
+            <td>Agir directement depuis la boîte mail.</td>
+          </tr>
+          <tr>
+            <td>Notebook <code>CHRUTH_Messages_AO.ipynb</code></td>
+            <td>Choisir un AO, régénérer, éditer finement. Écrit aussi un fichier <code>output\messages_ao\AO_&lt;id&gt;.md</code> ouvrable dans Word.</td>
+            <td>Retravailler un message précis.</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Le moteur se règle tout seul (clé API ou Ollama)</h3>
+      <p>Aucun réglage à faire dans le notebook. L'outil choisit automatiquement :</p>
+      <ol class="steps">
+        <li>
+          <div>
+            <strong>Une clé cloud est présente</strong>
+            <p>Si une clé est collée dans <code>.env</code> (<code>ANTHROPIC_API_KEY</code>, <code>MISTRAL_API_KEY</code> ou <code>GROQ_API_KEY</code>) → messages rapides et bien structurés. Une seule suffit ; l'ordre de priorité est anthropic &gt; mistral &gt; groq. Un fichier <code>.env</code> prêt à remplir est déjà présent : ouvre-le et colle ta clé juste après le <code>=</code>.</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Sinon, Ollama en local</strong>
+            <p>Si Ollama tourne sur le poste, il rédige localement (données qui ne sortent pas). Le premier appel peut être lent (modèle à froid).</p>
+          </div>
+        </li>
+        <li>
+          <div>
+            <strong>Sinon, brouillon type</strong>
+            <p>Sans clé ni Ollama, l'outil retombe sur un brouillon déterministe (mention <code>source : defaut</code>). Rien ne bloque.</p>
+          </div>
+        </li>
+      </ol>
+
+      <h3>Rendre les messages précis : la fiche CHRUTH</h3>
+      <p>Pour que l'IA parle vraiment de CHRUTH (et n'invente rien), remplir une fois le fichier :</p>
+      <pre>config_chruth\fiche_chruth.md</pre>
+      <p>On y met des <strong>faits vrais</strong> : activité, zone d'intervention (IDF), types de prestations, points forts, et surtout <em>ce qu'il ne faut PAS prétendre</em> (pas de certification inexistante, pas de prix). L'IA n'utilise que cette fiche pour décrire CHRUTH. Tant qu'elle est vide, les messages restent volontairement génériques.</p>
+      <div class="notice ok">
+        <strong>Bon réflexe :</strong> remplir la fiche CHRUTH une première fois donne des messages nettement plus justes et personnalisés, partout (cockpit, mail d'alerte, notebook).
+      </div>
+      <div class="notice warn">
+        Les messages restent des <strong>brouillons</strong> : toujours les relire, vérifier l'objet du marché et le nom de l'acheteur avant d'envoyer.
+      </div>
+
+      <h3>Notebooks utiles (vérifier / aperçu)</h3>
+      <ul>
+        <li><code>CHRUTH_Moteur_IA.ipynb</code> — montre quel moteur est actif (clé cloud détectée / Ollama / repli) et permet de tester un prompt.</li>
+        <li><code>CHRUTH_Alertes.ipynb</code> — <strong>aperçu</strong> du mail d'alerte (avec les brouillons) sans rien envoyer ; l'envoi réel reste en option explicite.</li>
+        <li><code>CHRUTH_Messages_Prospects.ipynb</code> — même logique de génération, côté prospects (par segment).</li>
+      </ul>
+    </section>
+
+    <section id="maj">
+      <h2>7. Mettre à jour les AO chaque semaine</h2>
+      <p>La mise à jour lance la collecte BOAMP, évite les doublons avec SQLite et régénère le fichier Excel.</p>
+      <h3>Méthode simple</h3>
+      <p>Double-cliquer sur :</p>
+      <pre>CHRUTH_Data\LANCER_UPDATE_AO_CHRUTH.bat</pre>
+      <h3>Méthode avec PowerShell</h3>
+      <pre>cd CHRUTH_Data
+python ao_weekly_update.py --max-pages 12 --page-limit 100 --max-ao 80</pre>
+      <div class="notice">
+        <strong>Conseil :</strong> garder un nombre limité d'AO au début. Une base plus petite mais vérifiée vaut mieux qu'une base très grande et inutilisable.
+      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>Paramètre</th>
+            <th>Rôle</th>
+            <th>Valeur conseillée</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--max-pages</code></td>
+            <td>Nombre de pages BOAMP lues.</td>
+            <td>8 à 12 au début</td>
+          </tr>
+          <tr>
+            <td><code>--page-limit</code></td>
+            <td>Nombre d'avis par page.</td>
+            <td>100</td>
+          </tr>
+          <tr>
+            <td><code>--max-ao</code></td>
+            <td>Nombre maximum d'AO gardés.</td>
+            <td>80 à 120</td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section id="scoring">
+      <h2>8. Comprendre le scoring sans lire le code</h2>
+      <p>Le score sert à prioriser. Il ne remplace pas la vérification humaine.</p>
+      <table>
+        <thead>
+          <tr>
+            <th>Critère</th>
+            <th>Ce qui donne des points</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Métier</td>
+            <td>Mots comme nettoyage, propreté, entretien des locaux, hygiène, bionettoyage.</td>
+          </tr>
+          <tr>
+            <td>Localisation</td>
+            <td>Bonus fort pour l'Île-de-France.</td>
+          </tr>
+          <tr>
+            <td>Budget</td>
+            <td>Bonus si un montant supérieur à 100 000 euros est détecté.</td>
+          </tr>
+          <tr>
+            <td>Contact</td>
+            <td>Bonus si email, téléphone, SIRET, adresse, ville et lien source existent.</td>
+          </tr>
+          <tr>
+            <td>Délai</td>
+            <td>Bonus si la date limite laisse le temps de répondre. Malus si le délai est trop court.</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="notice warn">
+        Un AO peut être <strong>CHAUD</strong> parce qu'il est très bien localisé et très pertinent, même si le budget reste à vérifier. Dans ce cas, ouvrir le lien source avant de contacter.
+      </div>
+    </section>
+
+    <section id="limites">
+      <h2>9. Limites normales et bonnes pratiques</h2>
+      <details open>
+        <summary>BOAMP ne donne pas toujours toutes les informations</summary>
+        <p>Le budget, le téléphone, l'email, le contact nominatif ou l'adresse complète peuvent être absents. C'est normal. Le fichier marque ces lignes avec <code>A_VERIFIER_BUDGET</code> ou <code>DCE_A_TELECHARGER</code>.</p>
+      </details>
+      <details>
+        <summary>Certains AO demandent de consulter le DCE</summary>
+        <p>Quand l'avis public ne suffit pas, il faudra télécharger ou consulter les documents de consultation. La pipeline ne doit pas inventer ces informations.</p>
+      </details>
+      <details>
+        <summary>Ne pas envoyer les messages IA sans relecture</summary>
+        <p>Les colonnes <code>proposition_message</code> et <code>script_appel</code> sont des brouillons. Elles doivent être relues, corrigées et adaptées au contexte réel.</p>
+      </details>
+      <details>
+        <summary>Ne pas modifier les onglets techniques au hasard</summary>
+        <p>Pour un usage simple, modifier surtout <code>CRM_Suivi</code>. Éviter de supprimer des colonnes dans <code>AO_Tous</code>, car elles servent aux filtres et aux formules.</p>
+      </details>
+      <div class="notice danger">
+        <strong>Point de vigilance :</strong> le fichier aide à décider, mais il ne garantit pas qu'un AO est gagnable. Il faut vérifier la source, les pièces, le calendrier et la capacité réelle de CHRUTH à répondre.
+      </div>
+    </section>
+
+    <section>
+      <h2>10. Où sont les fichiers</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>Fichier</th>
+            <th>Chemin</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Excel AO</td>
+            <td><code>CHRUTH_Data\output\AO_CHRUTH.xlsx</code></td>
+          </tr>
+          <tr>
+            <td>Lanceur mise à jour</td>
+            <td><code>CHRUTH_Data\LANCER_UPDATE_AO_CHRUTH.bat</code></td>
+          </tr>
+          <tr>
+            <td>Base SQLite</td>
+            <td><code>CHRUTH_Data\data\ao_chruth.sqlite</code></td>
+          </tr>
+          <tr>
+            <td>Dossier organisé</td>
+            <td><code>CHRUTH_Data\CHRUTH_PROJET_ORGANISE\10_APPELS_OFFRES</code></td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="small">Dernière version du guide HTML : à utiliser comme support de formation pour les personnes peu à l'aise avec Excel.</p>
+    </section>
+  </main>
+
+  <footer>
+    CHRUTH Data - Guide AO Excel, BOAMP et veille commerciale
+  </footer>
+
+  <button id="totop" type="button" aria-label="Revenir en haut">&#8593;</button>
+
+  <script>
+    (function () {
+      var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var bar = document.getElementById('progress');
+      var totop = document.getElementById('totop');
+      var doc = document.documentElement;
+
+      function onScroll() {
+        var max = doc.scrollHeight - doc.clientHeight;
+        var pct = max > 0 ? (doc.scrollTop / max) * 100 : 0;
+        if (bar) bar.style.width = pct + '%';
+        if (totop) totop.classList.toggle('show', doc.scrollTop > 400);
+      }
+      document.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
+
+      if (totop) totop.addEventListener('click', function () {
+        window.scrollTo({ top: 0, behavior: reduce ? 'auto' : 'smooth' });
+      });
+
+      var sections = Array.prototype.slice.call(document.querySelectorAll('main section'));
+
+      // Revelation au scroll (progressive enhancement)
+      if (!reduce && 'IntersectionObserver' in window) {
+        sections.forEach(function (s) { s.classList.add('reveal'); });
+        var reveal = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting) { e.target.classList.add('in'); reveal.unobserve(e.target); }
+          });
+        }, { rootMargin: '0px 0px -10% 0px', threshold: 0.08 });
+        sections.forEach(function (s) { reveal.observe(s); });
+      }
+
+      // Scroll-spy : surligne le lien de nav de la section visible
+      var links = Array.prototype.slice.call(document.querySelectorAll('nav a[href^="#"]'));
+      var byId = {};
+      links.forEach(function (a) {
+        var id = a.getAttribute('href').slice(1);
+        if (document.getElementById(id)) byId[id] = a;
+      });
+      if ('IntersectionObserver' in window && Object.keys(byId).length) {
+        var spy = new IntersectionObserver(function (entries) {
+          entries.forEach(function (e) {
+            if (e.isIntersecting && byId[e.target.id]) {
+              links.forEach(function (a) { a.classList.remove('active'); });
+              byId[e.target.id].classList.add('active');
+            }
+          });
+        }, { rootMargin: '-45% 0px -50% 0px', threshold: 0 });
+        Object.keys(byId).forEach(function (id) { spy.observe(document.getElementById(id)); });
+      }
+    })();
+  </script>
+</body>
+</html>

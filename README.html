@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CHRUTH — Guide des pipelines</title>
+<style>
+:root{--bleu:#1f4e78;--bleu2:#2e5496;--gris:#f5f7fa;--bord:#d7dde6;}
+*{box-sizing:border-box}
+body{font-family:-apple-system,Segoe UI,Roboto,Arial,sans-serif;line-height:1.6;color:#1f2933;
+     max-width:900px;margin:0 auto;padding:32px 22px;background:#fff;}
+h1{color:var(--bleu);border-bottom:3px solid var(--bleu);padding-bottom:10px;}
+h2{color:var(--bleu);margin-top:2em;border-bottom:1px solid var(--bord);padding-bottom:6px;}
+h3{color:var(--bleu2);margin-top:1.4em;}
+code{background:var(--gris);padding:2px 6px;border-radius:4px;font-size:.92em;
+     font-family:Consolas,Monaco,monospace;color:#b4316f;}
+pre{background:#1f2933;color:#e6edf3;padding:14px 16px;border-radius:8px;overflow:auto;}
+pre code{background:transparent;color:inherit;padding:0;}
+table{border-collapse:collapse;width:100%;margin:1em 0;font-size:.95em;}
+th,td{border:1px solid var(--bord);padding:8px 12px;text-align:left;vertical-align:top;}
+th{background:var(--bleu);color:#fff;}
+tr:nth-child(even){background:var(--gris);}
+blockquote{border-left:4px solid #e0a800;background:#fff8e6;margin:1em 0;padding:10px 16px;border-radius:0 6px 6px 0;}
+a{color:var(--bleu2);}
+hr{border:none;border-top:1px solid var(--bord);margin:2em 0;}
+em{color:#52606d;}
+</style>
+</head>
+<body>
+<h1 id="chruth-outils-data-prospection">CHRUTH — Outils data &amp; prospection</h1>
+<p>Projet data-driven pour CHRUTH : il <strong>collecte, structure, score et visualise</strong> des opportunités commerciales, et produit des <strong>tableaux Excel</strong> + une <strong>carte interactive</strong> exploitables sans coder.</p>
+<p>Dossier de référence unique : <strong><code>CHRUTH_Data</code></strong>.</p>
+<hr />
+<h2 id="1-ce-que-ca-fait-vue-densemble">1. Ce que ça fait (vue d'ensemble)</h2>
+<p>Il y a <strong>deux pipelines indépendants</strong> :</p>
+<table>
+<thead>
+<tr>
+<th>Pipeline</th>
+<th>Source de données</th>
+<th>Produit</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AO — Appels d'offres</strong></td>
+<td>API <strong>BOAMP</strong> (marchés publics)</td>
+<td><code>output/AO_CHRUTH.xlsm</code> (cockpit appels d'offres)</td>
+</tr>
+<tr>
+<td><strong>Prospects — Entreprises</strong></td>
+<td>API <strong>Recherche Entreprises</strong> (data.gouv)</td>
+<td><code>output/Base_Prospects_CHRUTH.xlsm</code> + <code>output/Carte_Prospects_CHRUTH.html</code></td>
+</tr>
+</tbody>
+</table>
+<p>Les deux sont <strong>séparés</strong> (données et logiques différentes) mais vivent dans le même projet.</p>
+<hr />
+<h2 id="2-les-fichiers-produits-dans-output">2. Les fichiers produits (dans <code>output/</code>)</h2>
+<ul>
+<li><strong><code>AO_CHRUTH.xlsm</code></strong> — cockpit appels d'offres. Onglets : <code>Pilotage</code> (bandeau + KPI + Top 20 de la semaine), <code>AO_CHAUDS</code>, <code>AO_A_VERIFIER</code>, <code>DCE_A_RECUPERER</code>, <code>CRM_Suivi</code>, <code>Agent_IA</code>, <code>Scoring</code>, etc. Contient un <strong>bouton macro</strong> « Mettre à jour ».</li>
+<li><strong><code>Base_Prospects_CHRUTH.xlsm</code></strong> — base des sociétés (SIRET, catégorie, priorité CHAUDE/TIEDE/FROIDE, coordonnées…), avec <strong>bouton « Mettre à jour »</strong> (macro). <em>Nom fixe, écrasé à chaque run.</em></li>
+<li><strong><code>Carte_Prospects_CHRUTH.html</code></strong> — carte interactive des sociétés (voir §5).</li>
+<li>Annexes prospects : <code>CRM_CHRUTH_CHAUDE.xlsx</code>, <code>Prospects_CHAUDS_messages.xlsx</code>, <code>KPI_CHRUTH.csv</code>, <code>CONTROLE_QUALITE_CHRUTH.csv</code>, exports Notion/Power BI.</li>
+</ul>
+<hr />
+<h2 id="3-comment-lancer-une-mise-a-jour">3. Comment lancer une mise à jour</h2>
+<blockquote>
+<p>⚠️ <strong>Avant toute mise à jour : ferme les fichiers Excel</strong> (<code>AO_CHRUTH.xlsm</code>, <code>Base_Prospects…xlsx</code>). Un fichier ouvert dans Excel est <strong>verrouillé</strong> → la pipeline ne peut pas le réécrire et <strong>rien ne se met à jour</strong>.</p>
+</blockquote>
+<h3 id="le-plus-simple-le-notebook-tout-en-un-non-codeur">Le plus simple — le notebook tout-en-un (non-codeur)</h3>
+<p><code>CHRUTH_Pipeline_Unique.ipynb</code> : ouvre-le (Jupyter / VS Code) puis <strong>Exécuter ▸ Exécuter tout</strong>. Il fait <strong>les deux pipelines</strong> et produit les deux Excel + la carte. Réglages dans la section « TOUT METTRE À JOUR » :
+- <code>COLLECTE_AO</code> (défaut <code>True</code>) : collecte BOAMP (~2 min).
+- <code>COLLECTE_PROSPECTS</code> (défaut <code>False</code>) : <code>True</code> = recollecter toute la France (long). S'il n'y a aucune donnée locale, la collecte se déclenche <strong>automatiquement</strong>.</p>
+<p><em>Ce notebook est auto-suffisant : il recrée le code et le modèle Excel. Envoyé seul (+ Python + Internet), il reconstruit tout en collectant (1er run long).</em></p>
+<h3 id="en-ligne-de-commande-les-deux-pipelines-separement">En ligne de commande (les deux pipelines séparément)</h3>
+<pre><code class="language-bat">:: Appels d'offres -&gt; AO_CHRUTH.xlsm
+python ao_weekly_update.py
+:: ou : double-clic LANCER_UPDATE_AO_CHRUTH.bat
+
+:: Prospects + carte -&gt; Base_Prospects...xlsx + Carte_Prospects_CHRUTH.html
+python chruth_pipeline_master.py            :: retraite les données existantes
+python chruth_pipeline_master.py --collect  :: + recollecte toute la France (long)
+</code></pre>
+<h3 id="les-boutons-dans-excel-le-plus-pratique-au-quotidien">Les boutons dans Excel (le plus pratique au quotidien)</h3>
+<p>Chaque tableur a un <strong>bouton « Mettre à jour »</strong>. Au clic, le tableur <strong>se ferme, lance la collecte/MAJ, puis se rouvre tout seul à jour</strong> (via <code>outils/refresh_runner.py</code>, qui attend que le fichier soit libéré). <strong>Tu n'as donc PAS besoin de fermer le fichier toi-même</strong> avant — le bouton s'en charge.
+- <strong><code>AO_CHRUTH.xlsm</code></strong> → bouton « Mettre a jour les AO » : collecte BOAMP + DCE (~2 min) puis rouvre.
+- <strong><code>Base_Prospects_CHRUTH.xlsm</code></strong> → bouton « Mettre a jour les prospects » : <strong>popup</strong> au clic — <em>Oui</em> = rafraîchir vite (retraite, rapide) ; <em>Non</em> = tout recollecter la France (long).</p>
+<h3 id="automatique-chaque-lundi">Automatique (chaque lundi)</h3>
+<p>Deux <strong>tâches planifiées Windows</strong> déjà installées :
+- <strong>« CHRUTH AO - Mise a jour hebdomadaire »</strong> — lundi <strong>08:00</strong> → <code>ao_weekly_update.py</code>.
+- <strong>« CHRUTH Prospects - hebdo (carte) »</strong> — lundi <strong>08:30</strong> → <code>chruth_pipeline_master.py --collect --scope france</code>.</p>
+<hr />
+<h2 id="4-comment-ca-marche-flux-de-donnees">4. Comment ça marche (flux de données)</h2>
+<h3 id="pipeline-ao-ao_weekly_updatepy">Pipeline AO (<code>ao_weekly_update.py</code>)</h3>
+<ol>
+<li><strong>Collecte</strong> (<code>ao_collect_boamp.py</code>) : requête ciblée à l'API BOAMP (mots-clés nettoyage/propreté + fenêtre <strong>14 jours</strong>), filtrage de pertinence, <strong>dédup</strong> dans une base <strong>SQLite</strong> (<code>data/ao_chruth.sqlite</code>).</li>
+<li><strong>Scoring</strong> (<code>ao_scoring.py</code>) : note /100 (métier + zone IDF + budget + infos + délai) → priorité <strong>CHAUD / TIEDE / FROID / À VÉRIFIER</strong>.</li>
+<li><strong>DCE</strong> (<code>ao_dce.py</code>, <code>ao_dce_process.py</code>) : extrait le lien du dossier de consultation, télécharge les PDF directs (sans CAPTCHA) ou consomme les PDF déposés dans <code>dce_manuel/&lt;id_ao&gt;.pdf</code>, en extrait budget/contact (complète sans écraser).</li>
+<li><strong>Export</strong> (<code>ao_export_excel.py</code>) : assemble <code>AO_CHRUTH.xlsm</code> dans le gabarit macro <code>assets/AO_CHRUTH_TEMPLATE.xlsm</code> (conserve le bouton).</li>
+</ol>
+<h3 id="pipeline-prospects-chruth_pipeline_masterpy-full_update">Pipeline Prospects (<code>chruth_pipeline_master.py</code> → <code>full_update</code>)</h3>
+<ol>
+<li><strong>Collecte</strong> (<code>collect_api_entreprises.py</code>) : sociétés cibles via l'API Recherche Entreprises (par NAF × département) — coordonnées <strong>lat/lon incluses</strong>.</li>
+<li><strong>Nettoyage + classification</strong> (<code>clean_classify.py</code>) → <code>enrichissement FINESS</code> (<code>enrich_finess.py</code>, téléphones) → <strong>scoring + export</strong> (<code>scoring_export.py</code>) → <code>Base_Prospects…xlsx</code>.</li>
+<li><strong>Carte</strong> (<code>prospects_carte.py</code>) : génère <code>Carte_Prospects_CHRUTH.html</code>.</li>
+<li>Annexes : contrôle qualité, KPI, CRM, messages, exports Notion/Power BI.</li>
+</ol>
+<hr />
+<h2 id="5-la-carte-interactive-carte_prospects_chruthhtml">5. La carte interactive (<code>Carte_Prospects_CHRUTH.html</code>)</h2>
+<p>Centrée sur <strong>60 rue François Ier, 75008 Paris</strong>. Fonctionnalités :
+- <strong>Cercles de rayon</strong> togglables : 5 / 10 / 20 / 30 / 50 km.
+- <strong>Couche proximité</strong> (sociétés ≤ rayon) + <strong>couche France entière</strong> (30k, en clusters).
+- <strong>Recherche</strong> : par adresse (géocodeur) et par <strong>nom de société</strong>.
+- <strong>Itinéraire</strong> routier entre 2 adresses (distance + durée).
+- <strong>Filtre par priorité</strong> (Chaudes / Tièdes / Froides) — sur la proximité <strong>et</strong> la France.
+- <strong>Tri ✅ Retenir / ❌ Écarter</strong> par société (mémorisé dans le navigateur) + <strong>export CSV</strong> de la sélection.
+- <strong>Distance</strong> à votre adresse affichée dans chaque popup.</p>
+<p>Tout est <strong>gratuit, sans clé</strong> (OpenStreetMap / Nominatim / OSRM). Internet requis à l'ouverture.</p>
+<hr />
+<h2 id="6-prerequis-installation">6. Prérequis &amp; installation</h2>
+<ul>
+<li><strong>Python 3.10+</strong> ; dépendances : <code>pip install -r requirements.txt</code> (requests, pandas, openpyxl, pdfplumber, pymupdf, folium).</li>
+<li><strong>Internet</strong> (collecte des données, fonds de carte, itinéraire).</li>
+<li><strong>Excel</strong> (ou compatible) pour ouvrir le <code>.xlsm</code> ; macros à autoriser pour le bouton.</li>
+</ul>
+<hr />
+<h2 id="7-pieges-bonnes-pratiques">7. Pièges &amp; bonnes pratiques</h2>
+<ul>
+<li><strong>Ferme les fichiers Excel avant toute mise à jour</strong> (sinon écriture bloquée → « rien ne se passe »).</li>
+<li>La pipeline <strong>régénère entièrement</strong> les Excel à chaque run : les saisies manuelles dans <code>AO_CHRUTH.xlsm</code> (ex. CRM) <strong>sont écrasées</strong> au run suivant.</li>
+<li>La carte HTML peut rester ouverte (pas de verrou en écriture) ; fais juste <strong>Ctrl+F5</strong> pour voir la nouvelle version.</li>
+<li>Le tableur prospects a maintenant un <strong>nom fixe</strong> (<code>Base_Prospects_CHRUTH.xlsm</code>), écrasé à chaque run.</li>
+<li><strong>Bouton « Mettre à jour »</strong> dans chaque tableur : pas besoin de fermer le fichier avant — le bouton ferme, met à jour, et rouvre tout seul.</li>
+<li>La collecte France des prospects est <strong>longue</strong> (~dizaines de minutes, ~43k établissements).</li>
+</ul>
+<hr />
+<h2 id="8-structure-du-projet">8. Structure du projet</h2>
+<pre><code>CHRUTH_Data/
+├── CHRUTH_Pipeline_Unique.ipynb   ← notebook tout-en-un (non-codeur)
+├── ao_*.py                         ← pipeline Appels d'offres (12 modules)
+├── collect_api_entreprises.py, clean_classify.py, enrich_finess.py,
+│   scoring_export.py, config.py, chruth_pipeline_master.py, prospects_carte.py
+│                                   ← pipeline Prospects + carte
+├── assets/AO_CHRUTH_TEMPLATE.xlsm  ← gabarit macro (bouton)
+├── data/ao_chruth.sqlite           ← base AO (dédupliquée)  + data/raw_*.json (brut prospects)
+├── output/                         ← fichiers produits (Excel, carte, CSV)
+├── outils/                         ← vérificateur, générateurs
+├── tests/                          ← suite pytest
+└── docs/superpowers/               ← specs &amp; plans de conception
+</code></pre>
+<hr />
+<p><em>Toute la collecte s'appuie sur des sources publiques gratuites (BOAMP, API Entreprises, FINESS, OpenStreetMap). Aucune clé d'API payante n'est requise.</em></p>
+</body>
+</html>

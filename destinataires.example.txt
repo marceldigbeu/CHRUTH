@@ -1,0 +1,5 @@
+# Destinataires des alertes AO CHRUTH — une adresse e-mail par ligne.
+# Lignes vides et lignes commençant par # ignorées.
+# Copier ce fichier en "destinataires.txt" et ajouter les adresses voulues.
+contact@chruth.fr
+destinataire1@exemple.fr
