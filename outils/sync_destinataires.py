@@ -6,6 +6,7 @@ adresse valide a ete ecrite, 1 sinon (pour le message VBA).
 """
 from __future__ import annotations
 
+import json
 import sys
 from pathlib import Path
 
@@ -15,6 +16,7 @@ from openpyxl import load_workbook  # noqa: E402
 
 from ao_config import (  # noqa: E402
     ALERTE_DESTINATAIRES_FILE,
+    ALERTE_SECRETS_FILE,
     AO_OUTPUT_XLSM,
     PARAM_DEST_COL,
     PARAM_DEST_FIRST_ROW,
@@ -45,6 +47,20 @@ def ecrire_fichier(emails: list[str], dest_file: Path = ALERTE_DESTINATAIRES_FIL
     Path(dest_file).write_text(entete + "\n".join(emails) + "\n", encoding="utf-8")
 
 
+def ecrire_secrets(emails: list[str], secrets_file: Path = ALERTE_SECRETS_FILE) -> None:
+    """Met a jour le champ destinataire sans toucher aux identifiants SMTP."""
+    path = Path(secrets_file)
+    data: dict[str, object] = {}
+    if path.exists():
+        raw = path.read_text(encoding="utf-8").strip()
+        if raw:
+            loaded = json.loads(raw)
+            if not isinstance(loaded, dict):
+                raise ValueError(f"Format invalide dans {path} : objet JSON attendu.")
+            data = loaded
+    data["destinataire"] = ", ".join(emails)
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
 def main() -> int:
     try:
         emails = lire_colonne()
@@ -55,7 +71,11 @@ def main() -> int:
         print("Aucune adresse valide dans la colonne destinataires.")
         return 1
     ecrire_fichier(emails)
-    print(f"{len(emails)} destinataire(s) enregistre(s) -> {ALERTE_DESTINATAIRES_FILE}")
+    ecrire_secrets(emails)
+    print(
+        f"{len(emails)} destinataire(s) enregistre(s) -> "
+        f"{ALERTE_DESTINATAIRES_FILE} + {ALERTE_SECRETS_FILE}"
+    )
     return 0
 
 

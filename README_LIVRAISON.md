@@ -1,23 +1,26 @@
-# CHRUTH - Livraison pipeline unique
+# CHRUTH - Livraison no-code
 
-Pour une personne no-code, le fichier a ouvrir est :
+Ce dossier est la version allegee de livraison pour realiser les missions de la fiche de poste CHRUTH : base prospects, segmentation/scoring, messages IA, CRM/rentabilite et veille appels d'offres.
+
+## Fichier a ouvrir
+
+Pour une personne no-code, ouvrir en priorite :
+
+```bat
+COCKPIT_CHRUTH.bat
+```
+
+Alternative :
 
 ```bat
 OUVRIR_MOI_CHRUTH.bat
 ```
 
-Il ouvre une petite interface avec un bouton `Generer les documents`.
-La meme interface permet aussi de generer les messages prospects/AO et de les envoyer par Gmail.
+Ces interfaces permettent de generer les documents, les messages prospects/AO et d'envoyer les emails via Gmail.
 
-Le dossier contient aussi un notebook de pilotage :
+## Regeneration des documents
 
-```text
-CHRUTH_Pipeline_Unique.ipynb
-```
-
-Le notebook est utile si la personne travaille deja avec Jupyter ou VS Code.
-
-Le moteur appele par le notebook est :
+Le moteur appele par les interfaces est :
 
 ```bat
 python CHRUTH_PIPELINE_UNIQUE.py
@@ -29,7 +32,7 @@ Sous Windows, tu peux aussi double-cliquer :
 LANCER_PIPELINE_CHRUTH.bat
 ```
 
-Par defaut, la pipeline regenere les documents depuis les donnees locales, sans collecte reseau.
+Par defaut, la pipeline regenere les documents depuis les donnees locales, sans collecte reseau. Les anciennes donnees brutes, logs, tests et caches ont ete retires du dossier ; ils sont regenerables si une nouvelle collecte est lancee.
 
 ## Recollecter les donnees
 
@@ -58,11 +61,16 @@ python CHRUTH_PIPELINE_UNIQUE.py --pack
 ```
 
 Le pack exclut les secrets locaux :
+
+- `.env`
 - `alertes_secrets.json`
 - `destinataires.txt`
 
-Les fichiers exemples restent inclus.
-Les identifiants Gmail et destinataires doivent etre saisis dans l'onglet `Email` de l'interface sur le poste utilisateur.
+Les fichiers exemples restent inclus. Les identifiants Gmail et destinataires doivent etre saisis dans l'onglet `Email` de l'interface sur le poste utilisateur.
+
+## Email et destinataires
+
+Dans le cockpit Excel `output/AO_CHRUTH.xlsm`, l'onglet `Parametres` permet de saisir les destinataires des alertes en colonne B a partir de `B5`. Le bouton `Enregistrer_Destinataires` met a jour `destinataires.txt` et le champ `destinataire` de `alertes_secrets.json`, sans toucher a `smtp_user` ni `smtp_password`.
 
 ## Livrables principaux
 
@@ -83,3 +91,7 @@ La correspondance avec la fiche de poste est documentee ici :
 docs/MISSION_CHRUTH.md
 prompts/PROMPTS_CHRUTH.md
 ```
+
+## Nettoyage realise
+
+Le dossier conserve les fichiers necessaires a l'exploitation et aux livrables. Ont ete supprimes : historique Git local, tests, caches Python, logs, sauvegardes anciennes, donnees brutes volumineuses/corrompues et doublons regenerables. Les livrables `output/`, les scripts metier, les templates, la fiche de poste, les guides, les prompts et les configurations utiles sont conserves.

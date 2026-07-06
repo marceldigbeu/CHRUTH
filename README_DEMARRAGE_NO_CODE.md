@@ -2,23 +2,14 @@
 
 ## Ce qu'il faut faire
 
-1. Double-cliquer sur `COCKPIT_CHRUTH.bat` : le navigateur s'ouvre sur le **cockpit web CHRUTH**,
-   l'interface unique du projet (etat des missions, generation, messages, email, livrables).
-   Laisser la fenetre noire ouverte pendant l'utilisation.
-2. Alternative : `OUVRIR_MOI_CHRUTH.bat` ouvre l'ancienne interface Tkinter (memes actions).
-3. Dans les deux cas, les sections sont les memes :
-   - `1. Generer` pour recreer tous les documents.
-   - `2. Messages prospects` pour generer un email + script par segment.
-   - `3. Messages AO` pour generer un email + script pour un appel d'offres.
-   - `4. Email` pour configurer Gmail et envoyer le message affiche.
-   - `5. Livrables` pour ouvrir directement les fichiers, dossiers, guides, notebooks, logs et exports.
-3. Cliquer sur `Ouvrir le dossier output` si besoin.
+1. Double-cliquer sur `COCKPIT_CHRUTH.bat` : le navigateur s'ouvre sur le cockpit web CHRUTH.
+2. Laisser la fenetre noire ouverte pendant l'utilisation.
+3. Alternative : `OUVRIR_MOI_CHRUTH.bat` ouvre l'interface Tkinter historique.
+4. Dans les deux cas, les sections couvrent : generation, messages prospects, messages AO, email et livrables.
 
 ## Mode recommande
 
-Ne coche rien au premier lancement.
-
-La pipeline utilisera les donnees deja presentes et regenerera les documents sans collecte internet.
+Ne coche rien au premier lancement. La pipeline utilisera les donnees deja presentes et regenerera les documents sans collecte internet.
 
 ## Options
 
@@ -35,14 +26,16 @@ La pipeline utilisera les donnees deja presentes et regenerera les documents san
 - `output/CRM_CHRUTH_CHAUDE.xlsx`
 - `output/Prospects_CHAUDS_messages.xlsx`
 - `output/Modele_Financier_CHRUTH.xlsx`
+- `output/powerbi_sources/`
+- `output/notion_import_chruth/`
 
-L'onglet `Livrables` donne aussi acces a Power BI, Notion, DCE PDF, logs, prompts, notebooks, guides HTML et fiche de poste.
+La fiche de poste source est dans `docs/source/Fiche de poste CHRUTH.pdf`.
 
 ## En cas de probleme
 
-Ouvre le dernier fichier dans `logs/`.
+Les logs ne sont pas conserves dans la version allegee. Ils seront recrees automatiquement dans `logs/` au prochain lancement.
 
-Les fichiers Excel ouverts peuvent bloquer la regeneration. Ferme Excel puis relance.
+Les fichiers Excel ouverts peuvent bloquer la regeneration. Ferme Excel puis relance, sauf si tu utilises le bouton de mise a jour integre au classeur.
 
 ## Messages automatises
 
@@ -64,19 +57,11 @@ Le resultat est aussi ecrit dans `output/_message_prospect_segment.txt`.
 
 Le resultat est aussi ecrit dans `output/_message_ao.txt`.
 
-Pour retravailler un AO en detail : notebook `CHRUTH_Messages_AO.ipynb` (choix de l'AO,
-message sectionne, ecrit aussi un fichier editable `output/messages_ao/AO_<id>.md`).
-Chaque nouvel AO chaud/tiede arrive aussi avec son brouillon directement dans le mail d'alerte.
+## Rendre les messages precis
 
-### Rendre les messages precis (fiche CHRUTH)
+Remplir une fois `config_chruth/fiche_chruth.md` avec des faits vrais : activite, zone IDF, prestations, points forts, et ce qu'il ne faut pas pretendre. L'IA n'utilise que cette fiche pour parler de CHRUTH.
 
-Remplir une fois `config_chruth/fiche_chruth.md` avec des faits VRAIS (activite, zone IDF,
-prestations, points forts, et ce qu'il ne faut PAS pretendre). L'IA n'utilise que cette fiche
-pour parler de CHRUTH : messages plus justes partout (cockpit, mail d'alerte, notebook).
-Tant que la fiche est vide, les messages restent volontairement generiques.
-
-Le moteur se regle tout seul : une cle cloud dans `.env` (ANTHROPIC/MISTRAL/GROQ, une seule
-suffit) sinon Ollama local sinon brouillon type. Aucun reglage a faire.
+Le moteur se regle tout seul : une cle cloud dans `.env` si disponible, sinon Ollama local, sinon brouillon type.
 
 ## Envoi email depuis l'interface
 
@@ -85,10 +70,13 @@ suffit) sinon Ollama local sinon brouillon type. Aucun reglage a faire.
 3. Renseigner le mot de passe d'application Gmail.
 4. Renseigner le destinataire.
 5. Cliquer sur `Enregistrer config`.
-6. Depuis `Messages prospects` ou `Messages AO`, generer un message.
+6. Generer un message depuis `Messages prospects` ou `Messages AO`.
 7. Revenir dans `Email` et cliquer sur `Envoyer l'email`.
 
-La configuration est stockee localement dans `alertes_secrets.json` et `destinataires.txt`.
-Ces fichiers ne sont pas copies dans les packs envoyes.
+La configuration reste locale dans `alertes_secrets.json` et `destinataires.txt`. Ces fichiers ne sont pas copies dans les packs envoyes et ne doivent pas etre publies sur GitHub.
 
-Pour Gmail, il faut un mot de passe d'application, pas le mot de passe normal du compte.
+## Destinataires depuis Excel
+
+Dans `output/AO_CHRUTH.xlsm`, onglet `Parametres`, ajouter les destinataires en colonne B a partir de `B5`, une adresse par ligne, puis cliquer sur `Enregistrer_Destinataires`.
+
+Cette action met a jour `destinataires.txt` et le champ `destinataire` de `alertes_secrets.json`, sans modifier le compte expediteur Gmail.
