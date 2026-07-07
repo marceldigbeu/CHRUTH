@@ -1,0 +1,17 @@
+SEGMENT : PUB_MAIRIE / CHAUDE
+SOURCE : ia
+
+===== EMAIL =====
+A l'attention de VILLE DE PARIS,
+
+Nous sommes CHRUTH, spécialisés dans le nettoyage et la propreté des locaux. Nous avons remarqué que votre mairie, située à PARIS 04, pourrait bénéficier d'un entretien régulier pour maintenir un environnement sain et agréable pour les habitants.
+
+Notre équipe expérimentée peut vous aider à garantir la propreté de vos locaux, notamment dans les espaces communs et les bureaux. Nous proposons des services adaptés à votre besoin, allant du nettoyage quotidien au nettoyage spécialisé pour les surfaces sensibles.
+
+Nous serions ravis de discuter plus en détail de nos solutions personnalisées pour votre mairie. N'hésitez pas à nous contacter pour fixer un rendez-vous.
+
+Cordialement,
+L'équipe CHRUTH
+
+===== SCRIPT D'APPEL =====
+Bonjour, je m'appelle [Votre Nom] et je suis le représentant de CHRUTH. Nous sommes spécialisés dans le nettoyage et la propreté des locaux. Nous avons travaillé avec plusieurs communes similaires à VILLE DE PARIS à PARIS 04, et nous sommes convaincus que nos services peuvent vous aider à améliorer l'hygiène et la propreté de vos locaux. Pouvez-vous me dire si vous êtes ouvert à discuter de nos solutions ? Nous serions ravis de fixer un rendez-vous pour en savoir plus.

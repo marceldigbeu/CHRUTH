@@ -1,0 +1,15 @@
+﻿controle;valeur;alerte
+source_excel;Base_Prospects_CHRUTH.xlsm;NON
+lignes_total;132502;NON
+siret_vides;0;NON
+denomination_vides;0;NON
+categorie_vides;0;NON
+domaine_vides;0;NON
+ville_vides;66;OUI
+adresse_vides;0;NON
+priorite_vides;0;NON
+doublons_siret;0;NON
+villes_distinctes;5525;NON
+societes_distinctes;120614;NON
+score_min;10;NON
+score_max;90;NON

@@ -1,0 +1,18 @@
+{
+  "PRIV_BUREAU|CHAUDE|A": {
+    "email": "Objet : Entretien et propreté de vos locaux\n\nBonjour,\n\nJe me permets de vous contacter directement au sujet de l'entretien des locaux de {denomination} à {ville}.\n\nCHRUTH accompagne les structures comme la vôtre (effectif {effectif}) sur le nettoyage, la propreté et l'entretien régulier de leurs espaces, avec des prestations adaptées à votre activité.\n\nSeriez-vous disponible pour un échange rapide afin d'évaluer vos besoins ?\n\nCordialement,\nL'équipe CHRUTH",
+    "script": "Bonjour, je vous appelle de la part de CHRUTH, spécialiste de la propreté et de l'entretien des locaux. Je contacte {denomination} à {ville} car nous accompagnons des structures de votre taille ({effectif}) sur l'entretien de leurs espaces. Pourrais-je échanger avec la personne en charge des services généraux ou des locaux ?",
+    "source": "defaut",
+    "categorie": "PRIV_BUREAU",
+    "priorite": "CHAUDE",
+    "variante": "A"
+  },
+  "PRIV_BUREAU|CHAUDE|B": {
+    "email": "Objet : Des locaux toujours impeccables, sans y penser\n\nBonjour,\n\nEt si l'entretien des locaux de {denomination} à {ville} devenait un sujet que vous n'avez plus à gérer ?\n\nCHRUTH prend en charge le nettoyage et la propreté de structures de votre taille ({effectif}) avec un interlocuteur unique et des prestations régulières et fiables.\n\nQuand seriez-vous disponible pour un échange de 15 minutes ?\n\nCordialement,\nL'équipe CHRUTH",
+    "script": "Bonjour, CHRUTH à l'appareil. Nous aidons des structures comme {denomination} à {ville} ({effectif}) à garder des locaux impeccables sans avoir à s'en occuper. Puis-je échanger avec la personne en charge de l'entretien des locaux ?",
+    "source": "defaut",
+    "categorie": "PRIV_BUREAU",
+    "priorite": "CHAUDE",
+    "variante": "B"
+  }
+}

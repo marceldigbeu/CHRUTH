@@ -1,0 +1,235 @@
+{
+  "generated_at": "2026-07-03T08:09:26",
+  "root": "%USERPROFILE%\\Downloads\\CHRUTH_LIVRAISON_NO_CODE",
+  "log": "logs\\pipeline_unique_20260703_072709.log",
+  "missions": {
+    "1_data_foundation": [
+      "output/Base_Prospects_CHRUTH.xlsm",
+      "output/prospects_nettoyes.csv",
+      "output/prospects_enrichis.csv",
+      "output/Carte_Prospects_CHRUTH.html"
+    ],
+    "2_segmentation_scoring": [
+      "output/KPI_CHRUTH.csv",
+      "output/CONTROLE_QUALITE_CHRUTH.csv",
+      "output/Base_Prospects_CHRUTH.xlsm",
+      "output/powerbi_sources/"
+    ],
+    "3_ai_driven_sales": [
+      "output/Prospects_CHAUDS_messages.xlsx",
+      "output/segments_messages.json",
+      "output/_message_ao.txt",
+      "prompts/PROMPTS_CHRUTH.md"
+    ],
+    "4_crm_rentabilite": [
+      "output/CRM_CHRUTH_CHAUDE.xlsx",
+      "output/Modele_Financier_CHRUTH.xlsx",
+      "output/notion_import_chruth/"
+    ],
+    "bonus_appels_offres": [
+      "output/AO_CHRUTH.xlsm"
+    ]
+  },
+  "outputs": [
+    {
+      "path": "output\\_message_ao.txt",
+      "size_bytes": 1278,
+      "modified": "2026-07-03T07:16:54"
+    },
+    {
+      "path": "output\\_message_prospect_segment.txt",
+      "size_bytes": 962,
+      "modified": "2026-07-03T08:08:55"
+    },
+    {
+      "path": "output\\AO_CHRUTH.xlsm",
+      "size_bytes": 251832,
+      "modified": "2026-07-03T07:27:56"
+    },
+    {
+      "path": "output\\Base_Prospects_CHRUTH.xlsm",
+      "size_bytes": 85450609,
+      "modified": "2026-07-03T07:36:12"
+    },
+    {
+      "path": "output\\Carte_Prospects_CHRUTH.html",
+      "size_bytes": 3238301,
+      "modified": "2026-07-03T07:39:10"
+    },
+    {
+      "path": "output\\CONTROLE_QUALITE_CHRUTH.csv",
+      "size_bytes": 367,
+      "modified": "2026-07-03T07:41:49"
+    },
+    {
+      "path": "output\\CRM_CHRUTH_CHAUDE.xlsx",
+      "size_bytes": 519758,
+      "modified": "2026-07-03T07:44:13"
+    },
+    {
+      "path": "output\\KPI_CHRUTH.csv",
+      "size_bytes": 305,
+      "modified": "2026-07-03T07:44:07"
+    },
+    {
+      "path": "output\\LIRE_MOI_LIVRABLES.md",
+      "size_bytes": 1033,
+      "modified": "2026-07-02T21:15:40"
+    },
+    {
+      "path": "output\\MANIFEST_CHRUTH.json",
+      "size_bytes": 6502,
+      "modified": "2026-07-02T21:15:40"
+    },
+    {
+      "path": "output\\messages_ao\\AO_T1.md",
+      "size_bytes": 799,
+      "modified": "2026-07-01T19:34:50"
+    },
+    {
+      "path": "output\\Modele_Financier_CHRUTH.xlsx",
+      "size_bytes": 14451,
+      "modified": "2026-07-03T08:09:26"
+    },
+    {
+      "path": "output\\notion_import_chruth\\CHAUDE.csv",
+      "size_bytes": 993985,
+      "modified": "2026-07-03T07:44:22"
+    },
+    {
+      "path": "output\\notion_import_chruth\\Domaine_PRIVE.csv",
+      "size_bytes": 42897369,
+      "modified": "2026-07-03T07:46:32"
+    },
+    {
+      "path": "output\\notion_import_chruth\\Domaine_PUBLIC.csv",
+      "size_bytes": 3247324,
+      "modified": "2026-07-03T07:44:30"
+    },
+    {
+      "path": "output\\notion_import_chruth\\IMPORT_NOTION.md",
+      "size_bytes": 253,
+      "modified": "2026-07-03T07:47:18"
+    },
+    {
+      "path": "output\\notion_import_chruth\\MAPA_Prioritaires.csv",
+      "size_bytes": 3247324,
+      "modified": "2026-07-03T07:46:40"
+    },
+    {
+      "path": "output\\notion_import_chruth\\Societes.csv",
+      "size_bytes": 16356869,
+      "modified": "2026-07-03T07:47:18"
+    },
+    {
+      "path": "output\\notion_import_chruth\\Stats.csv",
+      "size_bytes": 523,
+      "modified": "2026-07-03T07:47:18"
+    },
+    {
+      "path": "output\\notion_import_chruth\\Top_Cibles.csv",
+      "size_bytes": 38617,
+      "modified": "2026-07-03T07:44:22"
+    },
+    {
+      "path": "output\\notion_import_chruth\\Veille.csv",
+      "size_bytes": 2037,
+      "modified": "2026-07-03T07:47:18"
+    },
+    {
+      "path": "output\\notion_import_chruth\\Villes.csv",
+      "size_bytes": 502870,
+      "modified": "2026-07-03T07:46:41"
+    },
+    {
+      "path": "output\\powerbi_sources\\Adresses.csv",
+      "size_bytes": 25554559,
+      "modified": "2026-07-03T08:09:03"
+    },
+    {
+      "path": "output\\powerbi_sources\\CHAUDE.csv",
+      "size_bytes": 993985,
+      "modified": "2026-07-03T07:49:25"
+    },
+    {
+      "path": "output\\powerbi_sources\\CONTROLE_QUALITE_CHRUTH.csv",
+      "size_bytes": 367,
+      "modified": "2026-07-03T08:09:24"
+    },
+    {
+      "path": "output\\powerbi_sources\\Domaine_PRIVE.csv",
+      "size_bytes": 42897369,
+      "modified": "2026-07-03T08:08:23"
+    },
+    {
+      "path": "output\\powerbi_sources\\Domaine_PUBLIC.csv",
+      "size_bytes": 3247324,
+      "modified": "2026-07-03T07:49:33"
+    },
+    {
+      "path": "output\\powerbi_sources\\KPI_CHRUTH.csv",
+      "size_bytes": 305,
+      "modified": "2026-07-03T08:09:24"
+    },
+    {
+      "path": "output\\powerbi_sources\\MAPA_Prioritaires.csv",
+      "size_bytes": 3247324,
+      "modified": "2026-07-03T08:08:31"
+    },
+    {
+      "path": "output\\powerbi_sources\\Prospects.csv",
+      "size_bytes": 46144209,
+      "modified": "2026-07-03T07:49:23"
+    },
+    {
+      "path": "output\\powerbi_sources\\Societes.csv",
+      "size_bytes": 16356869,
+      "modified": "2026-07-03T08:09:24"
+    },
+    {
+      "path": "output\\powerbi_sources\\Stats.csv",
+      "size_bytes": 523,
+      "modified": "2026-07-03T08:09:24"
+    },
+    {
+      "path": "output\\powerbi_sources\\Top_Cibles.csv",
+      "size_bytes": 38617,
+      "modified": "2026-07-03T07:49:23"
+    },
+    {
+      "path": "output\\powerbi_sources\\Veille.csv",
+      "size_bytes": 2037,
+      "modified": "2026-07-03T08:09:24"
+    },
+    {
+      "path": "output\\powerbi_sources\\Villes.csv",
+      "size_bytes": 502870,
+      "modified": "2026-07-03T08:08:32"
+    },
+    {
+      "path": "output\\Prospects_CHAUDS_messages.xlsx",
+      "size_bytes": 858496,
+      "modified": "2026-07-03T07:44:19"
+    },
+    {
+      "path": "output\\prospects_enrichis.csv",
+      "size_bytes": 43322929,
+      "modified": "2026-07-03T07:28:18"
+    },
+    {
+      "path": "output\\prospects_nettoyes.csv",
+      "size_bytes": 43322929,
+      "modified": "2026-07-03T07:28:14"
+    },
+    {
+      "path": "output\\segments_messages.json",
+      "size_bytes": 971,
+      "modified": "2026-07-03T08:08:55"
+    },
+    {
+      "path": "output\\segments_variantes.json",
+      "size_bytes": 20138,
+      "modified": "2026-07-03T07:44:16"
+    }
+  ]
+}
