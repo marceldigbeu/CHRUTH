@@ -54,12 +54,13 @@ def save_secrets(
         raise ValueError("Adresse expediteur invalide.")
     if not smtp_password:
         raise ValueError("Mot de passe d'application manquant.")
-    data = {
+    data = read_secrets(path)
+    data.update({
         "smtp_user": smtp_user,
         "smtp_password": smtp_password,
         "host": host or ALERTE_SMTP_HOST,
         "port": int(port or ALERTE_SMTP_PORT),
-    }
+    })
     Path(path).write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding="utf-8")
 
 

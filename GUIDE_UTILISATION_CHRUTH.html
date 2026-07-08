@@ -3,217 +3,313 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>CHRUTH — Guide d'utilisation complet</title>
+<title>CHRUTH - Guide d'utilisation pas a pas</title>
 <style>
-:root{--teal:#0F766E;--teal-dark:#0b5d57;--teal-light:#ccfbf1;--txt:#1f2937;--muted:#6b7280;--border:#e5e7eb;--warn-bg:#fffbeb;--warn:#d97706;--ok:#16a34a;}
-*{box-sizing:border-box}
-body{font-family:"Segoe UI",system-ui,sans-serif;color:var(--txt);margin:0;background:#f4f6f8;font-size:15px;line-height:1.55}
-.page{max-width:900px;margin:0 auto;background:#fff;padding:40px 48px 60px;min-height:100vh}
-h1{color:var(--teal-dark);font-size:26px;margin:0 0 4px}
-.soustitre{color:var(--muted);font-size:14px;margin-bottom:28px}
-h2{color:var(--teal-dark);font-size:19px;margin:38px 0 10px;padding-bottom:6px;border-bottom:2px solid var(--teal-light)}
-h3{color:var(--teal);font-size:15.5px;margin:22px 0 8px}
-p{margin:8px 0}
-code{background:#f3f4f6;border:1px solid var(--border);border-radius:4px;padding:1px 6px;font-family:Consolas,monospace;font-size:12.5px}
-pre{background:#0f172a;color:#d1fae5;border-radius:8px;padding:12px 14px;font-family:Consolas,monospace;font-size:12.5px;overflow-x:auto}
-table{border-collapse:collapse;width:100%;margin:12px 0;font-size:13.5px}
-th,td{border:1px solid var(--border);padding:8px 10px;text-align:left;vertical-align:top}
-th{background:var(--teal-light);color:var(--teal-dark)}
-ol,ul{margin:8px 0;padding-left:24px}
-li{margin:4px 0}
-.encadre{border-left:4px solid var(--teal);background:#f0fdfa;padding:10px 14px;border-radius:6px;margin:12px 0}
-.attention{border-left:4px solid var(--warn);background:var(--warn-bg);padding:10px 14px;border-radius:6px;margin:12px 0}
-.sommaire{background:#f9fafb;border:1px solid var(--border);border-radius:10px;padding:16px 22px;margin:20px 0}
-.sommaire ol{margin:6px 0}
-a{color:var(--teal)}
-.etape{font-weight:700;color:var(--teal-dark)}
-@media print{
-  body{background:#fff}
-  .page{max-width:none;padding:0}
-  h2{page-break-after:avoid;break-after:avoid}
-  h3{page-break-after:avoid;break-after:avoid}
-  table,pre,.encadre,.attention{page-break-inside:avoid;break-inside:avoid}
-  @page{size:A4;margin:18mm 16mm}
-}
+:root{--teal:#0f766e;--dark:#115e59;--soft:#ccfbf1;--txt:#1f2937;--muted:#6b7280;--line:#dbe2ea;--panel:#f8fafc;--warn:#b45309;--warnbg:#fffbeb;--red:#b91c1c}
+*{box-sizing:border-box}body{margin:0;background:#eef2f7;color:var(--txt);font-family:"Segoe UI",Arial,sans-serif;font-size:15px;line-height:1.58}.page{max-width:1080px;margin:0 auto;background:#fff;min-height:100vh;padding:38px 50px 64px}h1{margin:0;color:var(--dark);font-size:30px;line-height:1.15}.subtitle{color:var(--muted);margin:6px 0 26px;font-size:14px}h2{margin:42px 0 12px;color:var(--dark);font-size:21px;border-bottom:2px solid var(--soft);padding-bottom:7px}h3{margin:26px 0 8px;color:var(--teal);font-size:17px}p{margin:8px 0}a{color:#1d4ed8}code{font-family:Consolas,"Courier New",monospace;background:#f1f5f9;border:1px solid var(--line);border-radius:4px;padding:1px 5px;font-size:12.5px}pre{margin:10px 0;background:#0f172a;color:#d1fae5;border-radius:8px;padding:12px 14px;overflow-x:auto;font-family:Consolas,"Courier New",monospace;font-size:13px}table{width:100%;border-collapse:collapse;margin:12px 0 18px;font-size:13.5px}th,td{border:1px solid var(--line);padding:9px 10px;text-align:left;vertical-align:top}th{background:var(--soft);color:var(--dark)}ol,ul{margin:8px 0 14px;padding-left:24px}li{margin:5px 0}.toc{background:var(--panel);border:1px solid var(--line);border-radius:8px;padding:16px 20px;margin:20px 0 26px}.note{border-left:4px solid var(--teal);background:#f0fdfa;border-radius:6px;padding:10px 14px;margin:12px 0}.warn{border-left:4px solid var(--warn);background:var(--warnbg);border-radius:6px;padding:10px 14px;margin:12px 0}.danger{border-left:4px solid var(--red);background:#fef2f2;border-radius:6px;padding:10px 14px;margin:12px 0}.step{font-weight:700;color:var(--dark)}.small{font-size:12.8px;color:var(--muted)}@media(max-width:760px){.page{padding:24px 18px}table{font-size:12.5px}th,td{padding:7px}}@media print{body{background:#fff}.page{max-width:none;padding:0}h2,h3{break-after:avoid;page-break-after:avoid}table,pre,.note,.warn,.danger{break-inside:avoid;page-break-inside:avoid}@page{size:A4;margin:17mm 14mm}}
 </style>
 </head>
 <body>
 <div class="page">
+<h1>CHRUTH - Guide d'utilisation pas a pas</h1>
+<div class="subtitle">Version HTML de reference - mise a jour le 07/07/2026. Ce guide explique comment generer les livrables, les mettre a jour et automatiser les alertes sans coder.</div>
 
-<h1>CHRUTH — Guide d'utilisation complet</h1>
-<div class="soustitre">Pour une personne qui ne sait pas coder · Version du 03/07/2026</div>
-
-<div class="sommaire">
-<b>Sommaire</b>
+<div class="toc"><b>Sommaire</b>
 <ol>
-<li><a href="#demarrage">Démarrage rapide</a></li>
-<li><a href="#cles">Configurer ses clés (IA et Gmail)</a></li>
-<li><a href="#cockpit">Le cockpit web, section par section</a></li>
-<li><a href="#livrables">Les fichiers produits et à quoi ils servent</a></li>
-<li><a href="#autres">Les autres façons de lancer les outils</a></li>
-<li><a href="#problemes">En cas de problème</a></li>
-<li><a href="#securite">Sécurité des clés</a></li>
+<li><a href="#avant">Avant de lancer</a></li>
+<li><a href="#demarrage">Demarrage rapide</a></li>
+<li><a href="#fichiers">Quel fichier ouvrir selon le besoin</a></li>
+<li><a href="#generation">Generer tous les livrables</a></li>
+<li><a href="#prospects">Mettre a jour les prospects, la carte, le CRM et les exports</a></li>
+<li><a href="#ao">Mettre a jour les appels d'offres et les alertes</a></li>
+<li><a href="#messages">Generer les messages prospects et AO</a></li>
+<li><a href="#finance">Mettre a jour le modele financier</a></li>
+<li><a href="#output">Utiliser chaque fichier du dossier output</a></li>
+<li><a href="#automatisation">Automatiser</a></li>
+<li><a href="#github">Mettre a jour GitHub ou creer un dossier portable</a></li>
+<li><a href="#depannage">Depannage</a></li>
+<li><a href="#securite">Securite</a></li>
 </ol>
 </div>
 
-<h2 id="demarrage">1. Démarrage rapide</h2>
-<p>Tout le projet s'utilise depuis <b>une seule porte d'entrée</b> :</p>
+<h2 id="avant">1. Avant de lancer</h2>
+<div class="note"><b>Dossier de travail :</b> <code>%USERPROFILE%\Downloads\CHRUTH_LIVRAISON_NO_CODE</code>.</div>
 <ol>
-<li>Ouvrir le dossier du projet (<code>CHRUTH_LIVRAISON_NO_CODE</code>).</li>
-<li>Double-cliquer sur <b><code>COCKPIT_CHRUTH.bat</code></b>.</li>
-<li>Une fenêtre noire s'ouvre (la laisser ouverte), puis le navigateur affiche le <b>cockpit CHRUTH</b>.</li>
+<li><span class="step">Fermer Excel</span> avant toute regeneration. Un fichier <code>.xlsx</code> ou <code>.xlsm</code> ouvert peut bloquer l'ecriture.</li>
+<li>Garder la fenetre noire ouverte quand un fichier <code>.bat</code> lance le cockpit ou la pipeline.</li>
+<li>Ne pas supprimer <code>output/</code> : c'est le dossier des livrables.</li>
+<li>Ne pas publier <code>.env</code>, <code>alertes_secrets.json</code> ni <code>destinataires.txt</code>.</li>
 </ol>
-<div class="encadre">Premier lancement : le fichier vérifie que Python est installé et installe tout seul les
-dépendances (connexion internet nécessaire une fois). Si Python manque, il affiche le lien de
-téléchargement — installer en cochant « Add python.exe to PATH », puis relancer.</div>
-<p>Prérequis : Windows, Python 3.10 ou plus récent, Excel (pour les classeurs <code>.xlsm</code>, macros autorisées), internet pour les collectes de données et la carte.</p>
+<div class="warn"><b>Important :</b> les classeurs generes peuvent etre remplaces a la prochaine generation. Pour des annotations manuelles longues, faire une copie datee avant de regenerer.</div>
 
-<h2 id="cles">2. Configurer ses clés (IA et Gmail)</h2>
-<p>Le projet fonctionne <b>sans aucune clé</b> : les messages utilisent alors des modèles de texte
-prédéfinis. Les clés servent à deux choses : rendre les messages <b>personnalisés par IA</b>, et
-<b>envoyer des emails</b> depuis l'interface.</p>
+<h2 id="demarrage">2. Demarrage rapide</h2>
+<h3>Utilisation recommandee</h3>
+<ol>
+<li>Ouvrir le dossier <code>CHRUTH_LIVRAISON_NO_CODE</code>.</li>
+<li>Double-cliquer sur <code>COCKPIT_CHRUTH.bat</code>.</li>
+<li>Laisser la fenetre noire ouverte.</li>
+<li>Le navigateur s'ouvre sur le cockpit. Si rien ne s'ouvre, saisir <code>http://127.0.0.1:8770</code>.</li>
+<li>Utiliser les onglets <b>Generer</b>, <b>Messages prospects</b>, <b>Messages AO</b>, <b>Email</b> et <b>Livrables</b>.</li>
+</ol>
+<p>Au premier lancement, <code>COCKPIT_CHRUTH.bat</code> verifie Python puis installe les dependances de <code>requirements.txt</code>.</p>
+<h3>Alternative</h3>
+<ol>
+<li>Double-cliquer sur <code>OUVRIR_MOI_CHRUTH.bat</code>.</li>
+<li>Utiliser l'interface Windows historique si le navigateur pose probleme.</li>
+</ol>
 
-<h3>2.1 Clé IA — activer les brouillons personnalisés</h3>
-<p>Une seule clé suffit, au choix parmi quatre fournisseurs. Où l'obtenir :</p>
+<h2 id="fichiers">3. Quel fichier ouvrir selon le besoin</h2>
 <table>
-<tr><th>Fournisseur</th><th>Où créer sa clé</th><th>Ligne à remplir dans <code>.env</code></th><th>Remarque</th></tr>
-<tr><td>Anthropic (Claude)</td><td>console.anthropic.com → Settings → API Keys</td><td><code>ANTHROPIC_API_KEY=</code></td><td>Payant à l'usage, très bonne qualité</td></tr>
-<tr><td>Mistral</td><td>console.mistral.ai → API Keys</td><td><code>MISTRAL_API_KEY=</code></td><td>Acteur français, offre gratuite limitée</td></tr>
-<tr><td>Groq</td><td>console.groq.com → API Keys</td><td><code>GROQ_API_KEY=</code></td><td>Gratuit avec quotas, très rapide</td></tr>
-<tr><td>Google Gemini</td><td><b>aistudio.google.com/apikey</b> → « Create API key » (compte Google suffit)</td><td><code>GEMINI_API_KEY=</code></td><td>Gratuit avec quotas généreux — le plus simple pour démarrer</td></tr>
-</table>
-<p>Mise en place, pas à pas :</p>
-<ol>
-<li><span class="etape">Créer la clé</span> sur le site du fournisseur choisi (elle ressemble à <code>sk-ant-…</code>, <code>gsk_…</code> ou <code>AIza…</code> pour Gemini). La copier immédiatement : certains sites ne la réaffichent plus ensuite.</li>
-<li><span class="etape">Ouvrir le fichier <code>.env</code></span> à la racine du dossier projet, avec le Bloc-notes (clic droit → Ouvrir avec → Bloc-notes). S'il n'existe pas, copier <code>.env.template</code> et renommer la copie en <code>.env</code>.</li>
-<li><span class="etape">Coller la clé</span> juste après le <code>=</code> de la ligne correspondante, sans espace ni guillemets. Exemple : <pre>GEMINI_API_KEY=AIzaSyD4xxxxxxxxxxxxxxxxxxxxxxxx</pre></li>
-<li><span class="etape">Enregistrer</span> le fichier et <span class="etape">relancer le cockpit</span>. Le moteur détecte la clé tout seul : rien d'autre à régler.</li>
-</ol>
-<div class="encadre">Si plusieurs clés sont présentes, l'ordre de priorité est : anthropic &gt; mistral &gt; groq &gt; gemini.
-Sans aucune clé, le moteur essaie Ollama (IA locale, si installée), sinon il utilise les modèles de texte
-prédéfinis — tout continue de fonctionner. Le bandeau d'alertes du cockpit indique si une clé est détectée.</div>
-<div class="attention"><b>Important — la fiche CHRUTH.</b> Pour que l'IA écrive des messages précis et n'invente rien,
-remplir une fois <code>config_chruth/fiche_chruth.md</code> (ouvrable depuis l'onglet Livrables) avec des faits vrais :
-activité, zone d'intervention, prestations, points forts, et ce qu'il ne faut PAS prétendre. Tant que la fiche est
-vide, les messages restent volontairement génériques.</div>
-
-<h3>2.2 Changer ou révoquer une clé IA</h3>
-<ol>
-<li>Sur le site du fournisseur, supprimer (révoquer) l'ancienne clé si besoin et en créer une nouvelle.</li>
-<li>Rouvrir <code>.env</code>, remplacer l'ancienne valeur par la nouvelle, enregistrer, relancer le cockpit.</li>
-</ol>
-
-<h3>2.3 Gmail — envoyer des emails depuis l'interface</h3>
-<p>L'envoi utilise un <b>mot de passe d'application</b> Gmail (16 caractères), différent du mot de passe du compte.</p>
-<ol>
-<li><span class="etape">Activer la validation en 2 étapes</span> sur le compte Google (obligatoire pour la suite) : myaccount.google.com → Sécurité.</li>
-<li><span class="etape">Créer le mot de passe d'application</span> : myaccount.google.com/apppasswords → donner un nom (ex. « CHRUTH ») → copier les 16 caractères affichés.</li>
-<li><span class="etape">Dans le cockpit</span>, onglet <b>4. Email</b> : renseigner l'email expéditeur Gmail, coller le mot de passe d'application, renseigner le destinataire, cliquer <b>Enregistrer</b>.</li>
-<li>Générer un message (onglet 2 ou 3), cliquer « Envoyer par email → », vérifier le sujet et le corps, puis <b>Envoyer l'email</b>.</li>
-</ol>
-<p>Pour <b>changer</b> ce mot de passe : en recréer un sur myaccount.google.com/apppasswords, puis le recoller dans
-l'onglet Email → Enregistrer. Il est stocké localement dans <code>alertes_secrets.json</code> (jamais copié dans les packs ni sur GitHub).</p>
-
-<h3>2.4 Alertes automatiques GitHub Actions (optionnel)</h3>
-<p>Si le dépôt GitHub est utilisé pour les alertes AO horaires, les clés se règlent dans GitHub :
-Settings → Secrets and variables → Actions → renseigner <code>CHRUTH_SMTP_USER</code>,
-<code>CHRUTH_SMTP_PASSWORD</code> et <code>CHRUTH_ALERTE_DEST</code>. La variable <code>CHRUTH_NOTIFICATIONS=OFF</code>
-suspend les envois sans toucher au code.</p>
-
-<h2 id="cockpit">3. Le cockpit web, section par section</h2>
-
-<h3>État des missions</h3>
-<p>En haut du cockpit : les 4 missions de la fiche de poste + l'extension appels d'offres, chacune avec ses
-livrables en <b style="color:var(--ok)">vert</b> (présent, avec date et taille) ou <b style="color:#dc2626">rouge</b> (manquant).
-Se met à jour automatiquement après chaque génération. Le bandeau jaune signale ce qui reste à faire (fiche CHRUTH, clé IA).</p>
-
-<h3>1. Générer</h3>
-<p>Le bouton <b>« Générer tous les documents »</b> régénère l'ensemble des livrables. Les cases à cocher :</p>
-<table>
-<tr><th>Option</th><th>Effet</th><th>Durée</th></tr>
-<tr><td>Recollecter les appels d'offres BOAMP/DCE</td><td>Va chercher les nouveaux marchés publics sur internet</td><td>~2 min</td></tr>
-<tr><td>Recollecter les prospects API Entreprises</td><td>Recollecte toute la France (~43 000 établissements)</td><td>Longue (dizaines de minutes)</td></tr>
-<tr><td>Générer les brouillons IA</td><td>Rédige les messages avec l'IA (si clé configurée)</td><td>Variable</td></tr>
-<tr><td>Créer le dossier portable</td><td>Copie prête à envoyer, sans les secrets</td><td>Rapide</td></tr>
-</table>
-<div class="encadre">Mode recommandé au quotidien : <b>ne rien cocher</b>. La pipeline retraite les données déjà
-présentes et régénère tous les fichiers en quelques minutes, sans internet. Le journal noir affiche la progression en direct.</div>
-<p>Les deux autres boutons : « Mettre à jour les AO seulement » (collecte BOAMP + cockpit AO) et
-« Messages prospects dans Excel » (régénère le classeur de messages).</p>
-
-<h3>2. Messages prospects</h3>
-<ol>
-<li>Cliquer <b>« Charger les segments »</b> : la liste des segments CHAUDE/TIÈDE apparaît (ex. <code>IMMO_AGENCE — CHAUDE</code>).</li>
-<li>Choisir un segment ; un exemple réel (dénomination, ville, effectif) se remplit tout seul — modifiable.</li>
-<li>Cliquer <b>« Générer email + script »</b> : l'email et le script d'appel s'affichent côte à côte.</li>
-<li>Boutons : copier l'email, copier le script, ou « Envoyer par email → » qui bascule le texte dans l'onglet Email.</li>
-</ol>
-
-<h3>3. Messages AO</h3>
-<p>Même logique pour les appels d'offres : <b>« Charger les AO chauds/tièdes »</b> (classés par score décroissant),
-choisir un AO (ses détails s'affichent : objet, acheteur, date limite, budget, lien de l'avis), puis
-<b>« Générer email + script AO »</b>. Pour retravailler un AO en profondeur, utiliser le notebook
-<code>CHRUTH_Messages_AO.ipynb</code> (onglet Livrables).</p>
-
-<h3>4. Email</h3>
-<p>Configuration Gmail (voir section 2.3) et envoi du message affiché. Le sujet est extrait automatiquement de la ligne « Objet : » du message généré.</p>
-
-<h3>5. Livrables</h3>
-<p>Tous les fichiers du projet ouvrables en un clic, classés en 5 groupes : livrables principaux, exports
-(Power BI, Notion, KPI), messages &amp; IA, guides &amp; documentation, notebooks &amp; avancé. Un point vert = le fichier existe.</p>
-
-<h2 id="livrables">4. Les fichiers produits et à quoi ils servent</h2>
-<table>
-<tr><th>Fichier</th><th>Contenu et usage</th></tr>
-<tr><td><code>output/AO_CHRUTH.xlsm</code></td><td>Cockpit appels d'offres : onglets Pilotage (KPI + Top 20), AO_CHAUDS, AO_A_VERIFIER, DCE_A_RECUPERER, CRM_Suivi, Scoring. Bouton macro « Mettre à jour les AO » intégré : il ferme, met à jour et rouvre le fichier tout seul.</td></tr>
-<tr><td><code>output/Base_Prospects_CHRUTH.xlsm</code></td><td>Base des ~132 000 sociétés (SIRET, catégorie, priorité CHAUDE/TIÈDE/FROIDE, score /100, coordonnées). Pour prospecter : ouvrir l'onglet <b>CHAUDE</b> ou <b>Top_Cibles</b>. Bouton macro de mise à jour intégré.</td></tr>
-<tr><td><code>output/Carte_Prospects_CHRUTH.html</code></td><td>Carte interactive (navigateur, internet requis) : cercles de rayon 5–50 km autour du 60 rue François Iᵉʳ (Paris 8ᵉ), recherche par adresse ou société, itinéraire, filtre par priorité, tri ✅ Retenir / ❌ Écarter avec export CSV.</td></tr>
-<tr><td><code>output/CRM_CHRUTH_CHAUDE.xlsx</code></td><td>CRM simple des prospects chauds : suivi des contacts, statuts, relances.</td></tr>
-<tr><td><code>output/Prospects_CHAUDS_messages.xlsx</code></td><td>Messages par segment avec variantes A/B. Feuille <b>Suivi_Envois</b> : saisir à la main les résultats (envoyé/répondu/RDV) ; feuille <b>Perf_Messages</b> : taux par variante — au-delà de 20 résultats, la meilleure variante devient automatiquement celle proposée.</td></tr>
-<tr><td><code>output/Modele_Financier_CHRUTH.xlsx</code></td><td>Modèle financier interactif : prévisionnel global, charges fixes, hypothèses marché, rentabilité par marché. Les cellules d'hypothèses sont modifiables, le reste se recalcule.</td></tr>
-<tr><td><code>output/powerbi_sources/</code></td><td>13 CSV propres à brancher dans Power BI (Obtenir les données → Texte/CSV).</td></tr>
-<tr><td><code>output/notion_import_chruth/</code></td><td>CSV à importer dans Notion, avec la notice <code>IMPORT_NOTION.md</code>.</td></tr>
-<tr><td><code>docs/RAPPORT_AUDIT_FICHE_POSTE.md</code></td><td>Rapport d'audit : couverture de chaque mission de la fiche de poste, résultats des tests, écarts restants.</td></tr>
-</table>
-<div class="attention">Les classeurs Excel sont <b>entièrement régénérés</b> à chaque génération : les saisies manuelles
-faites dedans (hors <code>Suivi_Envois</code>, sauvegardé dans <code>suivi/</code>) sont écrasées. Faire une copie avant d'annoter.</div>
-
-<h2 id="autres">5. Les autres façons de lancer les outils</h2>
-<table>
-<tr><th>Moyen</th><th>Quand l'utiliser</th></tr>
-<tr><td><b>Cockpit web</b> — <code>COCKPIT_CHRUTH.bat</code></td><td>Usage quotidien recommandé : tout au même endroit.</td></tr>
-<tr><td>Interface Tkinter — <code>OUVRIR_MOI_CHRUTH.bat</code></td><td>Secours si le navigateur pose problème ; mêmes actions en 5 onglets.</td></tr>
-<tr><td>Boutons dans les classeurs Excel</td><td>Mise à jour rapide sans quitter Excel : le bouton ferme le fichier, met à jour et le rouvre.</td></tr>
-<tr><td>Notebooks (<code>CHRUTH_Pipeline_Unique.ipynb</code>…)</td><td>Si l'on travaille déjà dans Jupyter ou VS Code : Exécuter tout.</td></tr>
-<tr><td><code>LANCER_PIPELINE_CHRUTH.bat</code> / <code>LANCER_UPDATE_AO_CHRUTH.bat</code></td><td>Lancement direct de la pipeline complète / de la mise à jour AO, sans interface.</td></tr>
-<tr><td>Tâches planifiées Windows</td><td>Déjà installées : mise à jour AO chaque lundi 08 h 00, prospects chaque lundi 08 h 30.</td></tr>
-<tr><td>GitHub Actions</td><td>Alertes email des nouveaux AO chaque heure ouvrée, sans PC allumé (voir 2.4).</td></tr>
+<tr><th>Besoin</th><th>Fichier a ouvrir</th><th>Ce que cela fait</th></tr>
+<tr><td>Tout piloter sans coder</td><td><code>COCKPIT_CHRUTH.bat</code></td><td>Ouvre le cockpit web. C'est la porte d'entree principale.</td></tr>
+<tr><td>Regenerer tous les livrables</td><td><code>LANCER_PIPELINE_CHRUTH.bat</code></td><td>Lance <code>python CHRUTH_PIPELINE_UNIQUE.py</code> en mode local, sans nouvelle collecte internet.</td></tr>
+<tr><td>Mettre a jour les AO</td><td><code>LANCER_UPDATE_AO_CHRUTH.bat</code></td><td>Lance <code>ao_weekly_update.py</code> et regenere <code>output/AO_CHRUTH.xlsm</code>.</td></tr>
+<tr><td>Travailler les AO dans Excel</td><td><code>output/AO_CHRUTH.xlsm</code></td><td>Cockpit appels d'offres : pilotage, AO chauds, CRM AO, destinataires email.</td></tr>
+<tr><td>Prospecter les entreprises</td><td><code>output/Base_Prospects_CHRUTH.xlsm</code></td><td>Base prospects, scoring, priorite chaude/tiede/froide, top cibles.</td></tr>
+<tr><td>Voir les prospects sur une carte</td><td><code>output/Carte_Prospects_CHRUTH.html</code></td><td>Carte interactive dans le navigateur.</td></tr>
+<tr><td>Suivre les prospects chauds</td><td><code>output/CRM_CHRUTH_CHAUDE.xlsx</code></td><td>Suivi commercial simple.</td></tr>
+<tr><td>Preparer les emails et scripts</td><td><code>output/Prospects_CHAUDS_messages.xlsx</code></td><td>Messages par segment, variantes A/B, suivi de performance.</td></tr>
+<tr><td>Simuler la rentabilite</td><td><code>output/Modele_Financier_CHRUTH.xlsx</code></td><td>Dashboard financier, scenarios, rentabilite par marche.</td></tr>
+<tr><td>Installer l'automatisation Windows</td><td><code>INSTALLER.bat</code></td><td>Installe dependances, macros Excel, configuration Gmail et taches planifiees.</td></tr>
 </table>
 
-<h2 id="problemes">6. En cas de problème</h2>
+<h2 id="generation">4. Generer tous les livrables</h2>
+<h3>Depuis le cockpit</h3>
+<ol>
+<li>Fermer Excel.</li>
+<li>Double-cliquer sur <code>COCKPIT_CHRUTH.bat</code>.</li>
+<li>Onglet <b>Generer</b>.</li>
+<li>Pour une regeneration rapide, ne rien cocher.</li>
+<li>Cliquer sur <b>Generer tous les documents</b>.</li>
+<li>Attendre la fin du journal d'execution.</li>
+<li>Onglet <b>Livrables</b> : verifier que les fichiers sont presents.</li>
+</ol>
+<h3>Depuis Windows, sans cockpit</h3>
+<ol>
+<li>Fermer Excel.</li>
+<li>Double-cliquer sur <code>LANCER_PIPELINE_CHRUTH.bat</code>.</li>
+<li>Attendre le message de fin.</li>
+<li>Ouvrir les fichiers dans <code>output/</code>.</li>
+</ol>
+<h3>Depuis le terminal</h3>
+<pre>cd /d %USERPROFILE%\Downloads\CHRUTH_LIVRAISON_NO_CODE
+python CHRUTH_PIPELINE_UNIQUE.py</pre>
+<table>
+<tr><th>Objectif</th><th>Commande</th></tr>
+<tr><td>Regeneration locale, rapide</td><td><code>python CHRUTH_PIPELINE_UNIQUE.py</code></td></tr>
+<tr><td>Recollecter les appels d'offres</td><td><code>python CHRUTH_PIPELINE_UNIQUE.py --collect-ao</code></td></tr>
+<tr><td>Recollecter les prospects France</td><td><code>python CHRUTH_PIPELINE_UNIQUE.py --collect-prospects --scope france</code></td></tr>
+<tr><td>Recollecter seulement l'Ile-de-France</td><td><code>python CHRUTH_PIPELINE_UNIQUE.py --collect-prospects --scope region --regions 11</code></td></tr>
+<tr><td>Recollecter quelques departements</td><td><code>python CHRUTH_PIPELINE_UNIQUE.py --collect-prospects --scope departements --departements 75,92,93,94</code></td></tr>
+<tr><td>Generer avec brouillons IA</td><td><code>python CHRUTH_PIPELINE_UNIQUE.py --generer-messages</code></td></tr>
+<tr><td>Creer un pack portable</td><td><code>python CHRUTH_PIPELINE_UNIQUE.py --pack</code></td></tr>
+</table>
+<p>La pipeline regenere les AO, les prospects, la carte, le CRM, les KPI, les exports Power BI/Notion, le modele financier et le manifeste des livrables.</p>
+
+<h2 id="prospects">5. Mettre a jour les prospects, la carte, le CRM et les exports</h2>
+<h3>Mise a jour sans nouvelle collecte internet</h3>
+<ol>
+<li>Fermer Excel.</li>
+<li>Lancer <code>COCKPIT_CHRUTH.bat</code>.</li>
+<li>Onglet <b>Generer</b> : ne rien cocher.</li>
+<li>Cliquer sur <b>Generer tous les documents</b>.</li>
+<li>Verifier <code>Base_Prospects_CHRUTH.xlsm</code>, <code>Carte_Prospects_CHRUTH.html</code>, <code>CRM_CHRUTH_CHAUDE.xlsx</code>, <code>KPI_CHRUTH.csv</code>, <code>CONTROLE_QUALITE_CHRUTH.csv</code>, <code>powerbi_sources/</code> et <code>notion_import_chruth/</code>.</li>
+</ol>
+<h3>Recollecter les prospects sur internet</h3>
+<ol>
+<li>Prevoir du temps : une collecte France est longue.</li>
+<li>Fermer Excel.</li>
+<li>Lancer le cockpit.</li>
+<li>Onglet <b>Generer</b> : cocher <b>Recollecter les prospects API Entreprises</b>.</li>
+<li>Cliquer sur <b>Generer tous les documents</b>.</li>
+<li>Attendre la fin complete avant d'ouvrir les fichiers.</li>
+</ol>
+<p>Commande equivalente :</p>
+<pre>python CHRUTH_PIPELINE_UNIQUE.py --collect-prospects --scope france</pre>
+<h3>Utiliser la base prospects</h3>
+<ol>
+<li>Ouvrir <code>output/Base_Prospects_CHRUTH.xlsm</code>.</li>
+<li>Commencer par les onglets <b>CHAUDE</b> ou <b>Top_Cibles</b>.</li>
+<li>Filtrer par departement, ville, categorie, score ou priorite.</li>
+<li>Reporter les prospects retenus dans le CRM ou dans votre outil commercial.</li>
+</ol>
+
+<h2 id="ao">6. Mettre a jour les appels d'offres et les alertes</h2>
+<h3>Mettre a jour les AO depuis Excel</h3>
+<ol>
+<li>Ouvrir <code>output/AO_CHRUTH.xlsm</code>.</li>
+<li>Activer les macros si Excel le demande.</li>
+<li>Cliquer sur le bouton de mise a jour AO.</li>
+<li>Le classeur peut se fermer puis se rouvrir automatiquement.</li>
+<li>Consulter <b>Pilotage</b>, <b>AO_CHAUDS</b>, <b>AO_A_VERIFIER</b>, <b>DCE_A_RECUPERER</b> et <b>CRM_Suivi</b>.</li>
+</ol>
+<h3>Mettre a jour les AO depuis Windows</h3>
+<ol>
+<li>Fermer <code>AO_CHRUTH.xlsm</code>.</li>
+<li>Double-cliquer sur <code>LANCER_UPDATE_AO_CHRUTH.bat</code>.</li>
+<li>Attendre la fin.</li>
+<li>Rouvrir <code>output/AO_CHRUTH.xlsm</code>.</li>
+</ol>
+<p>Commande equivalente :</p>
+<pre>python CHRUTH_PIPELINE_UNIQUE.py --collect-ao</pre>
+<h3>Ajouter ou modifier les destinataires d'alertes</h3>
+<ol>
+<li>Ouvrir <code>output/AO_CHRUTH.xlsm</code>.</li>
+<li>Aller dans l'onglet <b>Parametres</b>.</li>
+<li>En colonne <b>B</b>, a partir de <b>B5</b>, saisir une adresse email par ligne.</li>
+<li>Cliquer sur <b>Enregistrer_Destinataires</b>.</li>
+<li>Excel lance <code>outils/sync_destinataires.py</code>.</li>
+<li>Le script met a jour <code>destinataires.txt</code> et le champ <code>destinataire</code> de <code>alertes_secrets.json</code>.</li>
+</ol>
+<div class="note">Ce bouton ne change pas le compte expediteur. Pour changer l'adresse qui envoie les emails, modifier l'onglet Email du cockpit ou les champs <code>smtp_user</code> et <code>smtp_password</code> dans <code>alertes_secrets.json</code>.</div>
+<h3>Activer ou couper les alertes</h3>
+<ol>
+<li>Utiliser le bouton ON/OFF dans <code>AO_CHRUTH.xlsm</code> si present.</li>
+<li>Le statut est stocke dans <code>alertes_actives.flag</code>.</li>
+<li><code>ON</code> autorise les alertes. <code>OFF</code> bloque les envois.</li>
+</ol>
+
+<h2 id="messages">7. Generer les messages prospects et AO</h2>
+<h3>Rendre les messages plus precis</h3>
+<ol>
+<li>Ouvrir <code>config_chruth/fiche_chruth.md</code>.</li>
+<li>Renseigner les faits reels : activite, zone d'intervention, prestations, points forts, limites a ne pas inventer.</li>
+<li>Enregistrer.</li>
+<li>Si une IA cloud est souhaitee, renseigner une cle dans <code>.env</code>. Sans cle, le systeme utilise des modeles de texte.</li>
+</ol>
+<h3>Message prospect depuis le cockpit</h3>
+<ol>
+<li>Lancer <code>COCKPIT_CHRUTH.bat</code>.</li>
+<li>Onglet <b>Messages prospects</b>.</li>
+<li>Cliquer sur <b>Charger les segments</b>.</li>
+<li>Choisir un segment.</li>
+<li>Verifier l'exemple affiche.</li>
+<li>Cliquer sur <b>Generer email + script</b>.</li>
+<li>Copier le resultat ou cliquer sur <b>Envoyer par email</b>.</li>
+</ol>
+<p>Le dernier resultat est ecrit dans <code>output/_message_prospect_segment.txt</code>.</p>
+<h3>Message AO depuis le cockpit</h3>
+<ol>
+<li>Onglet <b>Messages AO</b>.</li>
+<li>Cliquer sur <b>Charger les AO chauds/tiedes</b>.</li>
+<li>Choisir un AO.</li>
+<li>Cliquer sur <b>Generer email + script AO</b>.</li>
+<li>Copier le resultat ou l'envoyer par email.</li>
+</ol>
+<p>Le dernier resultat est ecrit dans <code>output/_message_ao.txt</code>. Les messages sauvegardes sont dans <code>output/messages_ao/</code>.</p>
+<h3>Envoyer un email depuis le cockpit</h3>
+<ol>
+<li>Onglet <b>Email</b>.</li>
+<li>Renseigner l'adresse Gmail expediteur.</li>
+<li>Renseigner le mot de passe d'application Gmail.</li>
+<li>Renseigner le ou les destinataires.</li>
+<li>Cliquer sur <b>Enregistrer config</b>.</li>
+<li>Generer un message prospect ou AO.</li>
+<li>Revenir dans <b>Email</b>, verifier le sujet et le corps, puis cliquer sur <b>Envoyer l'email</b>.</li>
+</ol>
+
+<h2 id="finance">8. Mettre a jour le modele financier</h2>
+<h3>Utiliser le classeur</h3>
+<ol>
+<li>Ouvrir <code>output/Modele_Financier_CHRUTH.xlsx</code>.</li>
+<li>Commencer par <b>Tableau_de_Bord</b>.</li>
+<li>Dans <b>Previsionnel_Global</b>, choisir le scenario en <code>B4</code>.</li>
+<li>Modifier uniquement les hypotheses jaunes.</li>
+<li>Dans <b>Marches</b>, renseigner jours, heures, effectif, type, couts et prix.</li>
+<li>Lire <b>Decision / action</b> et <b>Synthese_Rentabilite</b>.</li>
+</ol>
+<h3>Regenerer le modele financier</h3>
+<pre>python outils\generer_modele_financier.py</pre>
+<p>Ou via la pipeline complete :</p>
+<pre>python CHRUTH_PIPELINE_UNIQUE.py</pre>
+<div class="warn">La regeneration remplace <code>output/Modele_Financier_CHRUTH.xlsx</code>. Faire une copie avant si une simulation manuelle doit etre conservee.</div>
+
+<h2 id="output">9. Utiliser chaque fichier du dossier output</h2>
+<table>
+<tr><th>Fichier</th><th>A quoi il sert</th><th>Comment le mettre a jour</th></tr>
+<tr><td><code>AO_CHRUTH.xlsm</code></td><td>Cockpit appels d'offres, scoring, destinataires email.</td><td><code>LANCER_UPDATE_AO_CHRUTH.bat</code> ou <code>python CHRUTH_PIPELINE_UNIQUE.py --collect-ao</code>.</td></tr>
+<tr><td><code>Base_Prospects_CHRUTH.xlsm</code></td><td>Base prospects avec scoring et priorites.</td><td><code>python CHRUTH_PIPELINE_UNIQUE.py</code>. Nouvelle collecte : <code>--collect-prospects</code>.</td></tr>
+<tr><td><code>Carte_Prospects_CHRUTH.html</code></td><td>Carte interactive des prospects.</td><td>Regeneration prospects. Ouvrir ensuite dans un navigateur.</td></tr>
+<tr><td><code>CRM_CHRUTH_CHAUDE.xlsx</code></td><td>CRM simple pour prospects chauds.</td><td>Regeneration prospects ; suivi durable possible via <code>crm/suivi_clients.csv</code>.</td></tr>
+<tr><td><code>Prospects_CHAUDS_messages.xlsx</code></td><td>Emails/scripts par segment, variantes A/B, suivi des envois.</td><td>Pipeline complete ou onglet Messages prospects.</td></tr>
+<tr><td><code>Modele_Financier_CHRUTH.xlsx</code></td><td>Previsionnel, dashboard, rentabilite par marche.</td><td><code>python outils\generer_modele_financier.py</code>.</td></tr>
+<tr><td><code>prospects_nettoyes.csv</code></td><td>Base prospects nettoyee.</td><td>Pipeline prospects.</td></tr>
+<tr><td><code>prospects_enrichis.csv</code></td><td>Base enrichie avec scores.</td><td>Pipeline prospects.</td></tr>
+<tr><td><code>KPI_CHRUTH.csv</code></td><td>Indicateurs rapides.</td><td>Pipeline prospects.</td></tr>
+<tr><td><code>CONTROLE_QUALITE_CHRUTH.csv</code></td><td>Controle qualite des donnees.</td><td>Pipeline prospects.</td></tr>
+<tr><td><code>powerbi_sources/</code></td><td>CSV propres pour Power BI.</td><td>Pipeline prospects. Power BI : Obtenir les donnees -> Texte/CSV ou Dossier.</td></tr>
+<tr><td><code>notion_import_chruth/</code></td><td>CSV prepares pour Notion.</td><td>Pipeline prospects. Lire <code>IMPORT_NOTION.md</code>.</td></tr>
+<tr><td><code>segments_messages.json</code></td><td>Templates de messages par segment.</td><td>Pipeline messages/prospects.</td></tr>
+<tr><td><code>segments_variantes.json</code></td><td>Variantes A/B.</td><td>Pipeline messages/prospects.</td></tr>
+<tr><td><code>_message_prospect_segment.txt</code></td><td>Dernier message prospect genere.</td><td>Onglet Messages prospects.</td></tr>
+<tr><td><code>_message_ao.txt</code></td><td>Dernier message AO genere.</td><td>Onglet Messages AO.</td></tr>
+<tr><td><code>messages_ao/</code></td><td>Messages AO sauvegardes par identifiant.</td><td>Outil ou notebook de generation AO.</td></tr>
+<tr><td><code>MANIFEST_CHRUTH.json</code></td><td>Inventaire technique des fichiers generes.</td><td>Pipeline complete.</td></tr>
+<tr><td><code>LIRE_MOI_LIVRABLES.md</code></td><td>Notice courte du dossier output.</td><td>Pipeline complete.</td></tr>
+</table>
+
+<h2 id="automatisation">10. Automatiser</h2>
+<h3>Automatisation Windows</h3>
+<ol>
+<li>Double-cliquer sur <code>INSTALLER.bat</code>.</li>
+<li>Le script verifie Python et installe les dependances.</li>
+<li>Il tente d'ajouter le dossier CHRUTH comme emplacement de confiance Excel.</li>
+<li>Il propose de configurer Gmail pour les alertes.</li>
+<li>Il cree les taches planifiees Windows si l'environnement l'autorise.</li>
+</ol>
+<table>
+<tr><th>Tache</th><th>Script lance</th><th>Role</th></tr>
+<tr><td>CHRUTH AO - Alerte horaire</td><td><code>ao_alertes_run.py</code></td><td>Controle les nouveaux AO puis envoie une alerte email si un AO chaud ou tiede est nouveau.</td></tr>
+<tr><td>CHRUTH AO - Mise a jour hebdomadaire</td><td><code>ao_weekly_update.py</code></td><td>Regenere le cockpit AO chaque semaine.</td></tr>
+</table>
+<h3>Tester manuellement l'alerte</h3>
+<pre>python ao_alertes_run.py</pre>
+<h3>Couper ou reactiver les notifications</h3>
+<pre>python outils\set_notifications.py OFF
+python outils\set_notifications.py ON</pre>
+<h3>Automatisation GitHub Actions</h3>
+<ol>
+<li>Dans GitHub : <b>Settings</b> -> <b>Secrets and variables</b> -> <b>Actions</b>.</li>
+<li>Ajouter <code>CHRUTH_SMTP_USER</code>, <code>CHRUTH_SMTP_PASSWORD</code> et <code>CHRUTH_ALERTE_DEST</code>.</li>
+<li>Mettre <code>CHRUTH_NOTIFICATIONS=OFF</code> pour suspendre les envois sans supprimer les secrets.</li>
+</ol>
+
+<h2 id="github">11. Mettre a jour GitHub ou creer un dossier portable</h2>
+<h3>Creer un dossier portable</h3>
+<pre>python CHRUTH_PIPELINE_UNIQUE.py --pack</pre>
+<p>Le pack exclut automatiquement <code>.env</code>, <code>alertes_secrets.json</code>, <code>destinataires.txt</code>, logs et caches.</p>
+<h3>Mettre a jour GitHub</h3>
+<ol>
+<li>Ne jamais envoyer <code>.env</code>, <code>alertes_secrets.json</code> ni <code>destinataires.txt</code>.</li>
+<li>Si le dossier local n'est pas un depot Git, cloner le depot dans un dossier temporaire.</li>
+<li>Copier les fichiers utiles.</li>
+<li>Comme <code>output/</code> est ignore par <code>.gitignore</code>, utiliser <code>git add -f output</code> uniquement si les livrables doivent etre publies.</li>
+<li>Faire le commit puis le push.</li>
+</ol>
+<div class="warn">GitHub affiche un avertissement pour les fichiers de plus de 50 Mo. Au-dessus de 100 Mo, utiliser Git LFS ou ne pas publier le fichier.</div>
+
+<h2 id="depannage">12. Depannage</h2>
+<table>
+<tr><th>Probleme</th><th>Cause probable</th><th>Solution</th></tr>
+<tr><td>Le cockpit ne s'ouvre pas</td><td>Navigateur non lance automatiquement</td><td>Laisser la fenetre noire ouverte et ouvrir <code>http://127.0.0.1:8770</code>.</td></tr>
+<tr><td>Erreur d'ecriture Excel</td><td>Un fichier Excel est ouvert</td><td>Fermer Excel et relancer.</td></tr>
+<tr><td>Macros bloquees</td><td>Excel ne fait pas confiance au dossier</td><td>Lancer <code>INSTALLER.bat</code> ou autoriser les macros manuellement.</td></tr>
+<tr><td>Messages trop generiques</td><td>Fiche CHRUTH vide ou aucune cle IA</td><td>Remplir <code>config_chruth/fiche_chruth.md</code> et, si besoin, ajouter une cle dans <code>.env</code>.</td></tr>
+<tr><td>Email non envoye</td><td>Mauvais mot de passe Gmail</td><td>Utiliser un mot de passe d'application Gmail de 16 caracteres.</td></tr>
+<tr><td>Destinataire Excel non pris en compte</td><td>Bouton non clique ou alertes OFF</td><td>Cliquer sur <b>Enregistrer_Destinataires</b>, verifier <code>destinataires.txt</code> et <code>alertes_actives.flag</code>.</td></tr>
+<tr><td>Carte vide</td><td>Pas d'internet ou cache navigateur</td><td>Verifier internet puis faire <b>Ctrl+F5</b>.</td></tr>
+<tr><td>Generation echouee</td><td>Erreur Python, reseau ou fichier verrouille</td><td>Ouvrir le dernier fichier dans <code>logs/</code> et lire les dernieres lignes.</td></tr>
+</table>
+
+<h2 id="securite">13. Securite</h2>
 <ul>
-<li><b>« Rien ne se met à jour »</b> : un classeur Excel est resté ouvert → Excel verrouille le fichier. Fermer Excel et relancer (les boutons intégrés aux classeurs gèrent cela tout seuls).</li>
-<li><b>Le cockpit ne s'ouvre pas</b> : vérifier que la fenêtre noire est bien restée ouverte ; sinon relancer <code>COCKPIT_CHRUTH.bat</code>. Si le navigateur ne s'ouvre pas seul, taper <code>http://127.0.0.1:8770</code> dans la barre d'adresse.</li>
-<li><b>Erreur pendant une génération</b> : ouvrir le fichier le plus récent du dossier <code>logs/</code> (accessible depuis l'onglet Livrables) — la dernière ligne indique la cause.</li>
-<li><b>Les messages IA restent génériques</b> : soit la fiche CHRUTH est vide (section 2.1), soit aucune clé n'est détectée (vérifier le bandeau d'alertes du cockpit).</li>
-<li><b>L'email ne part pas</b> : vérifier que c'est bien un mot de passe d'application (16 caractères) et non le mot de passe du compte, et que la validation en 2 étapes est active.</li>
-<li><b>La carte est vide</b> : elle a besoin d'internet à l'ouverture (fonds de carte OpenStreetMap). Après une régénération, faire Ctrl+F5 pour recharger.</li>
-<li><b>Collecte désactivée</b> : les boutons « Activer / Désactiver collecte » des classeurs pilotent un mode hors-ligne (état OFF = aucun appel internet, retraitement local seulement).</li>
+<li><code>.env</code> contient les cles IA. Il reste local.</li>
+<li><code>alertes_secrets.json</code> contient le Gmail expediteur et le mot de passe d'application. Il reste local.</li>
+<li><code>destinataires.txt</code> contient les adresses qui recoivent les alertes. Il reste local.</li>
+<li><code>alertes_secrets.example.json</code> et <code>destinataires.example.txt</code> sont des exemples partageables.</li>
+<li>En cas de doute, revoquer la cle IA ou le mot de passe d'application Gmail, puis en creer un nouveau.</li>
 </ul>
-
-<h2 id="securite">7. Sécurité des clés</h2>
-<ul>
-<li>Les clés vivent dans deux fichiers locaux : <code>.env</code> (clés IA) et <code>alertes_secrets.json</code> (Gmail). Les deux sont dans le <code>.gitignore</code> : ils ne partent <b>jamais</b> sur GitHub ni dans les packs générés.</li>
-<li>Le cockpit n'est accessible que depuis l'ordinateur lui-même (127.0.0.1) — personne sur le réseau ou internet ne peut s'y connecter.</li>
-<li>Toute personne qui ouvre la session Windows peut en revanche utiliser les clés enregistrées : la protection est celle de la session.</li>
-<li>Si le dossier est partagé à la main (clé USB, WeTransfer…), supprimer <code>.env</code> et <code>alertes_secrets.json</code> de la copie — ou utiliser l'option « Créer le dossier portable » qui les exclut automatiquement.</li>
-<li>En cas de doute sur une clé (fuite, partage involontaire) : la révoquer sur le site du fournisseur et en créer une nouvelle (sections 2.2 et 2.3).</li>
-</ul>
-
-<p style="margin-top:40px;color:var(--muted);font-size:12.5px;border-top:1px solid var(--border);padding-top:12px">
-CHRUTH — Guide d'utilisation · Ce guide existe aussi en PDF : <code>GUIDE_UTILISATION_CHRUTH.pdf</code>.
-Documentation complémentaire : <code>README.md</code>, <code>README_DEMARRAGE_NO_CODE.md</code>, <code>docs/RAPPORT_AUDIT_FICHE_POSTE.md</code>.</p>
-
+<p class="small" style="margin-top:40px;border-top:1px solid var(--line);padding-top:12px">CHRUTH - Guide d'utilisation. Version HTML de reference. Documentation complementaire : <code>README.md</code>, <code>README_DEMARRAGE_NO_CODE.md</code>, <code>README_LIVRAISON.md</code>, <code>docs/MISSION_CHRUTH.md</code>, <code>prompts/PROMPTS_CHRUTH.md</code>.</p>
 </div>
 </body>
 </html>

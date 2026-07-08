@@ -17,10 +17,12 @@ from __future__ import annotations
 
 import json
 import os
+import re
 import socket
 import subprocess
 import sys
 import threading
+import time
 import webbrowser
 from datetime import datetime
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -33,6 +35,52 @@ PACK_DIR = ROOT.parent / "CHRUTH_LIVRAISON_NOTEBOOK"
 PORT_DEFAUT = 8770
 
 sys.path.insert(0, str(ROOT))
+
+
+
+def taille_lisible(octets: int) -> str:
+    if octets >= 1_000_000:
+        return f"{octets / 1_000_000:.1f} Mo"
+    if octets >= 1_000:
+        return f"{octets / 1_000:.0f} Ko"
+    return f"{octets} o"
+
+
+def duree_lisible(secondes: float) -> str:
+    secondes = max(0, int(secondes))
+    minutes, secs = divmod(secondes, 60)
+    heures, minutes = divmod(minutes, 60)
+    if heures:
+        return f"{heures}h {minutes:02d}m {secs:02d}s"
+    if minutes:
+        return f"{minutes}m {secs:02d}s"
+    return f"{secs}s"
+
+
+def fichiers_modifies_depuis(started_at: float | None) -> list[dict]:
+    if not started_at or not OUTPUT.exists():
+        return []
+    cutoff = started_at - 1.0
+    fichiers: list[dict] = []
+    for path in OUTPUT.rglob("*"):
+        if not path.is_file() or path.name.startswith("~$"):
+            continue
+        try:
+            stat = path.stat()
+        except OSError:
+            continue
+        if stat.st_mtime < cutoff:
+            continue
+        elapsed = max(0.0, stat.st_mtime - started_at)
+        fichiers.append({
+            "chemin": path.relative_to(ROOT).as_posix(),
+            "temps": duree_lisible(elapsed),
+            "secondes": round(elapsed, 1),
+            "date": datetime.fromtimestamp(stat.st_mtime).strftime("%H:%M:%S"),
+            "taille": taille_lisible(stat.st_size),
+        })
+    fichiers.sort(key=lambda row: row["secondes"])
+    return fichiers[-120:]
 
 
 # --------------------------------------------------------------------------- #
@@ -134,6 +182,9 @@ LIVRABLES = {
     "dce": ("DCE telecharges (PDF)", ROOT / "dce_auto", "avance"),
     "logs": ("Logs des pipelines", ROOT / "logs", "avance"),
     "interface_tk": ("Ancienne interface Tkinter", ROOT / "OUVRIR_MOI_CHRUTH.bat", "avance"),
+    "installer": ("Installer / automatiser Windows", ROOT / "INSTALLER.bat", "avance"),
+    "bat_pipeline": ("Lancer pipeline (BAT)", ROOT / "LANCER_PIPELINE_CHRUTH.bat", "avance"),
+    "bat_update_ao": ("Lancer mise a jour AO (BAT)", ROOT / "LANCER_UPDATE_AO_CHRUTH.bat", "avance"),
 }
 
 
@@ -147,6 +198,8 @@ class Job:
         self.running = False
         self.label = ""
         self.code: int | None = None
+        self.started_at: float | None = None
+        self.finished_at: float | None = None
 
     def start(self, cmd: list[str], label: str) -> bool:
         with self.lock:
@@ -155,7 +208,14 @@ class Job:
             self.running = True
             self.label = label
             self.code = None
-            self.lines = ["$ " + " ".join(cmd), ""]
+            self.started_at = time.time()
+            self.finished_at = None
+            self.lines = [
+                "$ " + " ".join(cmd),
+                "",
+                f"Debut : {datetime.now().strftime('%H:%M:%S')}",
+                "",
+            ]
         threading.Thread(target=self._run, args=(cmd,), daemon=True).start()
         return True
 
@@ -183,18 +243,25 @@ class Job:
             with self.lock:
                 self.code = code
                 self.running = False
+                self.finished_at = time.time()
                 self.lines.append("")
+                self.lines.append(f"Fin : {datetime.now().strftime('%H:%M:%S')}")
                 self.lines.append(f"--- Termine (code {code}) ---")
 
     def state(self) -> dict:
         with self.lock:
+            started_at = self.started_at
+            end_at = time.time() if self.running else self.finished_at
+            elapsed = duree_lisible((end_at - started_at) if started_at and end_at else 0)
             return {
                 "running": self.running,
                 "label": self.label,
                 "code": self.code,
+                "started_at": datetime.fromtimestamp(started_at).strftime("%H:%M:%S") if started_at else "",
+                "elapsed": elapsed,
+                "fichiers": fichiers_modifies_depuis(started_at),
                 "log": "\n".join(self.lines[-500:]),
             }
-
 
 JOB = Job()
 
@@ -225,12 +292,8 @@ def info_fichier(rel: str) -> dict:
         octets = stat.st_size
         if p.is_dir():
             taille = f"{sum(1 for _ in p.iterdir())} fichiers"
-        elif octets >= 1_000_000:
-            taille = f"{octets / 1_000_000:.1f} Mo"
-        elif octets >= 1_000:
-            taille = f"{octets / 1_000:.0f} Ko"
         else:
-            taille = f"{octets} o"
+            taille = taille_lisible(octets)
     except OSError:
         date, taille = "", ""
     return {"chemin": rel, "present": True, "date": date, "taille": taille}
@@ -294,6 +357,7 @@ def statut_general() -> dict:
         "derniere_generation": manifest.get("generated_at", ""),
         "livrables": livrables,
         "collecte_active": (ROOT / "collecte_active.flag").exists(),
+        "notifications_actives": notifications_actives_status(),
     }
 
 
@@ -410,18 +474,67 @@ def generer_message_ao_api(data: dict) -> dict:
     return {"email": msg.get("email", ""), "script": msg.get("script", "")}
 
 
+def notifications_actives_status() -> bool:
+    from ao_config import notifications_actives
+
+    return bool(notifications_actives())
+
+
+def normaliser_emails(value: object) -> list[str]:
+    import chruth_email
+
+    if isinstance(value, list):
+        raw = value
+    else:
+        raw = re.split(r"[,;\n]+", str(value or ""))
+    emails: list[str] = []
+    for item in raw:
+        email = str(item or "").strip()
+        if not email:
+            continue
+        if not chruth_email.valid_email(email):
+            raise ValueError(f"Adresse email invalide : {email}")
+        emails.append(email)
+    return list(dict.fromkeys(emails))
+
+
+def sync_destinataires_secrets(emails: list[str]) -> None:
+    from ao_config import ALERTE_SECRETS_FILE
+
+    path = Path(ALERTE_SECRETS_FILE)
+    data: dict[str, object] = {}
+    if path.exists():
+        raw = path.read_text(encoding="utf-8").strip()
+        if raw:
+            loaded = json.loads(raw)
+            if isinstance(loaded, dict):
+                data = loaded
+    data["destinataire"] = ", ".join(emails)
+    path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+
+
 def config_email() -> dict:
     import chruth_email
 
     data = chruth_email.read_secrets()
     recipients = chruth_email.read_recipients()
-    ok, msg = chruth_email.config_ready()
+    smtp_ok, smtp_msg = chruth_email.config_ready()
+    prete = smtp_ok and bool(recipients)
+    if not smtp_ok:
+        message = smtp_msg
+    elif not recipients:
+        message = "Aucun destinataire configure."
+    else:
+        message = f"Configuration email prete ({len(recipients)} destinataire(s))."
     return {
         "expediteur": str(data.get("smtp_user") or ""),
         "mot_de_passe_defini": bool(data.get("smtp_password")),
         "destinataire": recipients[0] if recipients else "",
-        "prete": ok,
-        "message": msg,
+        "destinataires": "\n".join(recipients),
+        "nb_destinataires": len(recipients),
+        "notifications_actives": notifications_actives_status(),
+        "prete": prete,
+        "message": message,
     }
 
 
@@ -432,22 +545,62 @@ def enregistrer_email(data: dict) -> dict:
     password = str(data.get("mot_de_passe") or "").strip()
     if not password:
         password = str(current.get("smtp_password") or "")
-    chruth_email.save_secrets(str(data.get("expediteur") or ""), password)
-    if str(data.get("destinataire") or "").strip():
-        chruth_email.save_recipients(str(data.get("destinataire")))
+    expediteur = str(data.get("expediteur") or "").strip()
+    chruth_email.save_secrets(expediteur, password)
+
+    raw_dest = data.get("destinataires")
+    if raw_dest is None:
+        raw_dest = data.get("destinataire")
+    if str(raw_dest or "").strip():
+        emails = chruth_email.save_recipients(str(raw_dest))
+    else:
+        emails = chruth_email.read_recipients()
+    if emails:
+        sync_destinataires_secrets(emails)
     return config_email()
 
 
 def envoyer_email(data: dict) -> dict:
     import chruth_email
 
-    destinataire = str(data.get("destinataire") or "").strip()
+    raw_dest = data.get("destinataires")
+    if raw_dest is None:
+        raw_dest = data.get("destinataire")
+    destinataires = normaliser_emails(raw_dest)
     sujet = str(data.get("sujet") or "CHRUTH - Message").strip()
     corps = str(data.get("corps") or "").strip()
-    if not destinataire or not corps:
+    if not destinataires or not corps:
         raise ValueError("Destinataire et message obligatoires.")
-    chruth_email.send_email(destinataire, sujet, corps)
-    return {"ok": True, "message": f"Email envoye a {destinataire}."}
+    for destinataire in destinataires:
+        chruth_email.send_email(destinataire, sujet, corps)
+    return {"ok": True, "message": f"Email envoye a {len(destinataires)} destinataire(s)."}
+
+
+def lire_fiche_chruth() -> dict:
+    path = ROOT / "config_chruth" / "fiche_chruth.md"
+    texte = path.read_text(encoding="utf-8", errors="replace") if path.exists() else ""
+    return {"chemin": str(path), "contenu": texte, "present": path.exists()}
+
+
+def enregistrer_fiche_chruth(data: dict) -> dict:
+    path = ROOT / "config_chruth" / "fiche_chruth.md"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(str(data.get("contenu") or ""), encoding="utf-8")
+    return lire_fiche_chruth()
+
+
+def definir_notifications(data: dict) -> dict:
+    from ao_config import set_notifications
+
+    if "actif" not in data:
+        raise ValueError("Etat des notifications manquant.")
+    value = data.get("actif")
+    if isinstance(value, str):
+        actif = value.strip().upper() in {"1", "ON", "TRUE", "OUI", "YES"}
+    else:
+        actif = bool(value)
+    set_notifications(actif)
+    return config_email()
 
 
 def ouvrir_livrable(cle: str) -> dict:
@@ -510,6 +663,8 @@ class Handler(BaseHTTPRequestHandler):
                 self._json(lister_aos())
             elif chemin == "/api/email":
                 self._json(config_email())
+            elif chemin == "/api/fiche":
+                self._json(lire_fiche_chruth())
             else:
                 self._json({"erreur": "inconnu"}, code=404)
         except Exception as exc:  # noqa: BLE001
@@ -533,6 +688,15 @@ class Handler(BaseHTTPRequestHandler):
                         "--skip-ao", "--skip-finance", "--generer-messages",
                     ]
                     label = "Messages prospects dans Excel"
+                elif action == "finance_only":
+                    cmd = [sys.executable, str(ROOT / "outils" / "generer_modele_financier.py")]
+                    label = "Modele financier"
+                elif action == "pack_only":
+                    cmd = [sys.executable, "CHRUTH_PIPELINE_UNIQUE.py", "--pack", "--package-dir", str(PACK_DIR)]
+                    label = "Creation du dossier portable"
+                elif action == "alertes_run":
+                    cmd = [sys.executable, "ao_alertes_run.py"]
+                    label = "Controle et alerte AO"
                 else:
                     raise ValueError(f"Action inconnue : {action}")
                 if not JOB.start(cmd, label):
@@ -544,6 +708,10 @@ class Handler(BaseHTTPRequestHandler):
                 self._json(generer_message_ao_api(data))
             elif chemin == "/api/email":
                 self._json(enregistrer_email(data))
+            elif chemin == "/api/notifications":
+                self._json(definir_notifications(data))
+            elif chemin == "/api/fiche":
+                self._json(enregistrer_fiche_chruth(data))
             elif chemin == "/api/envoyer":
                 self._json(envoyer_email(data))
             elif chemin == "/api/ouvrir":
@@ -606,9 +774,21 @@ select,input[type=text],input[type=password]{padding:9px 10px;border:1px solid v
 select{max-width:100%}
 .champ{display:flex;flex-direction:column;gap:4px;font-size:12.5px;color:var(--muted);flex:1;min-width:150px}
 pre.journal{background:#0f172a;color:#d1fae5;border-radius:10px;padding:14px;font-size:12px;font-family:Consolas,monospace;max-height:340px;overflow:auto;white-space:pre-wrap;margin-top:12px;display:none}
+.fichiers-job{display:none;margin-top:12px;border:1px solid var(--border);border-radius:10px;overflow:hidden;background:#fff}
+.fichiers-job .head{background:#f9fafb;padding:10px 12px;font-size:12.5px;font-weight:700;color:var(--teal-dark);border-bottom:1px solid var(--border)}
+.fichiers-job table{width:100%;border-collapse:collapse;font-size:12px}
+.fichiers-job th,.fichiers-job td{border-bottom:1px solid var(--border);padding:7px 9px;text-align:left;vertical-align:top}
+.fichiers-job th{background:#f0fdfa;color:var(--teal-dark);font-size:11.5px;text-transform:uppercase;letter-spacing:.2px}
+.fichiers-job .path{font-family:Consolas,monospace;word-break:break-all}
+.fichiers-job .empty{padding:10px 12px;font-size:12.5px;color:var(--muted)}
 .deux{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:12px}
 @media(max-width:800px){.deux{grid-template-columns:1fr}}
 textarea{width:100%;min-height:220px;border:1px solid var(--border);border-radius:10px;padding:12px;font-size:13.5px;font-family:inherit;resize:vertical}
+.champ textarea{min-height:78px;padding:9px 10px}
+.config-actions{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:8px;margin-top:10px}
+.config-actions button{width:100%;text-align:center}
+.statut-ligne{font-size:12.5px;color:var(--muted);margin:6px 0 10px}
+button.warnbtn{background:#b45309} button.warnbtn:hover{background:#92400e}
 .libelle{font-size:12.5px;font-weight:700;color:var(--muted);margin-bottom:4px;display:flex;justify-content:space-between;align-items:center}
 .livr-grp{margin-bottom:16px}
 .livr-grp h3{font-size:13px;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:8px}
@@ -637,8 +817,9 @@ textarea{width:100%;min-height:220px;border:1px solid var(--border);border-radiu
   <a href="#generer">1. Generer</a>
   <a href="#prospects">2. Messages prospects</a>
   <a href="#ao">3. Messages AO</a>
-  <a href="#email">4. Email</a>
-  <a href="#livrables">5. Livrables</a>
+  <a href="#config">4. Config & automatisation</a>
+  <a href="#email">5. Envoyer email</a>
+  <a href="#livrables">6. Livrables</a>
 </nav>
 <main>
 
@@ -661,9 +842,11 @@ textarea{width:100%;min-height:220px;border:1px solid var(--border);border-radiu
     <div class="rang">
       <button id="btnPipeline" onclick="lancer('pipeline')">Generer tous les documents</button>
       <button class="sec" id="btnAOupd" onclick="lancer('ao_update')">Mettre a jour les AO seulement</button>
+      <button class="sec" id="btnAlertesNow" onclick="lancer('alertes_run')">Lancer alertes AO maintenant</button>
       <button class="sec" id="btnMsgXlsx" onclick="lancer('messages_excel')">Messages prospects dans Excel</button>
     </div>
     <pre class="journal" id="journal"></pre>
+    <div class="fichiers-job" id="fichiersJob"></div>
   </div>
 </section>
 
@@ -713,14 +896,51 @@ textarea{width:100%;min-height:220px;border:1px solid var(--border);border-radiu
   </div>
 </section>
 
+
+<section id="config">
+  <h2>4. Configuration & automatisation</h2>
+  <div class="deux">
+    <div class="carte">
+      <h2 style="margin-bottom:8px">Email, destinataires et alertes</h2>
+      <div class="statut-ligne" id="nStatut">Chargement de la configuration...</div>
+      <div class="rang">
+        <button class="petit" onclick="setNotifications(true)">Activer alertes</button>
+        <button class="sec petit" onclick="setNotifications(false)">Couper alertes</button>
+      </div>
+      <div class="statut-ligne">Les destinataires se modifient dans la section Email ci-dessous. Le cockpit met a jour <code>destinataires.txt</code> et <code>alertes_secrets.json</code>.</div>
+    </div>
+    <div class="carte">
+      <h2 style="margin-bottom:8px">Fiche CHRUTH utilisee par l'IA</h2>
+      <div class="statut-ligne">Renseigne uniquement des faits vrais : prestations, zones, points forts, limites a ne pas inventer.</div>
+      <textarea id="ficheTxt" style="min-height:180px"></textarea>
+      <div class="rang">
+        <button class="petit" onclick="sauverFiche()">Enregistrer fiche</button>
+        <button class="sec petit" onclick="chargerFiche()">Recharger</button>
+        <button class="sec petit" onclick="ouvrir('fiche_chruth')">Ouvrir fichier</button>
+      </div>
+    </div>
+  </div>
+  <div class="carte" style="margin-top:14px">
+    <h2 style="margin-bottom:8px">Actions rapides sans sortir du cockpit</h2>
+    <div class="config-actions">
+      <button onclick="lancer('finance_only')">Regenerer modele financier</button>
+      <button onclick="lancer('pack_only')">Creer dossier portable</button>
+      <button class="warnbtn" onclick="lancer('alertes_run')">Lancer alertes AO maintenant</button>
+      <button class="sec" onclick="ouvrir('guide_html')">Ouvrir guide</button>
+      <button class="sec" onclick="ouvrir('dossier_output')">Ouvrir output</button>
+      <button class="sec" onclick="ouvrir('installer')">Lancer INSTALLER.bat</button>
+    </div>
+  </div>
+</section>
+
 <section id="email">
-  <h2>4. Email (Gmail)</h2>
+  <h2>5. Envoyer un email (Gmail)</h2>
   <div class="carte">
     <div style="font-size:13px;color:var(--muted);margin-bottom:10px">Utilise un <b>mot de passe d'application</b> Gmail (pas le mot de passe du compte). Configuration stockee localement, jamais dans les packs.</div>
     <div class="rang">
       <label class="champ">Email expediteur Gmail<input type="text" id="eUser"></label>
       <label class="champ">Mot de passe d'application<input type="password" id="ePass" placeholder="(inchange si vide)"></label>
-      <label class="champ">Destinataire<input type="text" id="eDest"></label>
+      <label class="champ">Destinataires (un par ligne)<textarea id="eDests"></textarea></label>
       <button class="petit" onclick="sauverEmailCfg()">Enregistrer</button>
     </div>
     <div id="eStatut" style="font-size:12.5px;color:var(--muted);margin:6px 0"></div>
@@ -734,7 +954,7 @@ textarea{width:100%;min-height:220px;border:1px solid var(--border);border-radiu
 </section>
 
 <section id="livrables">
-  <h2>5. Livrables & documents</h2>
+  <h2>6. Livrables & documents</h2>
   <div class="carte" id="zoneLivrables"></div>
 </section>
 
@@ -746,6 +966,7 @@ const CATS = [["principal","Livrables principaux"],["exports","Exports (Power BI
 let jobActif = false;
 
 function toast(msg, ms=3200){ const t=$("toast"); t.textContent=msg; t.classList.add("visible"); setTimeout(()=>t.classList.remove("visible"), ms); }
+function esc(v){ return String(v ?? "").replace(/[&<>"']/g, c=>{ if(c==="&") return "&amp;"; if(c==="<") return "&lt;"; if(c===">") return "&gt;"; if(c==='"') return "&quot;"; return "&#39;"; }); }
 async function api(chemin, corps){
   const opt = corps ? {method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify(corps)} : {};
   const rep = await fetch(chemin, opt);
@@ -788,12 +1009,27 @@ async function ouvrir(cle){
 
 // -------------------------------------------------------------- jobs -------
 function boutonsJob(off){
-  ["btnPipeline","btnAOupd","btnMsgXlsx"].forEach(id=>$(id).disabled = off);
+  ["btnPipeline","btnAOupd","btnAlertesNow","btnMsgXlsx"].forEach(id=>$(id).disabled = off);
+  document.querySelectorAll("#config button[onclick^='lancer']").forEach(b=>b.disabled = off);
+}
+function afficherFichiersJob(fichiers, elapsed){
+  const z = $("fichiersJob");
+  if(!z) return;
+  z.style.display = "block";
+  if(!fichiers || !fichiers.length){
+    z.innerHTML = `<div class="head">Temps par fichier</div><div class="empty">Aucun fichier du dossier output mis a jour pour l'instant.</div>`;
+    return;
+  }
+  z.innerHTML = `<div class="head">Fichiers mis a jour depuis le lancement - temps ecoule : ${esc(elapsed || "0s")}</div>` +
+    `<table><thead><tr><th>Temps</th><th>Fichier</th><th>Taille</th><th>Heure</th></tr></thead><tbody>` +
+    fichiers.map(f=>`<tr><td>${esc(f.temps)}</td><td class="path">${esc(f.chemin)}</td><td>${esc(f.taille)}</td><td>${esc(f.date)}</td></tr>`).join("") +
+    `</tbody></table>`;
 }
 async function lancer(action){
   if(jobActif) return;
   const options = {collect_ao:$("optAO").checked, collect_prospects:$("optProspects").checked, messages_ia:$("optIA").checked, pack:$("optPack").checked};
   if(action==="pipeline" && options.collect_prospects && !confirm("La recollecte prospects France peut durer plusieurs dizaines de minutes. Continuer ?")) return;
+  if(action==="alertes_run" && !confirm("Cette action controle les nouveaux AO et peut envoyer les alertes email aux destinataires configures. Continuer ?")) return;
   try{
     await api("/api/lancer",{action, options});
     jobActif = true; boutonsJob(true);
@@ -891,28 +1127,55 @@ function versEmail(idZone, defaut){
 async function chargerEmailCfg(){
   try{
     const c = await api("/api/email");
-    $("eUser").value = c.expediteur; $("eDest").value = c.destinataire;
-    $("eStatut").textContent = c.prete ? "✅ Configuration email prete." : "ℹ " + c.message;
+    $("eUser").value = c.expediteur; $("eDests").value = c.destinataires || c.destinataire || "";
+    $("eStatut").textContent = c.prete ? "Configuration email prete : " + c.nb_destinataires + " destinataire(s)." : c.message;
+    $("nStatut").textContent = "Alertes email : " + (c.notifications_actives ? "ON" : "OFF") + " | " + c.nb_destinataires + " destinataire(s).";
   }catch(e){}
 }
 async function sauverEmailCfg(){
   try{
-    const c = await api("/api/email",{expediteur:$("eUser").value, mot_de_passe:$("ePass").value, destinataire:$("eDest").value});
+    const c = await api("/api/email",{expediteur:$("eUser").value, mot_de_passe:$("ePass").value, destinataires:$("eDests").value});
     $("ePass").value = "";
-    $("eStatut").textContent = c.prete ? "✅ Configuration email prete." : "ℹ " + c.message;
+    $("eDests").value = c.destinataires || "";
+    $("eStatut").textContent = c.prete ? "Configuration email prete : " + c.nb_destinataires + " destinataire(s)." : c.message;
+    $("nStatut").textContent = "Alertes email : " + (c.notifications_actives ? "ON" : "OFF") + " | " + c.nb_destinataires + " destinataire(s).";
     toast("Configuration enregistree.");
-  }catch(e){ toast("⚠ " + e.message, 4500); }
+  }catch(e){ toast("Attention : " + e.message, 4500); }
 }
 async function envoyerEmail(){
-  const dest = $("eDest").value.trim();
+  const dest = $("eDests").value.trim();
   if(!$("eCorps").value.trim()){ toast("Le message est vide."); return; }
-  if(!confirm("Envoyer cet email a " + dest + " ?")) return;
+  if(!dest){ toast("Aucun destinataire."); return; }
+  if(!confirm("Envoyer cet email aux destinataires indiques ?")) return;
   $("btnEnvoyer").disabled = true;
   try{
-    const r = await api("/api/envoyer",{destinataire:dest, sujet:$("eSujet").value, corps:$("eCorps").value});
-    toast("✅ " + r.message, 5000);
-  }catch(e){ toast("⚠ " + e.message, 6000); }
+    const r = await api("/api/envoyer",{destinataires:dest, sujet:$("eSujet").value, corps:$("eCorps").value});
+    toast(r.message, 5000);
+  }catch(e){ toast("Attention : " + e.message, 6000); }
   finally{ $("btnEnvoyer").disabled = false; }
+}
+
+// ----------------------------------------------------------- config -------
+async function setNotifications(actif){
+  try{
+    const c = await api("/api/notifications",{actif});
+    $("nStatut").textContent = "Alertes email : " + (c.notifications_actives ? "ON" : "OFF") + " | " + c.nb_destinataires + " destinataire(s).";
+    toast(c.notifications_actives ? "Alertes email activees." : "Alertes email coupees.");
+    rafraichirStatut();
+  }catch(e){ toast("Attention : " + e.message, 4500); }
+}
+async function chargerFiche(){
+  try{
+    const f = await api("/api/fiche");
+    $("ficheTxt").value = f.contenu || "";
+  }catch(e){ toast("Attention : " + e.message, 4500); }
+}
+async function sauverFiche(){
+  try{
+    await api("/api/fiche",{contenu:$("ficheTxt").value});
+    toast("Fiche CHRUTH enregistree.");
+    rafraichirStatut();
+  }catch(e){ toast("Attention : " + e.message, 4500); }
 }
 
 // ------------------------------------------------------------- divers ------
@@ -927,6 +1190,7 @@ document.querySelectorAll("nav a").forEach(a=>a.addEventListener("click",()=>{
 
 rafraichirStatut();
 chargerEmailCfg();
+chargerFiche();
 api("/api/job").then(j=>{ if(j.running){ jobActif=true; boutonsJob(true); $("journal").style.display="block"; suivreJob(); } }).catch(()=>{});
 </script>
 </body>

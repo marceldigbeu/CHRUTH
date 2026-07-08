@@ -654,7 +654,14 @@ def export_excel(path: Path = None, region_names: str = "") -> Path:
     wb._sheets.sort(key=lambda s: ordered.index(s.title))
 
     write_vba_module()
-    wb.save(path)
+    try:
+        wb.save(path)
+    except PermissionError as exc:
+        raise PermissionError(
+            f"Impossible d'ecrire {path}. Ferme le classeur AO_CHRUTH.xlsm dans Excel "
+            "puis relance la mise a jour depuis le cockpit. Si Excel semble deja ferme, "
+            "verifie dans le Gestionnaire des taches qu'aucun processus EXCEL.EXE ne reste ouvert."
+        ) from exc
     return path
 
 
@@ -761,7 +768,11 @@ def main() -> int:
     parser.add_argument("--regions", default="",
                         help="Region(s) a mettre en avant dans l'onglet AO_Region, ex: \"Île-de-France\".")
     args = parser.parse_args()
-    path = export_excel(region_names=args.regions)
+    try:
+        path = export_excel(region_names=args.regions)
+    except PermissionError as exc:
+        print(f"[ERREUR] {exc}")
+        return 1
     print(f"Excel AO exporte : {path}")
     return 0
 

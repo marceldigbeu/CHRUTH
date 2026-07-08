@@ -14,6 +14,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from openpyxl import Workbook  # noqa: E402
 
 import previsions  # noqa: E402
+from ameliorer_modele_financier import ameliorer  # noqa: E402
 
 OUT = Path(__file__).resolve().parent.parent / "output" / "Modele_Financier_CHRUTH.xlsx"
 
@@ -29,6 +30,7 @@ def main() -> int:
     rentabilite_marche.ecrire_feuilles(wb)
     OUT.parent.mkdir(parents=True, exist_ok=True)
     wb.save(OUT)
+    ameliorer(OUT)
     print(f"Modele financier interactif : {OUT}")
     print("  Onglets : Previsionnel_Global, Charges_Fixes, Hypotheses_Marche, "
           "Marches, Synthese_Rentabilite")
