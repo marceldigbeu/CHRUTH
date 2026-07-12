@@ -43,10 +43,17 @@ def main() -> int:
                 print(f"[ERREUR] Collecte echouee (code {code})")
                 return code
 
-            # 1.5) Ingestion Maximilien (BEST-EFFORT : emails non lus IMAP -> injecte dans la base).
-            code_max = _run("1.5. Ingestion Maximilien (IMAP)", [py, str(BASE / "ao_maximilien_ingest.py")], log_file)
+            # 1.5) Collecte Maximilien PUBLIQUE (BEST-EFFORT : scrape de la recherche
+            #      publique, sans compte ni API -> injecte dans la base). Voie principale.
+            code_mxs = _run("1.5. Collecte Maximilien (recherche publique)", [py, str(BASE / "ao_maximilien_scrape.py")], log_file)
+            if code_mxs != 0:
+                log_file.write("[INFO] Maximilien public non collecte (site indisponible/modifie) -> on continue.\n")
+
+            # 1.6) Ingestion Maximilien IMAP (BEST-EFFORT, SECOURS : lit les alertes email
+            #      Maximilien non lues si une recherche enregistree existe cote plateforme).
+            code_max = _run("1.6. Ingestion Maximilien (IMAP, secours)", [py, str(BASE / "ao_maximilien_ingest.py")], log_file)
             if code_max != 0:
-                log_file.write("[INFO] Maximilien non ingere (IMAP indisponible ou aucun email) -> on continue.\n")
+                log_file.write("[INFO] Maximilien IMAP non ingere (indisponible ou aucun email) -> on continue.\n")
         else:
             log_file.write("[COLLECTE] Desactivee depuis Excel -> BOAMP/IMAP ignores.\n")
 

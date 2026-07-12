@@ -46,16 +46,22 @@ def _lire_secrets() -> dict[str, Any]:
     return {}
 
 
-def _is_maximilien_email(msg: Any) -> bool:
+def _is_maximilien_email(msg: Any, own_addr: str = "") -> bool:
     sender = str(msg.get("From", "")).lower()
     subject = str(msg.get("Subject", "")).lower()
+    # Anti-boucle : ne JAMAIS ravaler nos propres alertes CHRUTH (self-email de
+    # monitoring). Elles contiennent des liens marches.maximilien.fr et etaient
+    # donc faussement detectees comme "Maximilien" via le corps du message.
+    if own_addr and own_addr.lower() in sender:
+        return False
+    if subject.startswith("chruth") or "veille automatique chruth" in subject:
+        return False
+    # Positif : uniquement sur l'expediteur (Maximilien/Atexo) ou un sujet explicite.
+    # (On ne se fie PLUS au corps du message, cause de la boucle.)
     for s in MAXIMILIEN_SENDERS:
         if s in sender:
             return True
     if "maximilien" in subject:
-        return True
-    body = _get_body(msg)
-    if "maximilien" in body.lower():
         return True
     return False
 
@@ -217,7 +223,7 @@ def ingerer_maximilien(
                 if result != "OK":
                     continue
                 msg = message_from_bytes(data[0][1])
-                if not _is_maximilien_email(msg):
+                if not _is_maximilien_email(msg, own_addr=user):
                     imap.store(uid, "+FLAGS", "\\Seen")
                     continue
 
