@@ -93,25 +93,30 @@ def calculer_verdicts_manquants(db_path: Path = AO_DB_PATH, guide: str = "",
     """Trie les AO qui n'ont pas encore de verdict. Renvoie le nombre traites.
 
     Marque, ne supprime jamais : les AO rejetes restent visibles dans le cockpit.
+
+    Ecriture AO par AO, connexion refermee entre chaque : un cas ambigu peut couter
+    30 s de LLM, et garder une transaction ouverte pendant tout l'arriere-plan
+    perdrait le travail a la moindre interruption tout en verrouillant la base
+    face a la tache planifiee.
     """
     import ao_pertinence
 
     init_db(db_path)
     with connect(db_path) as conn:
-        lignes = conn.execute(
+        lignes = [dict(r) for r in conn.execute(
             "SELECT id_ao, objet, resume_commercial FROM ao_records "
             "WHERE verdict_tri IS NULL OR verdict_tri = ''"
-        ).fetchall()
+        ).fetchall()]
 
-        traites = 0
-        for ligne in lignes:
-            r = dict(ligne)
-            v = ao_pertinence.trier(r.get("objet") or "", r.get("resume_commercial") or "",
-                                    guide=guide, client=client)
+    traites = 0
+    for r in lignes:
+        v = ao_pertinence.trier(r.get("objet") or "", r.get("resume_commercial") or "",
+                                guide=guide, client=client)
+        with connect(db_path) as conn:
             conn.execute("UPDATE ao_records SET verdict_tri=?, motif_tri=? WHERE id_ao=?",
                          (v.verdict, v.motif, r["id_ao"]))
-            traites += 1
-        conn.commit()
+            conn.commit()
+        traites += 1
     return traites
 
 
