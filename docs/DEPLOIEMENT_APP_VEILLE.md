@@ -5,11 +5,14 @@ depuis un téléphone, sans PC allumé.
 
 ## En local, tout de suite
 
-Double-clic sur `LANCER_APP_VEILLE.bat`, ou :
+Double-clic sur `LANCER_APP_CHRUTH.bat`, ou :
 
 ```
-python -m streamlit run app_veille.py
+python -m streamlit run CHRUTH_APP.py
 ```
+
+L'application s'ouvre sur la veille ; la page « Messages et CRM » est dans le
+menu de gauche.
 
 Elle lit `etat/veille.json` dans le dossier du projet. Sans veille cloud encore en
 service, ce fichier se remplit avec :
@@ -23,7 +26,7 @@ python ao_maximilien_veille.py
 ### 1. Connecter le dépôt
 
 share.streamlit.io > **New app** > le dépôt `CHRUTH`, branche `main`,
-fichier principal `app_veille.py`.
+fichier principal `CHRUTH_APP.py`.
 
 ### 2. Renseigner les secrets de l'app
 

@@ -765,9 +765,10 @@ class App(tk.Tk):
         messagebox.showwarning("Fiche de poste", "Fiche de poste CHRUTH.pdf introuvable.")
 
     def launch_streamlit_messages(self) -> None:
-        app = ROOT / "app_messages.py"
+        # Point d'entree unique : veille + messages sont deux pages de la meme app.
+        app = ROOT / "CHRUTH_APP.py"
         if not app.exists():
-            messagebox.showwarning("App messages", "app_messages.py introuvable.")
+            messagebox.showwarning("App CHRUTH", "CHRUTH_APP.py introuvable.")
             return
         try:
             subprocess.Popen(
@@ -775,7 +776,7 @@ class App(tk.Tk):
                 cwd=ROOT,
                 creationflags=getattr(subprocess, "CREATE_NEW_CONSOLE", 0),
             )
-            self.set_status("App Streamlit messages lancee.")
+            self.set_status("Application CHRUTH lancee (veille + messages).")
         except Exception as exc:  # noqa: BLE001
             messagebox.showerror("App messages", str(exc))
 

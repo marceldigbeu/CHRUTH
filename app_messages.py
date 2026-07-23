@@ -4,7 +4,8 @@ Surface web complementaire au bouton Excel : choisir un AO (ou un segment prospe
 generer email + script via le backend pluggable (Ollama local OU cle cloud), editer,
 copier. Le fournisseur se choisit dans la barre laterale ; les cles vivent dans .env.
 
-Lancer :  streamlit run app_messages.py   (ou double-clic LANCER_APP_MESSAGES.bat)
+Lancer :  double-clic LANCER_APP_CHRUTH.bat, page « Messages et CRM »
+          (ou streamlit run app_messages.py pour cette page seule)
 """
 from __future__ import annotations
 
@@ -26,7 +27,12 @@ import prospect_messages as pm
 from ao_config import AO_DB_PATH
 from ao_db import connect
 
-st.set_page_config(page_title="CHRUTH — Messages IA", layout="wide")
+# set_page_config n'a le droit d'etre appele qu'une fois : l'entree multipage
+# (CHRUTH_APP.py) l'a deja fait. On garde l'appel pour l'usage en page isolee.
+try:
+    st.set_page_config(page_title="CHRUTH — Messages IA", layout="wide")
+except st.errors.StreamlitAPIException:
+    pass
 st.title("📨 CHRUTH — Générateur de messages (IA)")
 
 

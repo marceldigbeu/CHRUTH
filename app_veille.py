@@ -4,7 +4,7 @@ Lit l'etat produit par le veilleur (GitHub Actions) et le reecrit au meme endroi
 Aucune logique de tri ici : les verdicts viennent de ao_pertinence, cette page
 n'affiche que ce qui a deja ete decide et enregistre les jugements humains.
 
-Lancement local  : streamlit run app_veille.py
+Lancement local  : double-clic LANCER_APP_CHRUTH.bat (page « Veille »)
 Source distante  : CHRUTH_VEILLE_SOURCE=github + CHRUTH_GITHUB_REPO + CHRUTH_GITHUB_TOKEN
 """
 from __future__ import annotations
@@ -37,7 +37,12 @@ PERIODES = {
     "Depuis une date précise": "libre",
 }
 
-st.set_page_config(page_title="Veille CHRUTH", page_icon="🧹", layout="wide")
+# set_page_config n'a le droit d'etre appele qu'une fois : l'entree multipage
+# (CHRUTH_APP.py) l'a deja fait. On garde l'appel pour l'usage en page isolee.
+try:
+    st.set_page_config(page_title="Veille CHRUTH", page_icon="🧹", layout="wide")
+except st.errors.StreamlitAPIException:
+    pass
 
 
 # --- Etat ------------------------------------------------------------------
