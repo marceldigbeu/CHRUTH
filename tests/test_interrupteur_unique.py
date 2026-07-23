@@ -70,3 +70,23 @@ def test_reglages_adopte_l_ancienne_cle(tmp_path, monkeypatch):
     monkeypatch.setattr(veille_depot, "lire", lambda: (_etat(ancienne=False), None))
     reglages.invalider()
     assert reglages.lire()["notifications"] is False
+
+
+def test_ecrire_purge_l_ancienne_cle(tmp_path, monkeypatch):
+    """Sans cette purge, « une coupure posee l'emporte » devient un piege.
+
+    Une ancienne cle restee a False rendrait l'interrupteur IMPOSSIBLE a rouvrir
+    depuis la page Reglages : le repli ecraserait indefiniment le bloc.
+    """
+    monkeypatch.setattr(reglages, "CACHE", tmp_path / "cache.json")
+    etat = _etat(reg={"notifications": False}, ancienne=False)
+    monkeypatch.setattr(veille_depot, "lire", lambda: (etat, None))
+    monkeypatch.setattr(veille_depot, "ecrire", lambda e, sha, message="x": "sha")
+
+    reglages.invalider()
+    reglages.ecrire({"notifications": True})
+    assert "notifications" not in etat
+    assert etat["reglages"]["notifications"] is True
+
+    reglages.invalider()
+    assert reglages.lire()["notifications"] is True   # reactivable, enfin

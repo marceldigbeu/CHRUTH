@@ -116,6 +116,10 @@ def ecrire(modifs: dict[str, Any]) -> dict[str, Any]:
     try:
         etat, sha = veille_depot.lire()
         etat["reglages"] = valeurs
+        # Acheve la migration : tant que l'ancienne cle de premier niveau traine a
+        # False, le repli de `_depuis_etat` ecrase le bloc et l'interrupteur devient
+        # IMPOSSIBLE a rouvrir depuis la page Reglages.
+        etat.pop("notifications", None)
         veille_depot.ecrire(etat, sha, "reglages")
     except Exception:  # noqa: BLE001
         pass  # conserve en cache, repousse a la prochaine ecriture reussie
