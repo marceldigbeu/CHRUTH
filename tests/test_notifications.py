@@ -34,7 +34,10 @@ def test_collecte_set_off_puis_on(tmp_path):
 
 
 def test_main_off_n_envoie_aucun_email(monkeypatch):
-    monkeypatch.setattr(ao_alertes, "notifications_actives", lambda: False)
+    # main() interroge notifications_ouvertes() : les reglages partages priment
+    # sur le drapeau local, qui n'en est plus qu'un repli hors ligne. Patcher le
+    # drapeau ne suffit donc plus, et rendrait le test dependant des fichiers locaux.
+    monkeypatch.setattr(ao_alertes, "notifications_ouvertes", lambda: False)
 
     def _ne_doit_pas_etre_appele(*a, **k):
         raise AssertionError("envoyer_alertes ne doit pas etre appele quand OFF")
@@ -44,7 +47,7 @@ def test_main_off_n_envoie_aucun_email(monkeypatch):
 
 
 def test_main_on_appelle_envoyer(monkeypatch):
-    monkeypatch.setattr(ao_alertes, "notifications_actives", lambda: True)
+    monkeypatch.setattr(ao_alertes, "notifications_ouvertes", lambda: True)
     appels = {"n": 0}
 
     def _faux_envoi(*a, **k):
