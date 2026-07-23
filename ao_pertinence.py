@@ -9,6 +9,8 @@ Il ne connait ni le web, ni l'email, ni la base.
 """
 from __future__ import annotations
 
+import json
+import re
 from dataclasses import dataclass
 
 from ao_config import (
@@ -56,3 +58,90 @@ def trier_listes(objet: str, detail: str = "") -> Verdict | None:
             return Verdict(PERTINENT, "listes", f"mot-cle coeur dans l'intitule : {mot}")
 
     return None
+
+
+# --- Etage 2 : arbitrage IA des cas ambigus --------------------------------
+
+SYSTEM_TRI = (
+    "Tu es un expert des marchés publics de propreté. Tu décides si un appel d'offres "
+    "relève du métier de l'entreprise décrite, ou non. Tu réponds uniquement en JSON."
+)
+
+_JSON_RE = re.compile(r"\{.*\}", re.DOTALL)
+
+
+def prompt_tri(objet: str, detail: str = "", guide: str = "",
+               corrections: list[dict] | None = None) -> str:
+    """Prompt d'arbitrage. Garde-fous : pas d'invention, JSON strict, doute = PERTINENT."""
+    bloc_guide = f"\n\nL'ENTREPRISE :\n{guide.strip()}" if guide.strip() else ""
+
+    bloc_exemples = ""
+    if corrections:
+        lignes = "\n".join(
+            f"- « {c['objet']} » -> {c['verdict']}" for c in corrections[:10]
+        )
+        bloc_exemples = (
+            "\n\nDÉCISIONS DÉJÀ TRANCHÉES PAR L'UTILISATEUR (fais-toi le même jugement) :\n"
+            + lignes
+        )
+
+    return (
+        "Cet appel d'offres relève-t-il du nettoyage et de la propreté de locaux ?"
+        f"{bloc_guide}{bloc_exemples}\n\n"
+        f"INTITULÉ : {objet}\n"
+        f"DÉTAIL : {(detail or '')[:800]}\n\n"
+        "RÈGLES :\n"
+        "- Réponds NON_PERTINENT pour la maintenance technique (ascenseurs, incendie, "
+        "ventilation), les espaces verts, la conservation d'archives ou d'œuvres, "
+        "la dératisation, la restauration collective, les travaux.\n"
+        "- Réponds PERTINENT pour l'entretien courant de locaux, la vitrerie, "
+        "le bionettoyage, la remise en état.\n"
+        "- N'invente aucune information absente de l'intitulé.\n"
+        "- En cas de doute réel, réponds PERTINENT.\n\n"
+        'Réponds exactement : {"verdict": "PERTINENT" ou "NON_PERTINENT", '
+        '"motif": "une phrase courte"}'
+    )
+
+
+def _lire_reponse(brut: str) -> tuple[str, str] | None:
+    """Extrait (verdict, motif) d'une reponse LLM, tolerante aux fences markdown."""
+    m = _JSON_RE.search(brut or "")
+    if not m:
+        return None
+    try:
+        data = json.loads(m.group(0), strict=False)
+    except Exception:  # noqa: BLE001
+        return None
+    verdict = str(data.get("verdict") or "").strip().upper()
+    motif = str(data.get("motif") or "").strip()
+    if verdict not in ("PERTINENT", "NON_PERTINENT"):
+        return None
+    return (PERTINENT if verdict == "PERTINENT" else REJETE), motif
+
+
+def trier(objet: str, detail: str = "", guide: str = "", client=None,
+          corrections: list[dict] | None = None) -> Verdict:
+    """Verdict final. L'IA n'est consultee que si les listes ne tranchent pas.
+
+    Principe : le doute profite a l'AO. Un faux positif coute un email, un faux
+    negatif coute un marche.
+    """
+    verdict = trier_listes(objet, detail)
+    if verdict is not None:
+        return verdict
+
+    if client is None:
+        import llm_client as client  # import tardif : le module reste testable sans LLM
+
+    try:
+        if not client.moteur_auto():
+            return Verdict(PERTINENT, "listes", "ambigu, tri IA indisponible")
+        brut = client.generer(prompt_tri(objet, detail, guide, corrections),
+                              system=SYSTEM_TRI, timeout=60, temperature=0.1)
+    except Exception as exc:  # noqa: BLE001
+        return Verdict(PERTINENT, "listes", f"ambigu, tri IA en echec ({type(exc).__name__})")
+
+    lu = _lire_reponse(brut)
+    if lu is None:
+        return Verdict(PERTINENT, "listes", "ambigu, reponse IA illisible")
+    return Verdict(lu[0], "ia", lu[1] or "arbitrage IA")
