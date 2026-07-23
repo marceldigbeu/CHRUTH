@@ -511,6 +511,11 @@ def sync_destinataires_secrets(emails: list[str]) -> None:
                 data = loaded
     data["destinataire"] = ", ".join(emails)
     path.write_text(json.dumps(data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    try:
+        import reglages
+        reglages.ecrire({"destinataires": list(emails)})
+    except Exception as exc:  # noqa: BLE001
+        print(f"[REGLAGES] non synchronises ({exc}) -> fichiers locaux seulement.")
 
 
 def config_email() -> dict:
@@ -590,8 +595,6 @@ def enregistrer_fiche_chruth(data: dict) -> dict:
 
 
 def definir_notifications(data: dict) -> dict:
-    from ao_config import set_notifications
-
     if "actif" not in data:
         raise ValueError("Etat des notifications manquant.")
     value = data.get("actif")
@@ -599,7 +602,9 @@ def definir_notifications(data: dict) -> dict:
         actif = value.strip().upper() in {"1", "ON", "TRUE", "OUI", "YES"}
     else:
         actif = bool(value)
-    set_notifications(actif)
+    # `appliquer` pose l'etat partage ET le drapeau local, comme le bouton du tableur.
+    from outils.set_notifications import appliquer
+    appliquer(actif)
     return config_email()
 
 

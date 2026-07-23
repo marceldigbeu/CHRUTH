@@ -37,8 +37,17 @@ def _lire_secrets() -> dict[str, Any]:
 
 def charger_destinataires(secrets: dict[str, Any] | None = None) -> list[str]:
     """Liste des destinataires (dedupliquee). Priorite :
-    1) destinataires.txt (une adresse par ligne ; lignes vides / # ignorees) ;
-    2) env CHRUTH_ALERTE_DEST ; 3) 'destinataire' de alertes_secrets.json. (separateurs , ou ;)"""
+    1) reglages partages ; 2) destinataires.txt (une adresse par ligne ; lignes
+    vides / # ignorees) ; 3) env CHRUTH_ALERTE_DEST ; 4) 'destinataire' de
+    alertes_secrets.json. (separateurs , ou ;)"""
+    try:
+        import reglages
+        partages = [e.strip() for e in (reglages.lire().get("destinataires") or []) if e.strip()]
+        if partages:
+            return list(dict.fromkeys(partages))
+    except Exception:  # noqa: BLE001
+        pass  # hors ligne : on continue sur les fichiers locaux
+
     f = Path(ALERTE_DESTINATAIRES_FILE)
     if f.exists():
         lignes = [l.strip() for l in f.read_text(encoding="utf-8").splitlines()]
@@ -49,6 +58,15 @@ def charger_destinataires(secrets: dict[str, Any] | None = None) -> list[str]:
     brut = os.environ.get("CHRUTH_ALERTE_DEST") or str(secrets.get("destinataire") or "")
     emails = [e.strip() for e in re.split(r"[,;]", brut) if e.strip()]
     return list(dict.fromkeys(emails))
+
+
+def notifications_ouvertes() -> bool:
+    """Interrupteur des emails : reglages partages, sinon drapeau local."""
+    try:
+        import reglages
+        return bool(reglages.lire().get("notifications", True))
+    except Exception:  # noqa: BLE001
+        return notifications_actives()
 
 
 def charger_config_smtp() -> dict[str, Any]:
@@ -253,7 +271,7 @@ def main() -> int:
     if hasattr(sys.stdout, "reconfigure"):
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     LOG_DIR.mkdir(parents=True, exist_ok=True)
-    if not notifications_actives():
+    if not notifications_ouvertes():
         print("[ALERTE] Notifications désactivées (bouton OFF / Parametres!B2) -> aucun email envoyé.")
         return 0
     try:

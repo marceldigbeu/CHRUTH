@@ -13,6 +13,17 @@ sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 from ao_config import notifications_actives, set_notifications  # noqa: E402
 
 
+def appliquer(actif: bool) -> bool:
+    """Pose l'interrupteur dans les reglages partages ET le drapeau local.
+
+    Le drapeau local reste ecrit : il sert de cache quand GitHub est injoignable.
+    """
+    import reglages
+    reglages.ecrire({"notifications": bool(actif)})
+    set_notifications(bool(actif))
+    return bool(actif)
+
+
 def main() -> int:
     arg = (sys.argv[1] if len(sys.argv) > 1 else "").strip().upper()
     if arg == "TOGGLE":
@@ -25,7 +36,7 @@ def main() -> int:
     else:
         print(f"Argument invalide : {arg!r} (attendu ON, OFF ou toggle).")
         return 2
-    set_notifications(actif)
+    appliquer(actif)
     print("Notifications email : " + ("ON" if actif else "OFF"))
     return 0
 

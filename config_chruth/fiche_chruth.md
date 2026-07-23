@@ -14,3 +14,10 @@
 
 ## Ce qu'il NE faut PAS prétendre
 <!-- Ex: pas de certification ISO à ce jour, ne pas citer de prix -->
+
+## Coordonnées
+<!-- Renseigner les vraies valeurs : elles seront collees telles quelles dans les messages.
+     Laisser vide plutot que d'approximer — un lien faux coute plus cher que pas de lien. -->
+- Site :
+- Email :
+- Téléphone :

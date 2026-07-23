@@ -61,6 +61,44 @@ AO_KEYWORDS_SECONDARY = [
     "desinfection",
 ]
 
+# Marches de PERSONNEL (mise a disposition, services associes). Volontairement
+# COMPOSES : « accueil », « logistique » ou « manutention » seuls figurent dans la
+# moitie des marches de services et noieraient les alertes. Chaque terme porte un
+# marqueur de personnel. Seul « gardiennage » est simple : il designe une
+# prestation, pas un mot courant — a surveiller en recette.
+AO_KEYWORDS_RH = [
+    "mise a disposition de personnel",
+    "mise a disposition d'agents",
+    "personnel de service",
+    "agents de service",
+    "personnel d'entretien",
+    "agent polyvalent",
+    "agents polyvalents",
+    "renfort d'agents",
+    "personnel d'accueil",
+    "agents d'accueil",
+    "agent de gardiennage",
+    "gardiennage",
+    "agents de manutention",
+    "personnel de restauration",
+    "agents de restauration",
+    "interim",
+    "travail temporaire",
+]
+
+# Marqueurs de la categorie Personnel (lecture du cockpit et du fil).
+AO_CATEGORIE_PERSONNEL = [
+    "mise a disposition de personnel",
+    "mise a disposition d'agents",
+    "personnel de service",
+    "agents de service",
+    "personnel d'accueil",
+    "agents d'accueil",
+    "gardiennage",
+    "interim",
+    "travail temporaire",
+]
+
 # Seuils budget ANNUALISE (EUR) : score strictement decroissant.
 # (montant, points) — la borne est un plafond "<=".
 AO_BUDGET_SCORE_BANDS = [
@@ -75,7 +113,10 @@ AO_BUDGET_SCORE_UNKNOWN = 10     # budget non affiche (frequent en MAPA), non pe
 # Categorisation nettoyage demandee par le client.
 AO_CATEGORIE_VITRES = ["vitre", "vitrerie", "vitree", "vitres"]
 AO_CATEGORIE_BUREAUX = ["bureau", "bureaux"]
-AO_CATEGORIE_BATIMENTS = ["batiment", "locaux", "immeuble", "site", "ecole", "gymnase"]
+# Pluriels explicites : le rapprochement exige des frontieres de mot des deux cotes,
+# donc « batiments communaux » ne matchait pas « batiment » et tombait en Mixte/Autre.
+AO_CATEGORIE_BATIMENTS = ["batiment", "batiments", "locaux", "immeuble", "immeubles",
+                          "site", "sites", "ecole", "ecoles", "gymnase", "gymnases"]
 
 # Secteurs cibles (bonus de score, jamais un filtre).
 AO_SECTEURS = {
@@ -154,6 +195,16 @@ AO_EXCLUSION_TRI = [
     "securite incendie",
     "bouches et poteaux",
     "collecte pneumatique",
+    # Fonction RH : CHRUTH fournit du personnel, elle n'exerce pas ces metiers.
+    "gestion de la paie",
+    "administration du personnel",
+    "sante au travail",
+    "medecine preventive",
+    "medecine professionnelle",
+    "formation des agents",
+    "missions de formation",
+    "recrutement",
+    "coaching",
     # Electromenager : « appareils menagers » commence par le mot-cle « menage ».
     # Cible l'objet fourni, jamais la prestation (« entretien menager » reste garde).
     "appareils menagers",
@@ -210,30 +261,39 @@ ALERTE_ACTIVE_FILE = BASE_DIR / "alertes_actives.flag"
 COLLECTE_ACTIVE_FILE = BASE_DIR / "collecte_active.flag"
 
 
-def notifications_actives(flag_file: Path = ALERTE_ACTIVE_FILE) -> bool:
+# Les quatre fonctions ci-dessous resolvent leur chemin A L'APPEL (`None` ->
+# constante du module), et non comme valeur par defaut figee a l'import : sinon
+# rediriger ALERTE_ACTIVE_FILE reste sans effet, et la suite de tests eteint pour
+# de bon les notifications du poste en ecrivant les vrais drapeaux.
+
+def notifications_actives(flag_file: Path | None = None) -> bool:
     """True si les alertes email sont activees. Defaut : actives si le fichier manque."""
     try:
-        return Path(flag_file).read_text(encoding="utf-8").strip().upper() != "OFF"
+        return Path(flag_file or ALERTE_ACTIVE_FILE).read_text(
+            encoding="utf-8").strip().upper() != "OFF"
     except FileNotFoundError:
         return True
 
 
-def set_notifications(actif: bool, flag_file: Path = ALERTE_ACTIVE_FILE) -> None:
+def set_notifications(actif: bool, flag_file: Path | None = None) -> None:
     """Persiste l'etat ON/OFF des alertes email."""
-    Path(flag_file).write_text("ON" if actif else "OFF", encoding="utf-8")
+    Path(flag_file or ALERTE_ACTIVE_FILE).write_text(
+        "ON" if actif else "OFF", encoding="utf-8")
 
 
-def collecte_active(flag_file: Path = COLLECTE_ACTIVE_FILE) -> bool:
+def collecte_active(flag_file: Path | None = None) -> bool:
     """True si la collecte reseau est activee. Defaut : active si le fichier manque."""
     try:
-        return Path(flag_file).read_text(encoding="utf-8").strip().upper() != "OFF"
+        return Path(flag_file or COLLECTE_ACTIVE_FILE).read_text(
+            encoding="utf-8").strip().upper() != "OFF"
     except FileNotFoundError:
         return True
 
 
-def set_collecte(actif: bool, flag_file: Path = COLLECTE_ACTIVE_FILE) -> None:
+def set_collecte(actif: bool, flag_file: Path | None = None) -> None:
     """Persiste l'etat ON/OFF de la collecte reseau."""
-    Path(flag_file).write_text("ON" if actif else "OFF", encoding="utf-8")
+    Path(flag_file or COLLECTE_ACTIVE_FILE).write_text(
+        "ON" if actif else "OFF", encoding="utf-8")
 
 
 # Emplacement de la liste de destinataires dans l'onglet Parametres du cockpit

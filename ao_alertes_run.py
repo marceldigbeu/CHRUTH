@@ -30,6 +30,11 @@ def _run(label: str, command: list[str], log_file) -> int:
 
 def main() -> int:
     LOG_DIR.mkdir(exist_ok=True)
+    try:
+        import reglages
+        reglages.rafraichir()
+    except Exception as exc:  # noqa: BLE001
+        print(f"[REGLAGES] non rafraichis ({exc}) -> cache local utilise.")
     stamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     log_path = LOG_DIR / f"ao_alerte_{stamp}.log"
     py = sys.executable

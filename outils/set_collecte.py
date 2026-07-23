@@ -10,6 +10,14 @@ sys.path.insert(0, str(BASE))
 from ao_config import collecte_active, set_collecte  # noqa: E402
 
 
+def appliquer(actif: bool) -> bool:
+    """Pose l'interrupteur de collecte dans les reglages partages ET le drapeau local."""
+    import reglages
+    reglages.ecrire({"collecte": bool(actif)})
+    set_collecte(bool(actif))
+    return bool(actif)
+
+
 def main(argv: list[str] | None = None) -> int:
     args = argv if argv is not None else sys.argv[1:]
     if len(args) != 1 or args[0].upper() not in {"ON", "OFF"}:
@@ -17,7 +25,7 @@ def main(argv: list[str] | None = None) -> int:
         return 2
 
     actif = args[0].upper() == "ON"
-    set_collecte(actif)
+    appliquer(actif)
     print(f"Collecte donnees : {'ON' if collecte_active() else 'OFF'}")
     return 0
 

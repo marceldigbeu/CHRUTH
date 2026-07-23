@@ -17,6 +17,7 @@ from ao_config import (
     AO_EXCLUSION_DURES,
     AO_EXCLUSION_TRI,
     AO_KEYWORDS_CORE,
+    AO_KEYWORDS_RH,
     AO_KEYWORDS_SECONDARY,
 )
 from ao_extract_fields import normalize_text
@@ -37,7 +38,20 @@ def _exclusions() -> list[str]:
 
 
 def _mots_cles() -> list[str]:
-    return list(AO_KEYWORDS_CORE) + list(AO_KEYWORDS_SECONDARY)
+    """Mots-cles qui declenchent un verdict PERTINENT a l'etage 1.
+
+    Les mots-cles de personnel sont pilotes par les reglages partages : s'ils
+    ramenent trop de bruit, ils se coupent depuis l'app sans toucher au code.
+    """
+    mots = list(AO_KEYWORDS_CORE) + list(AO_KEYWORDS_SECONDARY)
+    try:
+        import reglages
+        actifs = reglages.lire().get("mots_cles_rh_actifs", True)
+    except Exception:  # noqa: BLE001
+        actifs = True
+    if actifs:
+        mots += list(AO_KEYWORDS_RH)
+    return mots
 
 
 def _present(terme: str, texte_norm: str) -> bool:

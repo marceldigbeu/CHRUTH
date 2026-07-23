@@ -46,3 +46,6 @@ _scratch/
 
 # Etat local de la veille : sa source de verite est la branche ao-state.
 etat/
+
+# Cache local des reglages : la source de verite est la branche ao-state.
+reglages_cache.json
