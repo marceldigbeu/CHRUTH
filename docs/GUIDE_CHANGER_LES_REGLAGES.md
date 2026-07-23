@@ -16,12 +16,26 @@ est le dépôt de code : on y développe, on n'y règle rien.
 
 ## 1. Changer les destinataires
 
-Trois façons, du plus simple au plus technique. Elles écrivent toutes au même
-endroit : `destinataires.txt`, une adresse par ligne.
+> **Depuis la refonte, les façons ci-dessous écrivent au même endroit** : les
+> réglages partagés (`etat/veille.json` sur `ao-state`), avec `destinataires.txt`
+> en cache local. Le plus simple reste la page **Réglages** de la plateforme,
+> seule accessible depuis un téléphone. Voir `SURFACES_CHRUTH.md`.
+
+Quatre façons, du plus simple au plus technique. Elles écrivent toutes au même
+endroit : les réglages partagés, avec `destinataires.txt` en cache local, une
+adresse par ligne.
+
+### Depuis la plateforme (recommandé)
+
+1. Lancer `LANCER_APP_CHRUTH.bat`, page **Réglages**
+2. Saisir une adresse par ligne, puis **Enregistrer les destinataires**
+
+Le pipeline local les lit au run suivant, le tableur les affiche après sa
+prochaine régénération.
 
 **Aujourd'hui** : `destinataire1@exemple.fr` et `maintainers@users.noreply.github.com`.
 
-### Depuis le tableur (recommandé)
+### Depuis le tableur
 
 1. Ouvrir `output\AO_CHRUTH.xlsm`, onglet **Parametres**
 2. Colonne **B, à partir de la ligne 5** : une adresse par cellule
