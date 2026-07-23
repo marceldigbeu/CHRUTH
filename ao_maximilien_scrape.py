@@ -50,7 +50,10 @@ CATEGORIE_SERVICES = "3"
 # NB : "entretien des locaux" volontairement exclu -> trop large (ramenait
 # ascenseurs, elagage, bouches d'incendie...). La recherche Maximilien etant
 # full-text/floue, "nettoyage" capte deja les "entretien des locaux" pertinents.
-KEYWORDS = ["nettoyage", "propreté", "bionettoyage"]
+# Chaque terme declenche une recherche paginee complete : en ajouter coute des
+# requetes. On s'en tient aux formulations qui ramenent reellement du personnel.
+KEYWORDS = ["nettoyage", "propreté", "bionettoyage",
+            "mise à disposition de personnel", "agents de service"]
 
 CONSULT_RE = re.compile(r"/entreprise/consultation/(\d+)\?orgAcronyme=(\w+)")
 CP_RE = re.compile(r"\((\d{5})\s*-\s*([^)]+)\)")

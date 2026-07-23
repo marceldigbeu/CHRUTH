@@ -13,6 +13,7 @@ from ao_config import (
     AO_API_PAGE_LIMIT,
     AO_IDF_ONLY,
     AO_KEYWORDS_CORE,
+    AO_KEYWORDS_RH,
     AO_KEYWORDS_SECONDARY,
     AO_LOOKBACK_DAYS,
     AO_MAX_EXPORT_ROWS,
@@ -32,6 +33,7 @@ from ao_extract_fields import (
     email_template,
     extract_basic_fields,
     find_keywords,
+    find_keywords_rh,
     is_active_notice,
     keyword_in_text,
     normalize_department,
@@ -95,10 +97,13 @@ def is_relevant(record: dict[str, Any], extracted: dict[str, Any], strict_budget
 
     full_text = text_for_filter(record, extracted)
     core_keywords, secondary_keywords = find_keywords(full_text)
+    rh_keywords = find_keywords_rh(full_text)
     if core_keywords:
         match_reason = "ok"
     elif secondary_keywords:
         match_reason = "ok mot-cle secondaire"
+    elif rh_keywords:
+        match_reason = "ok personnel"
     else:
         return False, "aucun mot-cle CHRUTH"
 
@@ -204,7 +209,8 @@ def collect_boamp(
     skipped_reasons: dict[str, int] = {}
     kept_reasons: dict[str, int] = {}
 
-    where = build_where_clause(AO_KEYWORDS_CORE + AO_KEYWORDS_SECONDARY, lookback_days)
+    where = build_where_clause(
+        AO_KEYWORDS_CORE + AO_KEYWORDS_SECONDARY + AO_KEYWORDS_RH, lookback_days)
 
     for page in range(max_pages):
         offset = page * page_limit
