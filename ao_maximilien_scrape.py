@@ -31,7 +31,13 @@ from ao_config import (
     REQUEST_TIMEOUT_SECONDS,
 )
 from ao_db import AO_DB_PATH, connect, log_update, upsert_records
-from ao_extract_fields import classify_categorie, detect_secteur, normalize_text
+from ao_extract_fields import (
+    classify_categorie,
+    detect_secteur,
+    find_keywords,
+    find_keywords_rh,
+    normalize_text,
+)
 from ao_scoring import compute_ao_score
 
 logger = logging.getLogger(__name__)
@@ -291,12 +297,21 @@ def _to_ao(b: dict[str, Any]) -> dict[str, Any]:
 
 # --- Orchestration ---------------------------------------------------------
 
-def collecter_maximilien(
-    db_path: Path | None = None,
-    keywords: list[str] | None = None,
-) -> int:
-    """Collecte publique Maximilien -> injecte les nouveaux AO. Renvoie le nb insere."""
-    db_path = db_path or AO_DB_PATH
+def concerne_chruth(objet: str) -> bool:
+    """L'intitule touche-t-il un metier CHRUTH (nettoyage OU personnel) ?
+
+    La recherche Maximilien est full-text FLOUE : « mise a disposition de personnel »
+    matche sur les mots isoles et ramene assurances, traiteurs et photocopieurs
+    (mesure du 2026-07-23 : 14 -> 96 consultations pour UN vrai AO de personnel).
+    On rattrape donc en local, sur la phrase exacte, comme le fait deja BOAMP via
+    son `where` entre guillemets. Deterministe : aucun appel IA n'est gaspille.
+    """
+    core, secondary = find_keywords(objet)
+    return bool(core or secondary or find_keywords_rh(objet))
+
+
+def collecter_brut(keywords: list[str] | None = None) -> list[dict[str, Any]]:
+    """Interroge le portail et rend les AO du perimetre CHRUTH, dedupliques."""
     keywords = keywords or KEYWORDS
     session = _session()
 
@@ -311,12 +326,26 @@ def collecter_maximilien(
             continue
         time.sleep(1.0)  # courtoisie envers le site
 
-    if not collectes:
+    aos = [_to_ao(b) for b in collectes.values()]
+    retenus = [a for a in aos if concerne_chruth(a["objet"])]
+    if len(aos) != len(retenus):
+        logger.info("Maximilien : %s consultations ramenees, %s dans le perimetre CHRUTH",
+                    len(aos), len(retenus))
+    return retenus
+
+
+def collecter_maximilien(
+    db_path: Path | None = None,
+    keywords: list[str] | None = None,
+) -> int:
+    """Collecte publique Maximilien -> injecte les nouveaux AO. Renvoie le nb insere."""
+    db_path = db_path or AO_DB_PATH
+    aos = collecter_brut(keywords)
+
+    if not aos:
         logger.info("Aucune consultation Maximilien collectee.")
         log_update("MAXIMILIEN", 0, 0, 0, "aucun resultat", db_path=db_path)
         return 0
-
-    aos = [_to_ao(b) for b in collectes.values()]
 
     # Ne garder que l'IDF quand le departement est identifiable (le portail est
     # deja francilien ; on garde les AO sans CP lisible plutot que de les perdre).
@@ -331,13 +360,13 @@ def collecter_maximilien(
                 nouveaux.append(ao)
 
     inseres = upsert_records(nouveaux, db_path=db_path) if nouveaux else 0
-    log_update("MAXIMILIEN", len(collectes), len(gardes), inseres,
-               f"{len(keywords)} mots-cles", db_path=db_path)
+    log_update("MAXIMILIEN", len(aos), len(gardes), inseres,
+               f"{len(keywords or KEYWORDS)} mots-cles", db_path=db_path)
     for ao in nouveaux:
         logger.info("  Nouveau MAXIMILIEN [%s/%s] %s | %s",
                     ao["priorite"], ao["score_chruth"], ao["objet"][:55], ao["acheteur"])
-    logger.info("Maximilien : %s collectes, %s IDF, %s nouveaux inseres",
-                len(collectes), len(gardes), inseres)
+    logger.info("Maximilien : %s dans le perimetre, %s IDF, %s nouveaux inseres",
+                len(aos), len(gardes), inseres)
     return inseres
 
 
@@ -349,19 +378,9 @@ def main() -> int:
 
     dry = "--dry" in sys.argv
     if dry:
-        session = _session()
-        collectes: dict[str, dict[str, Any]] = {}
-        for kw in KEYWORDS:
-            try:
-                for html in _pages_resultats(session, kw):
-                    for b in _parse_resultats(html):
-                        collectes.setdefault(b["cid"], b)
-            except Exception as exc:  # noqa: BLE001
-                print(f"[DRY] '{kw}' echec : {exc}")
-            time.sleep(1.0)
-        print(f"[DRY] {len(collectes)} consultations uniques collectees :\n")
-        for b in collectes.values():
-            ao = _to_ao(b)
+        aos = collecter_brut()
+        print(f"[DRY] {len(aos)} consultations du perimetre CHRUTH :\n")
+        for ao in aos:
             print(f"  [{ao['priorite']:9} {ao['score_chruth']:3}] {ao['date_limite'] or '????-??-??'} "
                   f"| {ao['departement'] or '--'} | {ao['objet'][:60]}")
             print(f"      {ao['acheteur']} ({ao['ville']}) -> {ao['url_avis']}")
