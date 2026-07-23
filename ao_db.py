@@ -70,6 +70,8 @@ AO_COLUMNS = [
     "rdv_obtenu",
     "commentaire_humain",
     "texte_extraction",
+    "verdict_tri",
+    "motif_tri",
 ]
 
 
