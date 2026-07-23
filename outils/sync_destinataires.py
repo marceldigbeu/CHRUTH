@@ -45,6 +45,11 @@ def lire_colonne(xlsm_path: Path = AO_OUTPUT_XLSM) -> list[str]:
 def ecrire_fichier(emails: list[str], dest_file: Path = ALERTE_DESTINATAIRES_FILE) -> None:
     entete = "# Destinataires des alertes CHRUTH (genere depuis l'onglet Parametres du cockpit).\n"
     Path(dest_file).write_text(entete + "\n".join(emails) + "\n", encoding="utf-8")
+    try:
+        import reglages
+        reglages.ecrire({"destinataires": list(emails)})
+    except Exception as exc:  # noqa: BLE001
+        print(f"[REGLAGES] non synchronises ({exc}) -> fichiers locaux seulement.")
 
 
 def ecrire_secrets(emails: list[str], secrets_file: Path = ALERTE_SECRETS_FILE) -> None:

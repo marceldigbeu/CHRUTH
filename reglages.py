@@ -30,6 +30,21 @@ DEFAUTS: dict[str, Any] = {
 # Jamais dans un fichier versionne.
 CLES_INTERDITES = ("smtp_password", "password", "mot_de_passe", "token", "jeton")
 
+# Memoire de processus. `lire()` est appele DANS la boucle de tri (via
+# ao_pertinence._mots_cles) : en mode cloud, chaque lecture est une requete HTTP
+# vers l'API GitHub avec 20 s de timeout, et un run de 14 AO en faisait 14 pour la
+# meme reponse. On ne relit qu'une fois par processus ; `ecrire()` et
+# `rafraichir()` invalident, de sorte qu'une valeur perimee par nos soins n'est
+# jamais servie. Une surface qui tourne longtemps (l'app) appelle `rafraichir()`
+# pour reprendre les changements venus d'ailleurs.
+_memo: dict[str, Any] | None = None
+
+
+def invalider() -> None:
+    """Oublie la memoire de processus : la prochaine lecture repart de l'etat partage."""
+    global _memo
+    _memo = None
+
 
 def _cache_lu() -> dict[str, Any]:
     try:
@@ -54,7 +69,14 @@ def _depuis_etat(etat: dict[str, Any]) -> dict[str, Any]:
 
 
 def lire() -> dict[str, Any]:
-    """Reglages effectifs : etat partage, sinon cache local, sinon defauts du code."""
+    """Reglages effectifs : etat partage, sinon cache local, sinon defauts du code.
+
+    Memorise pour la duree du processus (voir `_memo`).
+    """
+    global _memo
+    if _memo is not None:
+        return dict(_memo)
+
     valeurs = dict(DEFAUTS)
     valeurs.update(_cache_lu())
     try:
@@ -62,6 +84,7 @@ def lire() -> dict[str, Any]:
         valeurs.update({k: v for k, v in _depuis_etat(etat).items() if v not in (None, "")})
     except Exception:  # noqa: BLE001
         pass  # hors ligne : le cache fait le travail, la veille continue
+    _memo = dict(valeurs)
     return valeurs
 
 
@@ -78,9 +101,11 @@ def ecrire(modifs: dict[str, Any]) -> dict[str, Any]:
                 "Les secrets restent dans alertes_secrets.json et les secrets GitHub."
             )
 
+    global _memo
     valeurs = lire()
     valeurs.update(modifs)
     _cache_ecrit(valeurs)
+    _memo = dict(valeurs)  # nos propres ecritures sont immediatement visibles
 
     try:
         etat, sha = veille_depot.lire()
@@ -93,6 +118,7 @@ def ecrire(modifs: dict[str, Any]) -> dict[str, Any]:
 
 def rafraichir() -> dict[str, Any]:
     """Recopie l'etat partage dans le cache local. Appele au debut d'un run local."""
+    invalider()
     valeurs = lire()
     _cache_ecrit(valeurs)
     return valeurs

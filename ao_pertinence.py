@@ -40,10 +40,18 @@ def _exclusions() -> list[str]:
 def _mots_cles() -> list[str]:
     """Mots-cles qui declenchent un verdict PERTINENT a l'etage 1.
 
-    Les mots-cles de personnel sont inclus inconditionnellement ici ; la tache 8
-    les rendra pilotables depuis les reglages partages.
+    Les mots-cles de personnel sont pilotes par les reglages partages : s'ils
+    ramenent trop de bruit, ils se coupent depuis l'app sans toucher au code.
     """
-    return list(AO_KEYWORDS_CORE) + list(AO_KEYWORDS_SECONDARY) + list(AO_KEYWORDS_RH)
+    mots = list(AO_KEYWORDS_CORE) + list(AO_KEYWORDS_SECONDARY)
+    try:
+        import reglages
+        actifs = reglages.lire().get("mots_cles_rh_actifs", True)
+    except Exception:  # noqa: BLE001
+        actifs = True
+    if actifs:
+        mots += list(AO_KEYWORDS_RH)
+    return mots
 
 
 def _present(terme: str, texte_norm: str) -> bool:

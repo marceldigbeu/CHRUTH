@@ -261,30 +261,39 @@ ALERTE_ACTIVE_FILE = BASE_DIR / "alertes_actives.flag"
 COLLECTE_ACTIVE_FILE = BASE_DIR / "collecte_active.flag"
 
 
-def notifications_actives(flag_file: Path = ALERTE_ACTIVE_FILE) -> bool:
+# Les quatre fonctions ci-dessous resolvent leur chemin A L'APPEL (`None` ->
+# constante du module), et non comme valeur par defaut figee a l'import : sinon
+# rediriger ALERTE_ACTIVE_FILE reste sans effet, et la suite de tests eteint pour
+# de bon les notifications du poste en ecrivant les vrais drapeaux.
+
+def notifications_actives(flag_file: Path | None = None) -> bool:
     """True si les alertes email sont activees. Defaut : actives si le fichier manque."""
     try:
-        return Path(flag_file).read_text(encoding="utf-8").strip().upper() != "OFF"
+        return Path(flag_file or ALERTE_ACTIVE_FILE).read_text(
+            encoding="utf-8").strip().upper() != "OFF"
     except FileNotFoundError:
         return True
 
 
-def set_notifications(actif: bool, flag_file: Path = ALERTE_ACTIVE_FILE) -> None:
+def set_notifications(actif: bool, flag_file: Path | None = None) -> None:
     """Persiste l'etat ON/OFF des alertes email."""
-    Path(flag_file).write_text("ON" if actif else "OFF", encoding="utf-8")
+    Path(flag_file or ALERTE_ACTIVE_FILE).write_text(
+        "ON" if actif else "OFF", encoding="utf-8")
 
 
-def collecte_active(flag_file: Path = COLLECTE_ACTIVE_FILE) -> bool:
+def collecte_active(flag_file: Path | None = None) -> bool:
     """True si la collecte reseau est activee. Defaut : active si le fichier manque."""
     try:
-        return Path(flag_file).read_text(encoding="utf-8").strip().upper() != "OFF"
+        return Path(flag_file or COLLECTE_ACTIVE_FILE).read_text(
+            encoding="utf-8").strip().upper() != "OFF"
     except FileNotFoundError:
         return True
 
 
-def set_collecte(actif: bool, flag_file: Path = COLLECTE_ACTIVE_FILE) -> None:
+def set_collecte(actif: bool, flag_file: Path | None = None) -> None:
     """Persiste l'etat ON/OFF de la collecte reseau."""
-    Path(flag_file).write_text("ON" if actif else "OFF", encoding="utf-8")
+    Path(flag_file or COLLECTE_ACTIVE_FILE).write_text(
+        "ON" if actif else "OFF", encoding="utf-8")
 
 
 # Emplacement de la liste de destinataires dans l'onglet Parametres du cockpit
