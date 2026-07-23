@@ -154,6 +154,11 @@ AO_EXCLUSION_TRI = [
     "securite incendie",
     "bouches et poteaux",
     "collecte pneumatique",
+    # Electromenager : « appareils menagers » commence par le mot-cle « menage ».
+    # Cible l'objet fourni, jamais la prestation (« entretien menager » reste garde).
+    "appareils menagers",
+    "appareil menager",
+    "electromenager",
 ]
 
 # Exclusions SOUPLES : ecartent seulement si AUCUN mot-cle nettoyage fort n'est present.
