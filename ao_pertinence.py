@@ -40,6 +40,16 @@ def _mots_cles() -> list[str]:
     return list(AO_KEYWORDS_CORE) + list(AO_KEYWORDS_SECONDARY)
 
 
+def _present(terme: str, texte_norm: str) -> bool:
+    """Le terme apparait-il en DEBUT de mot dans le texte deja normalise ?
+
+    Frontiere en tete seulement : « ascenseur » doit reconnaitre « ascenseurs »,
+    mais « menage » ne doit pas se declencher dans « amenagement » (cas reel
+    observe le 2026-07-23, un marche de travaux classe pertinent).
+    """
+    return re.search(r"\b" + re.escape(normalize_text(terme)), texte_norm) is not None
+
+
 def trier_listes(objet: str, detail: str = "") -> Verdict | None:
     """Verdict deterministe, ou None si le cas doit etre arbitre.
 
@@ -50,11 +60,11 @@ def trier_listes(objet: str, detail: str = "") -> Verdict | None:
     objet_norm = normalize_text(objet or "")
 
     for terme in _exclusions():
-        if normalize_text(terme) in objet_norm:
+        if _present(terme, objet_norm):
             return Verdict(REJETE, "listes", f"exclusion metier : {terme}")
 
     for mot in _mots_cles():
-        if normalize_text(mot) in objet_norm:
+        if _present(mot, objet_norm):
             return Verdict(PERTINENT, "listes", f"mot-cle coeur dans l'intitule : {mot}")
 
     return None
