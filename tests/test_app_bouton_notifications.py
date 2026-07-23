@@ -37,13 +37,23 @@ def test_le_bouton_propose_de_couper_quand_les_notifications_sont_actives(tmp_pa
     assert at.button(key="notifs").label == "Désactiver les notifications"
 
 
+def _relu(chemin: Path) -> bool:
+    """Passe par l'accesseur, jamais par la cle brute.
+
+    Ces tests affirmaient `etat["notifications"]`, donc un emplacement. C'est ce
+    qui a laissé deux interrupteurs diverger sans que rien ne le signale : la page
+    Reglages ecrivait ailleurs et ces tests restaient verts.
+    """
+    return ve.notifications_actives(json.loads(chemin.read_text(encoding="utf-8")))
+
+
 def test_un_clic_coupe_les_notifications_et_le_persiste(tmp_path, monkeypatch):
     chemin = _preparer(tmp_path, monkeypatch)
     at = _lancer()
     at.button(key="notifs").click().run()
 
     assert not at.exception
-    assert json.loads(chemin.read_text(encoding="utf-8"))["notifications"] is False
+    assert _relu(chemin) is False
 
 
 def test_l_etat_coupe_est_annonce_et_reactivable(tmp_path, monkeypatch):
@@ -54,7 +64,7 @@ def test_l_etat_coupe_est_annonce_et_reactivable(tmp_path, monkeypatch):
     assert any("suspendues" in m.value.lower() for m in at.warning)
 
     at.button(key="notifs").click().run()
-    assert json.loads(chemin.read_text(encoding="utf-8"))["notifications"] is True
+    assert _relu(chemin) is True
 
 
 def test_couper_les_notifications_n_arrete_pas_le_fil(tmp_path, monkeypatch):

@@ -114,14 +114,34 @@ def definir_traitement(etat: dict[str, Any], id_ao: str, statut: str) -> None:
 
 
 def notifications_actives(etat: dict[str, Any]) -> bool:
-    """Les emails partent-ils ? Actives par defaut : un etat muet serait un piege."""
-    return bool(etat.get("notifications", True))
+    """Les emails partent-ils ? Actives par defaut : un etat muet serait un piege.
+
+    La verite est dans le bloc `reglages` de l'etat, celui que lisent aussi la page
+    Reglages et le pipeline local. L'ancienne cle de premier niveau reste lue en
+    repli, le temps que les etats en service migrent — et une coupure qu'elle porte
+    l'emporte : un coupe-circuit deja pose ne se rouvre jamais tout seul.
+
+    Pas d'import de `reglages` ici : ce serait une boucle
+    (reglages -> veille_depot -> veille_etat). L'etat porte deja le bloc.
+    """
+    reg = etat.get("reglages") or {}
+    ancienne = etat.get("notifications")
+    if ancienne is False:
+        return False
+    if "notifications" in reg:
+        return bool(reg["notifications"])
+    return True if ancienne is None else bool(ancienne)
 
 
 def definir_notifications(etat: dict[str, Any], actif: bool) -> None:
     """Interrupteur des emails. La collecte et le tri continuent quoi qu'il arrive :
-    en pause, les AO entrent dans l'etat sans email et repartent a la reactivation."""
-    etat["notifications"] = bool(actif)
+    en pause, les AO entrent dans l'etat sans email et repartent a la reactivation.
+
+    Ecrit dans le bloc `reglages` et efface l'ancienne cle : la laisser derriere
+    soi recreerait les deux commutateurs divergents qu'on vient de fusionner.
+    """
+    etat.setdefault("reglages", {})["notifications"] = bool(actif)
+    etat.pop("notifications", None)
 
 
 def definir_guide(etat: dict[str, Any], texte: str) -> None:

@@ -65,6 +65,12 @@ def _depuis_etat(etat: dict[str, Any]) -> dict[str, Any]:
     # Migration douce : guide_messages et fiche_chruth sont la meme chose.
     if not reg.get("fiche_chruth") and etat.get("guide_messages"):
         reg["fiche_chruth"] = etat["guide_messages"]
+    # Idem pour l'interrupteur des emails, longtemps porte par une cle de premier
+    # niveau que la page Veille ecrivait seule. Une coupure qu'elle porte l'emporte :
+    # un coupe-circuit deja pose ne se rouvre jamais tout seul.
+    ancienne = etat.get("notifications")
+    if ancienne is False or (ancienne is not None and "notifications" not in reg):
+        reg["notifications"] = bool(ancienne)
     return reg
 
 
