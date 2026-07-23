@@ -16,6 +16,10 @@ ETAT_VERSION = 1
 CHAMPS_AO = ("objet", "acheteur", "ville", "departement", "date_limite",
              "procedure", "url", "score", "priorite")
 
+# Statuts de suivi, alignes sur le CRM deja present dans app_messages.
+TRAITEMENTS = ("nouveau", "a_traiter", "repondu", "abandonne")
+VERDICTS = ("PERTINENT", "REJETE")
+
 
 def _vide() -> dict[str, Any]:
     return {"version": ETAT_VERSION, "maj_le": "", "aos": {}, "guide_messages": ""}
@@ -69,3 +73,46 @@ def ajouter(etat: dict[str, Any], ao: dict[str, Any], verdict,
         "lu": ancien.get("lu", False),
     })
     etat["aos"][id_ao] = entree
+
+
+# --- Ecritures humaines ----------------------------------------------------
+
+def _entree(etat: dict[str, Any], id_ao: str) -> dict[str, Any]:
+    aos = etat.setdefault("aos", {})
+    if id_ao not in aos:
+        raise KeyError(f"AO inconnu de l'etat : {id_ao}")
+    return aos[id_ao]
+
+
+def corriger(etat: dict[str, Any], id_ao: str, verdict: str, par: str = "app") -> None:
+    """Enregistre un jugement humain. Il prime ensuite sur le tri, definitivement."""
+    if verdict not in VERDICTS:
+        raise ValueError(f"verdict inconnu : {verdict} (attendus : {VERDICTS})")
+    _entree(etat, id_ao)["correction_humaine"] = {
+        "verdict": verdict,
+        "le": datetime.now(timezone.utc).isoformat(),
+        "par": par,
+    }
+
+
+def verdict_effectif(entree: dict[str, Any]) -> str:
+    """Verdict qui fait foi : la correction humaine d'abord, le tri ensuite."""
+    correction = entree.get("correction_humaine") or {}
+    if correction.get("verdict"):
+        return correction["verdict"]
+    return (entree.get("tri") or {}).get("verdict", "")
+
+
+def marquer_lu(etat: dict[str, Any], id_ao: str, lu: bool = True) -> None:
+    _entree(etat, id_ao)["lu"] = bool(lu)
+
+
+def definir_traitement(etat: dict[str, Any], id_ao: str, statut: str) -> None:
+    if statut not in TRAITEMENTS:
+        raise ValueError(f"statut inconnu : {statut} (attendus : {TRAITEMENTS})")
+    _entree(etat, id_ao)["traitement"] = statut
+
+
+def definir_guide(etat: dict[str, Any], texte: str) -> None:
+    """Guide qui pilote la redaction des messages ET le prompt de tri (spec 6.3)."""
+    etat["guide_messages"] = texte or ""
