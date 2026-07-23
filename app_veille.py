@@ -14,6 +14,7 @@ from pathlib import Path
 
 import streamlit as st
 
+import ao_maximilien_veille
 import veille_depot
 import veille_etat
 from veille_etat import TRAITEMENTS, verdict_effectif
@@ -34,6 +35,27 @@ st.set_page_config(page_title="Veille CHRUTH", page_icon="🧹", layout="wide")
 def charger():
     """Etat frais a chaque passage : la veille tourne toutes les 30 min en parallele."""
     return veille_depot.lire()
+
+
+def mettre_a_jour() -> str:
+    """Va chercher les nouveaux AO. Renvoie un message pour l'utilisateur.
+
+    Deux chemins, et la distinction n'est pas cosmetique :
+
+    - **source locale** : on collecte ici meme, sans envoyer d'email. L'app est une
+      fenetre sur la veille, ce n'est pas elle qui notifie.
+    - **source github** : on demande au workflow de tourner. Collecter ici marquerait
+      les AO comme vus dans l'etat partage, et le veilleur ne les notifierait plus
+      jamais — un AO vu par l'app serait un AO perdu.
+    """
+    if veille_depot.source() == "github":
+        if veille_depot.declencher_veille():
+            return "Veille lancée. Les résultats arrivent dans quelques minutes."
+        return ("Lancement à distance indisponible : jeton GitHub absent "
+                "(CHRUTH_GITHUB_TOKEN).")
+
+    ao_maximilien_veille.veiller(etat_path=veille_depot.chemin_local(), envoyer=False)
+    return "Mise à jour terminée."
 
 
 def enregistrer(etat, sha, message: str) -> None:
@@ -69,11 +91,23 @@ with st.sidebar:
         st.caption(f"État mis à jour : {etat['maj_le'][:16].replace('T', ' ')}")
     st.caption(f"{len(aos)} AO dans l'état")
 
-    if st.button("Vérifier maintenant", key="declencher"):
-        if veille_depot.declencher_veille():
-            st.success("Veille lancée. Le résultat arrivera dans quelques minutes.")
-        else:
-            st.info("Lancement à distance indisponible (source locale ou jeton absent).")
+    if st.button("Mettre à jour maintenant", key="maj", type="primary"):
+        attente = ("Consultation de Maximilien et tri en cours…"
+                   if veille_depot.source() == "local"
+                   else "Demande de vérification envoyée…")
+        try:
+            with st.spinner(attente):
+                message = mettre_a_jour()
+            st.success(message)
+            if veille_depot.source() == "local":
+                st.rerun()
+        except Exception as exc:  # noqa: BLE001
+            st.error(f"Mise à jour impossible : {exc}")
+
+    if veille_depot.source() == "local":
+        st.caption("La mise à jour collecte et trie ici, sans envoyer d'email.")
+    else:
+        st.caption("La mise à jour relance le veilleur, qui notifiera les nouveaux AO.")
 
 
 # --- Selection --------------------------------------------------------------

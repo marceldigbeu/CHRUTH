@@ -42,7 +42,8 @@ def _jeton() -> str:
     return os.environ.get("CHRUTH_GITHUB_TOKEN", "").strip()
 
 
-def _chemin_local() -> Path:
+def chemin_local() -> Path:
+    """Chemin de l'etat quand la source est locale."""
     defaut = Path(__file__).resolve().parent / "etat" / "veille.json"
     return Path(os.environ.get("CHRUTH_VEILLE_ETAT") or defaut)
 
@@ -85,7 +86,7 @@ def _lire_github() -> tuple[dict[str, Any], str | None]:
 def lire() -> tuple[dict[str, Any], str | None]:
     """Etat courant et, sur GitHub, le sha du blob (necessaire pour ecrire)."""
     if source() == "local":
-        return veille_etat.charger(_chemin_local()), None
+        return veille_etat.charger(chemin_local()), None
     return _lire_github()
 
 
@@ -112,7 +113,7 @@ def ecrire(etat: dict[str, Any], sha: str | None,
             "(permissions contents:write et actions:write sur ce seul depot)."
         )
     if source() == "local":
-        veille_etat.enregistrer(etat, _chemin_local())
+        veille_etat.enregistrer(etat, chemin_local())
         return None
 
     r = _put(etat, sha, message)
