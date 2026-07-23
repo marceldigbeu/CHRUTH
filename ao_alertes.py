@@ -80,6 +80,7 @@ def nouveaux_ao_a_alerter(db_path: Path = AO_DB_PATH) -> list[dict[str, Any]]:
         f"WHERE priorite IN ({placeholders}) "
         f"AND (alerte_envoyee IS NULL OR alerte_envoyee = '') "
         f"AND COALESCE(verdict_tri, '') <> 'REJETE' "
+        f"AND COALESCE(source, '') <> 'MAXIMILIEN' "
         f"ORDER BY CAST(score_chruth AS INTEGER) DESC"
     )
     with connect(db_path) as conn:
