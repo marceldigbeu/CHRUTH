@@ -106,6 +106,22 @@ with st.sidebar:
     non_lus_seuls = st.checkbox("Non lus seulement", value=False, key="non_lus")
 
     st.divider()
+    st.subheader("Notifications")
+
+    notifs = veille_etat.notifications_actives(etat)
+    if notifs:
+        st.caption("Chaque nouvel AO pertinent part par email.")
+    else:
+        st.warning("Notifications suspendues : aucun email ne part. "
+                   "Les AO continuent d'arriver ici et seront envoyés à la reprise.")
+
+    if st.button("Désactiver les notifications" if notifs else "Activer les notifications",
+                 key="notifs"):
+        veille_etat.definir_notifications(etat, not notifs)
+        enregistrer(etat, sha, "notifications " + ("OFF" if notifs else "ON"))
+        st.rerun()
+
+    st.divider()
     st.caption(f"Source : {veille_depot.source()}")
     if etat.get("maj_le"):
         st.caption(f"État mis à jour : {etat['maj_le'][:16].replace('T', ' ')}")

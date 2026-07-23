@@ -87,8 +87,31 @@ def _envoyer(sujet: str, html: str, texte: str) -> None:
     envoyer_email(sujet, html, texte, charger_config_smtp())
 
 
+def notifications_ouvertes(etat: dict[str, Any]) -> bool:
+    """Deux interrupteurs, l'un dans l'etat (bouton de l'app), l'autre dans
+    l'environnement (variable GitHub CHRUTH_NOTIFICATIONS=OFF, coupe-circuit)."""
+    if os.environ.get("CHRUTH_NOTIFICATIONS", "").strip().upper() == "OFF":
+        return False
+    return veille_etat.notifications_actives(etat)
+
+
+def _verdict_de(entree: dict[str, Any]):
+    """Verdict a afficher dans l'email : la correction humaine prime sur le tri."""
+    tri = entree.get("tri") or {}
+    verdict = veille_etat.verdict_effectif(entree)
+    if entree.get("correction_humaine"):
+        return ao_pertinence.Verdict(verdict, "correction", "verdict corrige a la main")
+    return ao_pertinence.Verdict(verdict, tri.get("etage", ""), tri.get("motif", ""))
+
+
 def veiller(etat_path: Path | None = None, envoyer: bool = True, client=None) -> int:
-    """Un passage de veille. Renvoie le nombre d'AO effectivement notifies."""
+    """Un passage de veille. Renvoie le nombre d'AO effectivement notifies.
+
+    Deux temps distincts, et c'est deliberé : on enregistre TOUT ce qu'on voit,
+    puis on notifie ce qui reste a notifier. Un AO paru pendant une pause, ou dont
+    l'email a echoue, garde `notifie_le` vide et repart au passage suivant — sans
+    cette separation, couper les notifications ferait disparaitre des marches.
+    """
     chemin = Path(etat_path or ETAT_PATH)
     etat = veille_etat.charger(chemin)
     guide = etat.get("guide_messages", "")
@@ -98,21 +121,24 @@ def veiller(etat_path: Path | None = None, envoyer: bool = True, client=None) ->
         if e.get("correction_humaine")
     ]
 
-    notifies = 0
     for ao in veille_etat.nouveaux(etat, collecter()):
         verdict = ao_pertinence.trier(ao.get("objet", ""), ao.get("objet_desc", ""),
                                       guide=guide, client=client, corrections=corrections)
-        notifie_le = None
-        if verdict.verdict == ao_pertinence.PERTINENT and envoyer:
+        veille_etat.ajouter(etat, ao, verdict, None)
+
+    notifies = 0
+    if envoyer and notifications_ouvertes(etat):
+        for id_ao, entree in etat.get("aos", {}).items():
+            if entree.get("notifie_le"):
+                continue
+            if veille_etat.verdict_effectif(entree) != ao_pertinence.PERTINENT:
+                continue
             try:
-                _envoyer(*construire_email_ao(ao, verdict))
-                notifie_le = datetime.now(timezone.utc).isoformat()
+                _envoyer(*construire_email_ao(entree, _verdict_de(entree)))
+                entree["notifie_le"] = datetime.now(timezone.utc).isoformat()
                 notifies += 1
             except Exception as exc:  # noqa: BLE001
-                # On n'enregistre PAS l'AO : il sera retente au run suivant.
-                logger.error("Envoi echoue pour %s : %s", ao.get("id_ao"), exc)
-                continue
-        veille_etat.ajouter(etat, ao, verdict, notifie_le)
+                logger.error("Envoi echoue pour %s : %s", id_ao, exc)
 
     veille_etat.enregistrer(etat, chemin)
     return notifies
@@ -123,8 +149,9 @@ def main() -> int:
         sys.stdout.reconfigure(encoding="utf-8", errors="replace")
     logging.basicConfig(level=logging.INFO, format="%(asctime)s | %(message)s")
     if os.environ.get("CHRUTH_NOTIFICATIONS", "").strip().upper() == "OFF":
-        print("[VEILLE] suspendue (CHRUTH_NOTIFICATIONS=OFF)")
-        return 0
+        # On collecte et on trie quand meme : l'app doit rester a jour, et les AO
+        # vus pendant la suspension repartiront des sa levee.
+        print("[VEILLE] notifications suspendues (CHRUTH_NOTIFICATIONS=OFF)")
     n = veiller()
     print(f"[VEILLE-MAXIMILIEN] {n} AO notifies")
     return 0

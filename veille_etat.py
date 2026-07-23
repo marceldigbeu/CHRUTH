@@ -113,6 +113,17 @@ def definir_traitement(etat: dict[str, Any], id_ao: str, statut: str) -> None:
     _entree(etat, id_ao)["traitement"] = statut
 
 
+def notifications_actives(etat: dict[str, Any]) -> bool:
+    """Les emails partent-ils ? Actives par defaut : un etat muet serait un piege."""
+    return bool(etat.get("notifications", True))
+
+
+def definir_notifications(etat: dict[str, Any], actif: bool) -> None:
+    """Interrupteur des emails. La collecte et le tri continuent quoi qu'il arrive :
+    en pause, les AO entrent dans l'etat sans email et repartent a la reactivation."""
+    etat["notifications"] = bool(actif)
+
+
 def definir_guide(etat: dict[str, Any], texte: str) -> None:
     """Guide qui pilote la redaction des messages ET le prompt de tri (spec 6.3)."""
     etat["guide_messages"] = texte or ""
