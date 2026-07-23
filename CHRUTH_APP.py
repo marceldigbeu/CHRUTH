@@ -16,6 +16,8 @@ st.set_page_config(page_title="CHRUTH", page_icon="🧹", layout="wide")
 PAGES = [
     st.Page("app_veille.py", title="Veille appels d'offres", icon="📡", default=True),
     st.Page("app_messages.py", title="Messages et CRM", icon="📨"),
+    st.Page("pages_pilotage.py", title="Pilotage", icon="📊"),
+    st.Page("pages_reglages.py", title="Réglages", icon="⚙️"),
 ]
 
 st.navigation(PAGES).run()
