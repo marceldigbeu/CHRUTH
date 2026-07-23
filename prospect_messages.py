@@ -12,6 +12,8 @@ from pathlib import Path
 
 import pandas as pd
 
+import signature
+
 OUTPUT_DIR = Path(__file__).resolve().parent / "output"
 CACHE_PATH = OUTPUT_DIR / "segments_messages.json"
 VARIANTES_CACHE_PATH = OUTPUT_DIR / "segments_variantes.json"
@@ -114,13 +116,20 @@ def template_par_defaut(categorie: str, priorite: str, variante: str = "A") -> d
     return {"email": email, "script": script}
 
 
-def rendre(texte: str, row) -> str:
+def rendre(texte: str, row, fiche: str | None = None) -> str:
+    """Substitue les placeholders puis appose la signature CHRUTH.
+
+    `fiche=None` charge la fiche du projet ; passer `""` desactive la signature
+    (utile en test et pour les usages qui composent leur propre pied de message).
+    """
     out = str(texte)
     for ph, col in CHAMPS.items():
         val = row.get(col)
         val = "" if val is None or (isinstance(val, float) and pd.isna(val)) else str(val)
         out = out.replace("{" + ph + "}", val)
-    return out
+    if fiche is None:
+        fiche = fiche_chruth()
+    return signature.apposer(out, fiche)
 
 
 _PLACEHOLDERS = ("{denomination}", "{ville}", "{effectif}")

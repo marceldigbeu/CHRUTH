@@ -13,6 +13,7 @@ from pathlib import Path
 
 import pandas as pd
 
+import signature
 from ao_config import OUTPUT_DIR
 from ao_extract_fields import call_script, email_template
 from prospect_messages import _parser_reponse  # parser JSON robuste (DRY)
@@ -118,6 +119,8 @@ def prompt_ao(record, fiche: str = "") -> tuple[str, str]:
         "GARDE-FOUS :\n"
         "- Ne te fais JAMAIS passer pour l'acheteur, la mairie ou un de ses agents.\n"
         "- N'invente AUCUNE référence client, certification, prix ni chiffre.\n"
+        "- N'ecris AUCUNE coordonnee (site, email, telephone, adresse) : elles sont "
+        "ajoutees automatiquement apres generation. En inventer une serait une faute.\n"
         "- Reste factuel : CHRUTH = nettoyage / propreté / entretien des locaux.\n\n"
         'FORMAT : un seul objet JSON {"email": "...", "script": "..."}.'
     )
@@ -126,6 +129,15 @@ def prompt_ao(record, fiche: str = "") -> tuple[str, str]:
 
 def _repli(record) -> dict:
     return {"email": email_template(record), "script": call_script(record), "source": "defaut"}
+
+
+def _signer(data: dict, fiche: str) -> dict:
+    """Appose la signature sur l'email et le script. Sans coordonnees, rend data tel quel."""
+    if not signature.bloc(fiche or ""):
+        return data
+    return {**data,
+            "email": signature.apposer(str(data.get("email") or ""), fiche),
+            "script": signature.apposer(str(data.get("script") or ""), fiche)}
 
 
 def generer_message_ao(record, client=None, temperature: float = 0.2, fiche=None) -> dict:
@@ -152,10 +164,10 @@ def generer_message_ao(record, client=None, temperature: float = 0.2, fiche=None
             data = _parser_reponse(client.generer(
                 prompt, system, provider=provider, temperature=temperature, timeout=timeout))
             if data:
-                return {**data, "source": "ia"}
+                return _signer({**data, "source": "ia"}, fiche or "")
         except Exception:
             pass
-    return _repli(record)
+    return _signer(_repli(record), fiche or "")
 
 
 def _charger_cache(p: Path) -> dict:
