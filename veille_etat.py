@@ -13,8 +13,8 @@ from typing import Any
 
 ETAT_VERSION = 1
 
-CHAMPS_AO = ("objet", "acheteur", "ville", "departement", "date_limite",
-             "procedure", "url", "score", "priorite")
+CHAMPS_AO = ("objet", "acheteur", "ville", "departement", "date_publication",
+             "date_limite", "procedure", "url", "score", "priorite")
 
 # Statuts de suivi, alignes sur le CRM deja present dans app_messages.
 TRAITEMENTS = ("nouveau", "a_traiter", "repondu", "abandonne")

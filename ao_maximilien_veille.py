@@ -60,6 +60,7 @@ def construire_email_ao(ao: dict[str, Any], verdict) -> tuple[str, str, str]:
     champs = [
         ("Acheteur", ao.get("acheteur")),
         ("Ville", f"{ville} ({ao.get('departement') or '--'})"),
+        ("Publié le", ao.get("date_publication") or "non precisee"),
         ("Date limite", ao.get("date_limite") or "non precisee"),
         ("Procedure", ao.get("procedure")),
         ("Priorite", f"{ao.get('priorite')} ({ao.get('score')})"),

@@ -124,8 +124,19 @@ def _garde(entree: dict) -> bool:
     return True
 
 
+def _fraicheur(entree: dict) -> tuple[str, str]:
+    """Cle de classement : date de publication de l'avis d'abord.
+
+    C'est la fraicheur reelle de l'AO, pas celle de notre collecte : un avis publie
+    il y a deux mois et decouvert ce matin n'est pas une nouveaute. La date de
+    decouverte ne departage que les publications du meme jour, et les AO d'avant
+    la capture de ce champ (sans date) descendent en fin de fil.
+    """
+    return (str(entree.get("date_publication") or ""), str(entree.get("vu_le") or ""))
+
+
 retenus = [(i, e) for i, e in aos.items() if _garde(e)]
-retenus.sort(key=lambda couple: str(couple[1].get("vu_le") or ""), reverse=True)
+retenus.sort(key=lambda couple: _fraicheur(couple[1]), reverse=True)
 
 
 # --- Fil des AO -------------------------------------------------------------
@@ -147,8 +158,9 @@ for id_ao, entree in retenus:
     titre = f"{marque} **{entree.get('objet', '(sans intitulé)')}**"
     st.markdown(titre)
 
+    publie = entree.get("date_publication") or "date inconnue"
     ligne = (f"{entree.get('acheteur', '')} — {entree.get('ville', '')} "
-             f"({entree.get('departement') or '--'}) · limite "
+             f"({entree.get('departement') or '--'}) · publié le {publie} · limite "
              f"{entree.get('date_limite') or 'non précisée'} · "
              f"{entree.get('priorite', '')} {entree.get('score', '')}")
     st.markdown(ligne)

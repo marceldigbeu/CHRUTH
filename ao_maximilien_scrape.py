@@ -233,6 +233,10 @@ def _parse_resultats(html: str) -> list[dict[str, Any]]:
             "cp": cp,
             "ville": ville,
             "procedure": _txt(row.select_one(".cons_procedure")),
+            # Colonne « Publie le » : bloc .date-min, dans .cons_ref. A ne pas
+            # confondre avec .cons_dateEnd, qui porte la date limite de remise.
+            "date_publication_txt": _txt(row.select_one(".cons_ref .date-min")
+                                         or row.select_one(".cons_ref .date")),
             "date_limite_txt": _txt(row.select_one(".cons_dateEnd")),
             "url": f"{BASE_URL}/entreprise/consultation/{cid}?orgAcronyme={org}",
         })
@@ -258,7 +262,10 @@ def _to_ao(b: dict[str, Any]) -> dict[str, Any]:
         "url_avis": b["url"],
         "url_dce": b["url"],
         "date_limite": date_limite,
-        "date_publication": datetime.now(timezone.utc).strftime("%Y-%m-%d"),
+        # Date affichee par le listing ; a defaut, aujourd'hui (jamais vide, sinon
+        # l'AO sortirait du classement par fraicheur et du Top 20 de la semaine).
+        "date_publication": (_parse_date_fr(b.get("date_publication_txt", ""))
+                             or datetime.now(timezone.utc).strftime("%Y-%m-%d")),
         "categorie": classify_categorie(f"{objet} {b['objet_desc']}"),
         "secteur": detect_secteur(acheteur, objet),
         "budget_statut": "A_VERIFIER_BUDGET",
