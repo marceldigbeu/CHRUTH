@@ -1,0 +1,6 @@
+# Dependances du veilleur Maximilien (ao_maximilien_veille.py), et rien d'autre.
+# Le workflow GitHub Actions tourne ~594 fois par mois : installer pymupdf,
+# folium ou streamlit a chaque run couterait des minutes de quota pour rien.
+requests>=2.31.0
+beautifulsoup4>=4.12.0
+pandas>=2.0.0

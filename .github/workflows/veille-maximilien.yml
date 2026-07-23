@@ -31,7 +31,7 @@ jobs:
           python-version: "3.12"
 
       - name: Installer les dependances
-        run: pip install -r requirements.txt
+        run: pip install -r requirements-veille.txt
 
       - name: Lancer la veille
         env:
