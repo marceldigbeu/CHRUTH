@@ -10,6 +10,7 @@ Source distante  : CHRUTH_VEILLE_SOURCE=github + CHRUTH_GITHUB_REPO + CHRUTH_GIT
 from __future__ import annotations
 
 import os
+from datetime import date, timedelta
 from pathlib import Path
 
 import streamlit as st
@@ -26,6 +27,15 @@ LIBELLE_TRAITEMENT = {
     "abandonne": "Abandonné",
 }
 FICHE_AMORCE = Path(__file__).resolve().parent / "config_chruth" / "fiche_chruth.md"
+
+# Fenetres de fraicheur proposees, en jours. None = pas de borne.
+PERIODES = {
+    "Tout": None,
+    "7 derniers jours": 7,
+    "14 derniers jours": 14,
+    "30 derniers jours": 30,
+    "Depuis une date précise": "libre",
+}
 
 st.set_page_config(page_title="Veille CHRUTH", page_icon="🧹", layout="wide")
 
@@ -81,6 +91,16 @@ with st.sidebar:
     departements_vus = sorted({str(a.get("departement") or "--") for a in aos.values()})
     departements = st.multiselect("Département", departements_vus, default=[], key="departements")
 
+    periode = st.selectbox("Publié depuis", list(PERIODES), key="publie_depuis")
+    choix = PERIODES[periode]
+    if choix == "libre":
+        publie_apres = st.date_input("À partir du", value=date.today() - timedelta(days=30),
+                                     key="publie_depuis_date", format="DD/MM/YYYY")
+    elif choix is None:
+        publie_apres = None
+    else:
+        publie_apres = date.today() - timedelta(days=choix)
+
     voir_rejetes = st.checkbox("Afficher les AO rejetés par le tri", value=False,
                                key="voir_rejetes")
     non_lus_seuls = st.checkbox("Non lus seulement", value=False, key="non_lus")
@@ -121,6 +141,13 @@ def _garde(entree: dict) -> bool:
         return False
     if non_lus_seuls and entree.get("lu"):
         return False
+    if publie_apres is not None:
+        publie = str(entree.get("date_publication") or "")
+        # Date manquante : on garde. Comme pour le tri, le doute profite a l'AO —
+        # un marche peut-etre frais ne doit pas disparaitre sur une donnee absente.
+        # La ligne l'affiche « date inconnue », le lecteur tranche.
+        if publie and publie < publie_apres.isoformat():
+            return False
     return True
 
 
