@@ -138,6 +138,24 @@ AO_EXCLUSION_DURES = [
     "reservation de places",
 ]
 
+# Exclusions propres au TRI DES NOTIFICATIONS (ne filtrent PAS la collecte en base).
+# Familles constatees comme hors metier CHRUTH sur les AO reellement recus.
+AO_EXCLUSION_TRI = [
+    "decontamination",
+    "depoussierage",
+    "ascenseur",
+    "monte-charge",
+    "elevateur",
+    "elagage",
+    "essouchage",
+    "arbore",
+    "horticole",
+    "espaces verts",
+    "securite incendie",
+    "bouches et poteaux",
+    "collecte pneumatique",
+]
+
 # Exclusions SOUPLES : ecartent seulement si AUCUN mot-cle nettoyage fort n'est present.
 AO_EXCLUSION_KEYWORDS = [
     "travaux routiers",

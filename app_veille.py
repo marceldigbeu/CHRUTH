@@ -1,0 +1,182 @@
+"""Plateforme de veille CHRUTH — consulter, corriger, suivre.
+
+Lit l'etat produit par le veilleur (GitHub Actions) et le reecrit au meme endroit.
+Aucune logique de tri ici : les verdicts viennent de ao_pertinence, cette page
+n'affiche que ce qui a deja ete decide et enregistre les jugements humains.
+
+Lancement local  : streamlit run app_veille.py
+Source distante  : CHRUTH_VEILLE_SOURCE=github + CHRUTH_GITHUB_REPO + CHRUTH_GITHUB_TOKEN
+"""
+from __future__ import annotations
+
+import os
+from pathlib import Path
+
+import streamlit as st
+
+import veille_depot
+import veille_etat
+from veille_etat import TRAITEMENTS, verdict_effectif
+
+LIBELLE_TRAITEMENT = {
+    "nouveau": "Nouveau",
+    "a_traiter": "À traiter",
+    "repondu": "Répondu",
+    "abandonne": "Abandonné",
+}
+FICHE_AMORCE = Path(__file__).resolve().parent / "config_chruth" / "fiche_chruth.md"
+
+st.set_page_config(page_title="Veille CHRUTH", page_icon="🧹", layout="wide")
+
+
+# --- Etat ------------------------------------------------------------------
+
+def charger():
+    """Etat frais a chaque passage : la veille tourne toutes les 30 min en parallele."""
+    return veille_depot.lire()
+
+
+def enregistrer(etat, sha, message: str) -> None:
+    try:
+        veille_depot.ecrire(etat, sha, message)
+    except PermissionError as exc:
+        st.error(str(exc))
+    except Exception as exc:  # noqa: BLE001
+        st.error(f"Enregistrement impossible : {exc}")
+
+
+etat, sha = charger()
+aos = etat.get("aos", {})
+
+
+# --- Barre laterale : filtres ----------------------------------------------
+
+with st.sidebar:
+    st.header("Filtres")
+    priorites_vues = sorted({str(a.get("priorite") or "?") for a in aos.values()})
+    priorites = st.multiselect("Priorité", priorites_vues, default=[], key="priorites")
+
+    departements_vus = sorted({str(a.get("departement") or "--") for a in aos.values()})
+    departements = st.multiselect("Département", departements_vus, default=[], key="departements")
+
+    voir_rejetes = st.checkbox("Afficher les AO rejetés par le tri", value=False,
+                               key="voir_rejetes")
+    non_lus_seuls = st.checkbox("Non lus seulement", value=False, key="non_lus")
+
+    st.divider()
+    st.caption(f"Source : {veille_depot.source()}")
+    if etat.get("maj_le"):
+        st.caption(f"État mis à jour : {etat['maj_le'][:16].replace('T', ' ')}")
+    st.caption(f"{len(aos)} AO dans l'état")
+
+    if st.button("Vérifier maintenant", key="declencher"):
+        if veille_depot.declencher_veille():
+            st.success("Veille lancée. Le résultat arrivera dans quelques minutes.")
+        else:
+            st.info("Lancement à distance indisponible (source locale ou jeton absent).")
+
+
+# --- Selection --------------------------------------------------------------
+
+def _garde(entree: dict) -> bool:
+    if not voir_rejetes and verdict_effectif(entree) == "REJETE":
+        return False
+    if priorites and str(entree.get("priorite") or "?") not in priorites:
+        return False
+    if departements and str(entree.get("departement") or "--") not in departements:
+        return False
+    if non_lus_seuls and entree.get("lu"):
+        return False
+    return True
+
+
+retenus = [(i, e) for i, e in aos.items() if _garde(e)]
+retenus.sort(key=lambda couple: str(couple[1].get("vu_le") or ""), reverse=True)
+
+
+# --- Fil des AO -------------------------------------------------------------
+
+st.title("Veille appels d'offres")
+
+if not aos:
+    st.info("Aucun appel d'offres dans l'état pour le moment. "
+            "La veille écrit ici à chaque passage.")
+elif not retenus:
+    st.warning("Aucun AO ne correspond aux filtres.")
+
+for id_ao, entree in retenus:
+    verdict = verdict_effectif(entree)
+    tri = entree.get("tri") or {}
+    corrige = bool(entree.get("correction_humaine"))
+
+    marque = "🔵" if not entree.get("lu") else "⚪"
+    titre = f"{marque} **{entree.get('objet', '(sans intitulé)')}**"
+    st.markdown(titre)
+
+    ligne = (f"{entree.get('acheteur', '')} — {entree.get('ville', '')} "
+             f"({entree.get('departement') or '--'}) · limite "
+             f"{entree.get('date_limite') or 'non précisée'} · "
+             f"{entree.get('priorite', '')} {entree.get('score', '')}")
+    st.markdown(ligne)
+
+    origine = "corrigé à la main" if corrige else f"tri {tri.get('etage', '')}"
+    st.markdown(f"Verdict : **{verdict}** — {tri.get('motif', '')} _({origine})_")
+
+    if entree.get("url"):
+        st.markdown(f"[Ouvrir la consultation]({entree['url']})")
+
+    colonnes = st.columns([1, 1, 1, 2])
+    with colonnes[0]:
+        if st.button("Pertinent", key=f"ok_{id_ao}"):
+            veille_etat.corriger(etat, id_ao, "PERTINENT")
+            enregistrer(etat, sha, f"correction {id_ao} -> PERTINENT")
+            st.rerun()
+    with colonnes[1]:
+        if st.button("Pas pertinent", key=f"ko_{id_ao}"):
+            veille_etat.corriger(etat, id_ao, "REJETE")
+            enregistrer(etat, sha, f"correction {id_ao} -> REJETE")
+            st.rerun()
+    with colonnes[2]:
+        libelle = "Marquer non lu" if entree.get("lu") else "Marquer lu"
+        if st.button(libelle, key=f"lu_{id_ao}"):
+            veille_etat.marquer_lu(etat, id_ao, not entree.get("lu"))
+            enregistrer(etat, sha, f"lecture {id_ao}")
+            st.rerun()
+    with colonnes[3]:
+        courant = entree.get("traitement", "nouveau")
+        if courant not in TRAITEMENTS:
+            courant = "nouveau"
+        choisi = st.selectbox("Suivi", list(TRAITEMENTS),
+                              index=list(TRAITEMENTS).index(courant),
+                              format_func=lambda s: LIBELLE_TRAITEMENT.get(s, s),
+                              key=f"trait_{id_ao}", label_visibility="collapsed")
+        if choisi != courant:
+            veille_etat.definir_traitement(etat, id_ao, choisi)
+            enregistrer(etat, sha, f"suivi {id_ao} -> {choisi}")
+            st.rerun()
+
+    st.divider()
+
+
+# --- Guide des messages -----------------------------------------------------
+# Information d'entreprise : masquee tant que l'acces a l'app n'est pas restreint
+# (spec 10). CHRUTH_VEILLE_GUIDE=1 l'active en connaissance de cause.
+
+if os.environ.get("CHRUTH_VEILLE_GUIDE", "").strip() == "1":
+    st.header("Guide des messages")
+    st.caption("Alimente la rédaction des messages et le prompt de tri. "
+               "Ce qui est saisi ici fait foi.")
+
+    amorce = etat.get("guide_messages", "")
+    if not amorce:
+        try:
+            amorce = FICHE_AMORCE.read_text(encoding="utf-8")
+        except Exception:  # noqa: BLE001
+            amorce = ""
+
+    texte = st.text_area("Guide", value=amorce, height=280, key="guide",
+                         label_visibility="collapsed")
+    if st.button("Enregistrer le guide", key="enregistrer_guide"):
+        veille_etat.definir_guide(etat, texte)
+        enregistrer(etat, sha, "guide des messages")
+        st.success("Guide enregistré.")

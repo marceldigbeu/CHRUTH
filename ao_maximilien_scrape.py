@@ -55,6 +55,12 @@ KEYWORDS = ["nettoyage", "propreté", "bionettoyage"]
 CONSULT_RE = re.compile(r"/entreprise/consultation/(\d+)\?orgAcronyme=(\w+)")
 CP_RE = re.compile(r"\((\d{5})\s*-\s*([^)]+)\)")
 
+# --- Pagination ------------------------------------------------------------
+PAGE_SIZE = "20"
+MAX_PAGES = 20  # cap de securite : 20 pages x 20 = 400 resultats par mot-cle
+RESULT_PREFIX = "ctl0$CONTENU_PAGE$resultSearch$"
+NB_RESULTATS_RE = re.compile(r"r[eé]sultats?\s*:\s*(\d+)", re.IGNORECASE)
+
 MOIS_FR = {
     "janv": 1, "janvier": 1, "févr": 2, "fevr": 2, "février": 2, "fevrier": 2,
     "mars": 3, "avr": 4, "avril": 4, "mai": 5, "juin": 6, "juil": 7,
@@ -92,8 +98,13 @@ def _champs_formulaire(soup: BeautifulSoup) -> dict[str, str]:
     return data
 
 
-def _rechercher(session: requests.Session, keyword: str) -> str:
-    """GET le formulaire puis POST la recherche. Renvoie le HTML des resultats."""
+def _rechercher(session: requests.Session, keyword: str, page: int = 1,
+                page_size: str = PAGE_SIZE) -> str:
+    """GET le formulaire puis POST la recherche. Renvoie le HTML des resultats.
+
+    page=1 lance la recherche ; page>1 rejoue le postback de pagination sur la
+    page de resultats obtenue, car le jeton PRADO_PAGESTATE change a chaque reponse.
+    """
     r = session.get(SEARCH_PAGE, timeout=REQUEST_TIMEOUT_SECONDS)
     r.raise_for_status()
     data = _champs_formulaire(BeautifulSoup(r.text, "html.parser"))
@@ -108,7 +119,46 @@ def _rechercher(session: requests.Session, keyword: str) -> str:
 
     rp = session.post(SEARCH_PAGE, data=data, timeout=REQUEST_TIMEOUT_SECONDS)
     rp.raise_for_status()
+    html = rp.text
+
+    # Passer a 20 resultats par page (moins de requetes, moins de charge pour le site).
+    html = _postback(session, html, {RESULT_PREFIX + "listePageSizeTop": page_size},
+                     RESULT_PREFIX + "listePageSizeTop")
+    if page > 1:
+        html = _postback(session, html, {RESULT_PREFIX + "numPageTop": str(page)},
+                         RESULT_PREFIX + "DefaultButtonTop")
+    return html
+
+
+def _postback(session: requests.Session, html: str, champs: dict[str, str],
+              cible: str) -> str:
+    """Rejoue un postback Prado depuis une page deja chargee."""
+    data = _champs_formulaire(BeautifulSoup(html, "html.parser"))
+    data.update(champs)
+    data["PRADO_POSTBACK_TARGET"] = cible
+    data["PRADO_POSTBACK_PARAMETER"] = ""
+    rp = session.post(SEARCH_PAGE, data=data, timeout=REQUEST_TIMEOUT_SECONDS)
+    rp.raise_for_status()
     return rp.text
+
+
+def nb_resultats(html: str) -> int:
+    """Nombre total de resultats annonce par la page ; 0 si non trouve."""
+    m = NB_RESULTATS_RE.search(BeautifulSoup(html, "html.parser").get_text(" ", strip=True))
+    return int(m.group(1)) if m else 0
+
+
+def _pages_resultats(session: requests.Session, keyword: str):
+    """Rend le HTML de chaque page de resultats, page 1 comprise."""
+    premiere = _rechercher(session, keyword, page=1)
+    yield premiere
+
+    total = nb_resultats(premiere)
+    taille = int(PAGE_SIZE)
+    nb_pages = min((total + taille - 1) // taille, MAX_PAGES) if total else 1
+    for page in range(2, nb_pages + 1):
+        yield _rechercher(session, keyword, page=page)
+        time.sleep(0.5)  # courtoisie envers le site
 
 
 # --- Parsing ---------------------------------------------------------------
@@ -243,12 +293,12 @@ def collecter_maximilien(
     collectes: dict[str, dict[str, Any]] = {}
     for kw in keywords:
         try:
-            html = _rechercher(session, kw)
+            for html in _pages_resultats(session, kw):
+                for b in _parse_resultats(html):
+                    collectes.setdefault(b["cid"], b)  # dedup inter-pages et inter-mots-cles
         except Exception as exc:  # noqa: BLE001
             logger.warning("Recherche '%s' echouee : %s", kw, exc)
             continue
-        for b in _parse_resultats(html):
-            collectes.setdefault(b["cid"], b)  # dedup inter-mots-cles
         time.sleep(1.0)  # courtoisie envers le site
 
     if not collectes:
@@ -293,8 +343,9 @@ def main() -> int:
         collectes: dict[str, dict[str, Any]] = {}
         for kw in KEYWORDS:
             try:
-                for b in _parse_resultats(_rechercher(session, kw)):
-                    collectes.setdefault(b["cid"], b)
+                for html in _pages_resultats(session, kw):
+                    for b in _parse_resultats(html):
+                        collectes.setdefault(b["cid"], b)
             except Exception as exc:  # noqa: BLE001
                 print(f"[DRY] '{kw}' echec : {exc}")
             time.sleep(1.0)

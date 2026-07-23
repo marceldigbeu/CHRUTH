@@ -79,11 +79,45 @@ def nouveaux_ao_a_alerter(db_path: Path = AO_DB_PATH) -> list[dict[str, Any]]:
         f"SELECT * FROM ao_records "
         f"WHERE priorite IN ({placeholders}) "
         f"AND (alerte_envoyee IS NULL OR alerte_envoyee = '') "
+        f"AND COALESCE(verdict_tri, '') <> 'REJETE' "
+        f"AND COALESCE(source, '') <> 'MAXIMILIEN' "
         f"ORDER BY CAST(score_chruth AS INTEGER) DESC"
     )
     with connect(db_path) as conn:
         rows = conn.execute(sql, tuple(ALERTE_PRIORITES)).fetchall()
     return [dict(r) for r in rows]
+
+
+def calculer_verdicts_manquants(db_path: Path = AO_DB_PATH, guide: str = "",
+                                client=None) -> int:
+    """Trie les AO qui n'ont pas encore de verdict. Renvoie le nombre traites.
+
+    Marque, ne supprime jamais : les AO rejetes restent visibles dans le cockpit.
+
+    Ecriture AO par AO, connexion refermee entre chaque : un cas ambigu peut couter
+    30 s de LLM, et garder une transaction ouverte pendant tout l'arriere-plan
+    perdrait le travail a la moindre interruption tout en verrouillant la base
+    face a la tache planifiee.
+    """
+    import ao_pertinence
+
+    init_db(db_path)
+    with connect(db_path) as conn:
+        lignes = [dict(r) for r in conn.execute(
+            "SELECT id_ao, objet, resume_commercial FROM ao_records "
+            "WHERE verdict_tri IS NULL OR verdict_tri = ''"
+        ).fetchall()]
+
+    traites = 0
+    for r in lignes:
+        v = ao_pertinence.trier(r.get("objet") or "", r.get("resume_commercial") or "",
+                                guide=guide, client=client)
+        with connect(db_path) as conn:
+            conn.execute("UPDATE ao_records SET verdict_tri=?, motif_tri=? WHERE id_ao=?",
+                         (v.verdict, v.motif, r["id_ao"]))
+            conn.commit()
+        traites += 1
+    return traites
 
 
 def creneau_label(now: datetime) -> str:
@@ -204,6 +238,7 @@ def marquer_alertes(ids: list[str], db_path: Path = AO_DB_PATH) -> None:
 
 def envoyer_alertes(db_path: Path = AO_DB_PATH, now: datetime | None = None) -> int:
     now = now or datetime.now()
+    calculer_verdicts_manquants(db_path)
     records = nouveaux_ao_a_alerter(db_path)
     if not records:
         return 0
