@@ -51,9 +51,26 @@ def _declares(fichier: str) -> set[str]:
             for l in lignes if l.strip() and not l.strip().startswith("#")}
 
 
+def _pages_declarees() -> list[str]:
+    """Les pages listees dans CHRUTH_APP.py, lues a la source.
+
+    Ecrire la liste en dur ici la laisserait vieillir : les pages Pilotage et
+    Reglages sont restees hors de cette garde le temps d'une refonte, alors que
+    la dependance manquante est la panne de deploiement la plus courante.
+    """
+    source = (RACINE / "CHRUTH_APP.py").read_text(encoding="utf-8")
+    return sorted({m.removesuffix(".py") for m in re.findall(r'st\.Page\("([^"]+\.py)"', source)})
+
+
 def test_requirements_couvre_toute_l_application():
-    manquants = _imports_tiers(["CHRUTH_APP", "app_veille", "app_messages"]) - _declares("requirements.txt")
+    modules = ["CHRUTH_APP"] + _pages_declarees()
+    manquants = _imports_tiers(modules) - _declares("requirements.txt")
     assert manquants == set(), f"absents de requirements.txt : {sorted(manquants)}"
+
+
+def test_la_garde_couvre_bien_chaque_page_de_la_navigation():
+    """Sans ceci, ajouter une page la sortirait silencieusement du controle."""
+    assert _pages_declarees() == ["app_messages", "app_veille", "pages_pilotage", "pages_reglages"]
 
 
 def test_streamlit_est_declare():

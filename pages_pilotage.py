@@ -9,6 +9,7 @@ import streamlit as st
 
 import ao_db
 import ao_pilotage
+import veille_depot
 
 try:
     st.set_page_config(page_title="Pilotage CHRUTH", page_icon="🧹", layout="wide")
@@ -29,4 +30,12 @@ colonnes[3].metric("Budget à vérifier", str(kpis["budget_a_verifier"]))
 st.caption(f"Mise à jour : {kpis['date_maj']} · contrôle qualité : {kpis['check_qualite']}")
 
 if df.empty:
-    st.info("Aucun appel d'offres en base. Lancer une mise à jour depuis la page Veille.")
+    if veille_depot.source() == "github":
+        # En ligne, la base SQLite n'existe pas : elle est locale et gitignoree.
+        # Renvoyer vers « Mettre a jour maintenant » serait un mensonge — ce bouton
+        # declenche le workflow, qui remplit l'etat partage, jamais cette base.
+        st.info("Ces indicateurs viennent de la base **locale** du poste, qui n'est pas "
+                "publiée en ligne. Ils s'affichent depuis l'application lancée sur le PC. "
+                "Le suivi des appels d'offres en ligne se trouve sur la page Veille.")
+    else:
+        st.info("Aucun appel d'offres en base. Lancer une mise à jour depuis la page Veille.")

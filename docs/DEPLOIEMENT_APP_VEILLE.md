@@ -83,13 +83,48 @@ CHRUTH_GITHUB_TOKEN = "<le jeton de l'etape 2>"
 Sans `CHRUTH_GITHUB_TOKEN`, l'app est **vide et en lecture seule** : elle ne peut
 ni lire l'état du dépôt privé, ni enregistrer une correction.
 
+Community Cloud expose chaque secret comme variable d'environnement : c'est ainsi
+que `reglages.py` et `llm_client.py` les lisent, sans code particulier.
+
+Pour que la page **Messages et CRM** génère en ligne, ajouter une clé cloud — une
+seule suffit, `moteur_auto()` la trouve. Ollama ne tourne pas sur Community Cloud.
+
+```toml
+ANTHROPIC_API_KEY = "<ou MISTRAL_API_KEY, ou GROQ_API_KEY>"
+```
+
 ### 5. Vérifier
+
+Quatre pages dans le menu de gauche : Veille, Messages et CRM, Pilotage, Réglages.
 
 - Le fil affiche les AO, du plus récemment publié au plus ancien.
 - « Afficher les AO rejetés par le tri » les fait apparaître avec leur motif.
 - Un clic sur **Pas pertinent** survit à un rechargement de la page.
 - Le bouton **Mettre à jour maintenant** déclenche le workflow — il ne collecte
   pas depuis l'app, ce qui marquerait les AO comme vus sans les notifier.
+- **Réglages** affiche les vrais destinataires. En changer un, puis vérifier au
+  run local suivant que `ao_alertes.charger_destinataires()` les renvoie.
+- Le mot de passe d'application n'apparaît **nulle part** : il n'est pas dans
+  l'état partagé, et la page Réglages ne le lit pas.
+
+---
+
+## Ce qui ne fonctionne pas en ligne, et pourquoi
+
+Community Cloud redémarre l'application quand il veut, avec un disque neuf. Tout
+ce qui n'est pas dans le dépôt ou dans l'état partagé disparaît.
+
+| Fonction | En ligne | Raison |
+|---|---|---|
+| Veille, tri, corrections | ✅ | dans `etat/veille.json` sur `ao-state` |
+| Réglages | ✅ | même état partagé |
+| Messages IA | ✅ *avec une clé cloud* | Ollama est local |
+| **Pilotage** | ❌ affiche 0 | les KPI viennent de la base SQLite locale, gitignorée : elle n'est pas publiée. La page le dit explicitement en ligne plutôt que de renvoyer vers une mise à jour qui ne la remplirait pas |
+| **Saisies CRM** | ⚠️ éphémères | `crm/suivi_clients.csv` est sur le disque du conteneur, effacé au redémarrage |
+
+Le Pilotage et le CRM restent complets dans l'application lancée **sur le PC**,
+qui lit la vraie base. C'est le partage voulu : le téléphone sert à suivre la
+veille et à corriger le tri, le poste sert à travailler les données.
 
 ---
 
