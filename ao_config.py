@@ -195,6 +195,16 @@ AO_EXCLUSION_TRI = [
     "securite incendie",
     "bouches et poteaux",
     "collecte pneumatique",
+    # Fonction RH : CHRUTH fournit du personnel, elle n'exerce pas ces metiers.
+    "gestion de la paie",
+    "administration du personnel",
+    "sante au travail",
+    "medecine preventive",
+    "medecine professionnelle",
+    "formation des agents",
+    "missions de formation",
+    "recrutement",
+    "coaching",
     # Electromenager : « appareils menagers » commence par le mot-cle « menage ».
     # Cible l'objet fourni, jamais la prestation (« entretien menager » reste garde).
     "appareils menagers",

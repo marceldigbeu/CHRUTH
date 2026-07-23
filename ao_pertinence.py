@@ -17,6 +17,7 @@ from ao_config import (
     AO_EXCLUSION_DURES,
     AO_EXCLUSION_TRI,
     AO_KEYWORDS_CORE,
+    AO_KEYWORDS_RH,
     AO_KEYWORDS_SECONDARY,
 )
 from ao_extract_fields import normalize_text
@@ -37,7 +38,12 @@ def _exclusions() -> list[str]:
 
 
 def _mots_cles() -> list[str]:
-    return list(AO_KEYWORDS_CORE) + list(AO_KEYWORDS_SECONDARY)
+    """Mots-cles qui declenchent un verdict PERTINENT a l'etage 1.
+
+    Les mots-cles de personnel sont inclus inconditionnellement ici ; la tache 8
+    les rendra pilotables depuis les reglages partages.
+    """
+    return list(AO_KEYWORDS_CORE) + list(AO_KEYWORDS_SECONDARY) + list(AO_KEYWORDS_RH)
 
 
 def _present(terme: str, texte_norm: str) -> bool:
