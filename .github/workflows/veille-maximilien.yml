@@ -1,0 +1,58 @@
+name: Veille Maximilien
+
+on:
+  schedule:
+    # Toutes les 30 min, 6h-19h UTC, du lundi au vendredi.
+    # ~594 runs/mois x ~1 min = ~600 min sur les 2000 gratuites d'un depot prive.
+    # Une cadence 24/7 depasserait le quota (~2160 min).
+    - cron: "*/30 6-19 * * 1-5"
+  workflow_dispatch:
+
+concurrency:
+  group: veille-maximilien
+  cancel-in-progress: false
+
+jobs:
+  veille:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Recuperer le code
+        uses: actions/checkout@v4
+
+      - name: Recuperer l'etat
+        uses: actions/checkout@v4
+        with:
+          ref: ao-state
+          path: .etat
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Installer les dependances
+        run: pip install -r requirements.txt
+
+      - name: Lancer la veille
+        env:
+          CHRUTH_SMTP_USER: ${{ secrets.CHRUTH_SMTP_USER }}
+          CHRUTH_SMTP_PASSWORD: ${{ secrets.CHRUTH_SMTP_PASSWORD }}
+          CHRUTH_ALERTE_DEST: ${{ secrets.CHRUTH_ALERTE_DEST }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          MISTRAL_API_KEY: ${{ secrets.MISTRAL_API_KEY }}
+          CHRUTH_NOTIFICATIONS: ${{ vars.CHRUTH_NOTIFICATIONS }}
+          CHRUTH_VEILLE_ETAT: ${{ github.workspace }}/.etat/etat/veille.json
+        run: python ao_maximilien_veille.py
+
+      - name: Enregistrer l'etat s'il a change
+        working-directory: .etat
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "CHRUTH Veille"
+            git config user.email "veille@chruth.local"
+            git add -A
+            git commit -m "etat veille $(date -u +%Y-%m-%dT%H:%M:%SZ)"
+            git push origin ao-state
+          else
+            echo "Etat inchange, rien a committer."
+          fi
