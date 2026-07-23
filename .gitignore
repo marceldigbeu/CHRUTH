@@ -43,3 +43,6 @@ output/segments_variantes.json
 
 # Scratch/brouillons Python hors projet
 _scratch/
+
+# Etat local de la veille : sa source de verite est la branche ao-state.
+etat/
