@@ -12,6 +12,8 @@ from ao_config import (
     AO_BUDGET_MIN_EUR,
     AO_KEYWORDS_CORE,
     AO_KEYWORDS_SECONDARY,
+    AO_KEYWORDS_RH,
+    AO_CATEGORIE_PERSONNEL,
     AO_CATEGORIE_VITRES,
     AO_CATEGORIE_BUREAUX,
     AO_CATEGORIE_BATIMENTS,
@@ -129,9 +131,22 @@ def find_keywords(text: str) -> tuple[list[str], list[str]]:
     return core, secondary
 
 
-def classify_categorie(text: str) -> str:
-    """Classe l'AO en Vitres / Bureaux / Batiments / Mixte (priorite Vitres > Bureaux > Batiments)."""
+def find_keywords_rh(text: str) -> list[str]:
+    """Mots-cles de marches de personnel presents dans le texte."""
     normalized = normalize_text(text)
+    return [kw for kw in AO_KEYWORDS_RH if keyword_in_text(kw, normalized)]
+
+
+def classify_categorie(text: str) -> str:
+    """Classe l'AO en Personnel / Vitres / Bureaux / Batiments / Mixte.
+
+    Personnel prime : un marche de mise a disposition mentionne presque toujours des
+    locaux, il serait donc classe Batiments et se confondrait avec la proprete. La
+    forme contractuelle prime sur le lieu d'exercice.
+    """
+    normalized = normalize_text(text)
+    if any(keyword_in_text(kw, normalized) for kw in AO_CATEGORIE_PERSONNEL):
+        return "Personnel"
     if any(keyword_in_text(kw, normalized) for kw in AO_CATEGORIE_VITRES):
         return "Vitres"
     if any(keyword_in_text(kw, normalized) for kw in AO_CATEGORIE_BUREAUX):

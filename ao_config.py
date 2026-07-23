@@ -61,6 +61,44 @@ AO_KEYWORDS_SECONDARY = [
     "desinfection",
 ]
 
+# Marches de PERSONNEL (mise a disposition, services associes). Volontairement
+# COMPOSES : « accueil », « logistique » ou « manutention » seuls figurent dans la
+# moitie des marches de services et noieraient les alertes. Chaque terme porte un
+# marqueur de personnel. Seul « gardiennage » est simple : il designe une
+# prestation, pas un mot courant — a surveiller en recette.
+AO_KEYWORDS_RH = [
+    "mise a disposition de personnel",
+    "mise a disposition d'agents",
+    "personnel de service",
+    "agents de service",
+    "personnel d'entretien",
+    "agent polyvalent",
+    "agents polyvalents",
+    "renfort d'agents",
+    "personnel d'accueil",
+    "agents d'accueil",
+    "agent de gardiennage",
+    "gardiennage",
+    "agents de manutention",
+    "personnel de restauration",
+    "agents de restauration",
+    "interim",
+    "travail temporaire",
+]
+
+# Marqueurs de la categorie Personnel (lecture du cockpit et du fil).
+AO_CATEGORIE_PERSONNEL = [
+    "mise a disposition de personnel",
+    "mise a disposition d'agents",
+    "personnel de service",
+    "agents de service",
+    "personnel d'accueil",
+    "agents d'accueil",
+    "gardiennage",
+    "interim",
+    "travail temporaire",
+]
+
 # Seuils budget ANNUALISE (EUR) : score strictement decroissant.
 # (montant, points) — la borne est un plafond "<=".
 AO_BUDGET_SCORE_BANDS = [
@@ -75,7 +113,10 @@ AO_BUDGET_SCORE_UNKNOWN = 10     # budget non affiche (frequent en MAPA), non pe
 # Categorisation nettoyage demandee par le client.
 AO_CATEGORIE_VITRES = ["vitre", "vitrerie", "vitree", "vitres"]
 AO_CATEGORIE_BUREAUX = ["bureau", "bureaux"]
-AO_CATEGORIE_BATIMENTS = ["batiment", "locaux", "immeuble", "site", "ecole", "gymnase"]
+# Pluriels explicites : le rapprochement exige des frontieres de mot des deux cotes,
+# donc « batiments communaux » ne matchait pas « batiment » et tombait en Mixte/Autre.
+AO_CATEGORIE_BATIMENTS = ["batiment", "batiments", "locaux", "immeuble", "immeubles",
+                          "site", "sites", "ecole", "ecoles", "gymnase", "gymnases"]
 
 # Secteurs cibles (bonus de score, jamais un filtre).
 AO_SECTEURS = {
