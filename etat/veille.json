@@ -1760,6 +1760,28 @@
       "ville": "Montfermeil",
       "vu_le": "2026-07-23T07:18:45.624309+00:00"
     },
+    "MX-943280": {
+      "acheteur": "Ville de Paris",
+      "correction_humaine": null,
+      "date_limite": "2026-09-29",
+      "date_publication": "2026-07-24",
+      "departement": "75",
+      "lu": false,
+      "notifie_le": null,
+      "objet": "Maintenance et amélioration du système informatique industriel et des automatismes du réseau d’assainissement parisien (en 2 lots)",
+      "priorite": "TIEDE",
+      "procedure": "AOO",
+      "score": 45,
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "exclusion metier : assainissement",
+        "verdict": "REJETE"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/943280?orgAcronyme=r8t",
+      "ville": "Paris",
+      "vu_le": "2026-07-24T14:19:22.111343+00:00"
+    },
     "MX-943339": {
       "acheteur": "Mairie de Villejuif",
       "correction_humaine": null,
@@ -2156,6 +2178,28 @@
       "ville": "Neuilly-Plaisance",
       "vu_le": "2026-07-23T15:02:18.448800+00:00"
     },
+    "MX-944013": {
+      "acheteur": "Ville de La Courneuve",
+      "correction_humaine": null,
+      "date_limite": "2026-09-15",
+      "date_publication": "2026-07-24",
+      "departement": "93",
+      "lu": false,
+      "notifie_le": "2026-07-24T14:19:23.755461+00:00",
+      "objet": "ACCORD-CADRE DE MISSIONS DE GARDIENNAGE ET SECURISATION DES BATIMENTS COMMUNAUX ET DES MANIFESTATIONS PUBLIQUES",
+      "priorite": "TIEDE",
+      "procedure": "MAPA",
+      "score": 45,
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "mot-cle coeur dans l'intitule : gardiennage",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944013?orgAcronyme=d5c",
+      "ville": "La Courneuve",
+      "vu_le": "2026-07-24T14:19:22.116486+00:00"
+    },
     "MX-944023": {
       "acheteur": "Commune de Bussy-Saint-Georges",
       "correction_humaine": null,
@@ -2200,6 +2244,28 @@
       "ville": "ROMAINVILLE",
       "vu_le": "2026-07-23T15:02:18.399414+00:00"
     },
+    "MX-944059": {
+      "acheteur": "Ville de Montreuil",
+      "correction_humaine": null,
+      "date_limite": "2026-08-18",
+      "date_publication": "2026-07-24",
+      "departement": "93",
+      "lu": false,
+      "notifie_le": "2026-07-24T14:19:25.458093+00:00",
+      "objet": "Prestations de traiteur et services associés pour les besoins du CCAS de la ville de Montreuil",
+      "priorite": "TIEDE",
+      "procedure": "MAPA",
+      "score": 45,
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944059?orgAcronyme=d6a",
+      "ville": "Montreuil",
+      "vu_le": "2026-07-24T14:19:22.120145+00:00"
+    },
     "MX-944106": {
       "acheteur": "Commune de  CHATOU",
       "correction_humaine": null,
@@ -2224,6 +2290,6 @@
     }
   },
   "guide_messages": "",
-  "maj_le": "2026-07-24T12:13:10.775679+00:00",
+  "maj_le": "2026-07-24T14:19:25.458216+00:00",
   "version": 1
 }
