@@ -2199,9 +2199,31 @@
       "url": "https://marches.maximilien.fr/entreprise/consultation/944029?orgAcronyme=v8x",
       "ville": "ROMAINVILLE",
       "vu_le": "2026-07-23T15:02:18.399414+00:00"
+    },
+    "MX-944106": {
+      "acheteur": "Commune de  CHATOU",
+      "correction_humaine": null,
+      "date_limite": "2026-09-23",
+      "date_publication": "2026-07-24",
+      "departement": "78",
+      "lu": false,
+      "notifie_le": "2026-07-24T12:13:10.775563+00:00",
+      "objet": "PRESTATIONS DE SERVICE DE TRANSPORT COLLECTIF ROUTIER",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 30,
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944106?orgAcronyme=a1b",
+      "ville": "CHATOU",
+      "vu_le": "2026-07-24T12:13:09.325978+00:00"
     }
   },
   "guide_messages": "",
-  "maj_le": "2026-07-24T10:32:22.397230+00:00",
+  "maj_le": "2026-07-24T12:13:10.775679+00:00",
   "version": 1
 }
