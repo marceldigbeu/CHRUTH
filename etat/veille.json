@@ -1980,6 +1980,28 @@
       "ville": "Chevilly-Larue",
       "vu_le": "2026-07-23T15:02:18.424171+00:00"
     },
+    "MX-943717": {
+      "acheteur": "Les éparses",
+      "correction_humaine": null,
+      "date_limite": "2026-08-31",
+      "date_publication": "2026-07-24",
+      "departement": "90",
+      "lu": false,
+      "notifie_le": "2026-07-24T10:32:22.397093+00:00",
+      "objet": "Prestation d'entretien du linge plat",
+      "priorite": "FROID",
+      "procedure": "MAPA",
+      "score": 35,
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/943717?orgAcronyme=a1u",
+      "ville": "CHAUX",
+      "vu_le": "2026-07-24T10:32:20.711577+00:00"
+    },
     "MX-943721": {
       "acheteur": "Ville de Clichy",
       "correction_humaine": null,
@@ -2180,6 +2202,6 @@
     }
   },
   "guide_messages": "",
-  "maj_le": "2026-07-24T08:07:36.673224+00:00",
+  "maj_le": "2026-07-24T10:32:22.397230+00:00",
   "version": 1
 }
