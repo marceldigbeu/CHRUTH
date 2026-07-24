@@ -264,6 +264,28 @@
       "ville": "Paris",
       "vu_le": "2026-07-23T15:02:18.473345+00:00"
     },
+    "MX-939426": {
+      "acheteur": "CD94 - Conseil départemental du Val-de-Marne",
+      "correction_humaine": null,
+      "date_limite": "2026-09-24",
+      "date_publication": "2026-07-24",
+      "departement": "94",
+      "lu": false,
+      "notifie_le": "2026-07-24T08:07:35.342059+00:00",
+      "objet": "PRESTATIONS DE NETTOYAGE DES SITES DE L'ENFANCE",
+      "priorite": "TIEDE",
+      "procedure": "AOO",
+      "score": 55,
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "mot-cle coeur dans l'intitule : nettoyage",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/939426?orgAcronyme=a8z",
+      "ville": "Créteil",
+      "vu_le": "2026-07-24T08:07:34.070325+00:00"
+    },
     "MX-939496": {
       "acheteur": "Ville de Paris",
       "correction_humaine": null,
@@ -2068,6 +2090,28 @@
       "ville": "Montfermeil",
       "vu_le": "2026-07-23T15:02:18.418356+00:00"
     },
+    "MX-943981": {
+      "acheteur": "SPL PLAINE COMMUNE DEVELOPPEMENT",
+      "correction_humaine": null,
+      "date_limite": "2026-08-21",
+      "date_publication": "2026-07-24",
+      "departement": "93",
+      "lu": false,
+      "notifie_le": "2026-07-24T08:07:36.673092+00:00",
+      "objet": "FUP - Mission de coordination SPS de travaux des opérations d’aménagement des atterrissages",
+      "priorite": "FROID",
+      "procedure": "MAPA",
+      "score": 35,
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/943981?orgAcronyme=d5g",
+      "ville": "Saint-Denis La Plaine",
+      "vu_le": "2026-07-24T08:07:34.074119+00:00"
+    },
     "MX-943996": {
       "acheteur": "Commune de Neuilly-Plaisance",
       "correction_humaine": null,
@@ -2136,6 +2180,6 @@
     }
   },
   "guide_messages": "",
-  "maj_le": "2026-07-23T19:54:26.956782+00:00",
+  "maj_le": "2026-07-24T08:07:36.673224+00:00",
   "version": 1
 }
