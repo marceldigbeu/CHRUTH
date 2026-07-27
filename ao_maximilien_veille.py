@@ -115,11 +115,7 @@ def veiller(etat_path: Path | None = None, envoyer: bool = True, client=None) ->
     chemin = Path(etat_path or ETAT_PATH)
     etat = veille_etat.charger(chemin)
     guide = etat.get("guide_messages", "")
-    corrections = [
-        {"objet": e.get("objet", ""), "verdict": (e.get("correction_humaine") or {}).get("verdict", "")}
-        for e in etat.get("aos", {}).values()
-        if e.get("correction_humaine")
-    ]
+    corrections = veille_etat.memoire_corrections(etat)
 
     for ao in veille_etat.nouveaux(etat, collecter()):
         verdict = ao_pertinence.trier(ao.get("objet", ""), ao.get("objet_desc", ""),
@@ -140,6 +136,7 @@ def veiller(etat_path: Path | None = None, envoyer: bool = True, client=None) ->
             except Exception as exc:  # noqa: BLE001
                 logger.error("Envoi echoue pour %s : %s", id_ao, exc)
 
+    veille_etat.elaguer(etat)
     veille_etat.enregistrer(etat, chemin)
     return notifies
 
