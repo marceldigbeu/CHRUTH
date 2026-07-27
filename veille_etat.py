@@ -7,12 +7,13 @@ chaque run. Ce module ne connait ni le tri, ni le web, ni l'email.
 from __future__ import annotations
 
 import json
-from datetime import datetime, timezone
+from datetime import date, datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any
 
 ETAT_VERSION = 1
 MEMOIRE_MAX = 50
+PURGE_JOURS = 90
 
 CHAMPS_AO = ("objet", "acheteur", "ville", "departement", "date_publication",
              "date_limite", "procedure", "url", "score", "priorite")
@@ -107,6 +108,41 @@ def verdict_effectif(entree: dict[str, Any]) -> str:
     if correction.get("verdict"):
         return correction["verdict"]
     return (entree.get("tri") or {}).get("verdict", "")
+
+
+def _expire(entree: dict[str, Any], aujourd_hui: date) -> bool:
+    """Expire si la date limite est passee ; a defaut, si vu_le est plus vieux que PURGE_JOURS."""
+    dl = str(entree.get("date_limite") or "").strip()
+    if dl:
+        try:
+            return date.fromisoformat(dl[:10]) < aujourd_hui
+        except ValueError:
+            pass
+    vu = str(entree.get("vu_le") or "").strip()
+    if not vu:
+        return False
+    try:
+        vu_dt = datetime.fromisoformat(vu)
+    except ValueError:
+        return False
+    if vu_dt.tzinfo is None:
+        vu_dt = vu_dt.replace(tzinfo=timezone.utc)
+    return (datetime.now(timezone.utc) - vu_dt).days > PURGE_JOURS
+
+
+def elaguer(etat: dict[str, Any], aujourd_hui: date | None = None) -> int:
+    """Supprime les AO REJETE effectif + non corriges + expires. Renvoie le nombre supprime."""
+    aujourd_hui = aujourd_hui or datetime.now(timezone.utc).date()
+    aos = etat.get("aos", {})
+    a_retirer = [
+        i for i, e in aos.items()
+        if verdict_effectif(e) == "REJETE"
+        and not e.get("correction_humaine")
+        and _expire(e, aujourd_hui)
+    ]
+    for i in a_retirer:
+        del aos[i]
+    return len(a_retirer)
 
 
 def marquer_lu(etat: dict[str, Any], id_ao: str, lu: bool = True) -> None:
