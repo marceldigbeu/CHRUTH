@@ -12,7 +12,17 @@ Le dossier local est allege : les tests, logs, caches, donnees brutes massives e
 
 ## Demarrage rapide
 
-Pour une personne no-code, ouvrir :
+Pour une personne no-code, ouvrir l'application CHRUTH :
+
+```bat
+LANCER_APP_CHRUTH.bat
+```
+
+Une seule adresse, quatre pages : veille appels d'offres, messages et CRM, pilotage,
+reglages. C'est la surface principale, et la seule consultable en ligne depuis un
+telephone (voir `docs/DEPLOIEMENT_APP_VEILLE.md` et `docs/SURFACES_CHRUTH.md`).
+
+Pour lancer les traitements par lots :
 
 ```bat
 COCKPIT_CHRUTH.bat

@@ -37,6 +37,8 @@ crm/
 # Suivi des envois de messages (Mission 3 - perf) - CSV persistant
 suivi/
 output/segments_variantes.json
+# Cache des templates de messages : ecrit a chaque generation dans l'app, regenerable.
+output/segments_messages.json
 
 # Scratch orchestration subagent-driven (briefs, reports, diffs)
 .superpowers/

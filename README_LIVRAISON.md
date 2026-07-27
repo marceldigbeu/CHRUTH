@@ -4,7 +4,17 @@ Ce dossier est la version allegee de livraison pour realiser les missions de la 
 
 ## Fichier a ouvrir
 
-Pour une personne no-code, ouvrir en priorite :
+Pour une personne no-code, ouvrir en priorite l'application CHRUTH :
+
+```bat
+LANCER_APP_CHRUTH.bat
+```
+
+Une seule adresse, quatre pages : veille appels d'offres, messages et CRM,
+pilotage, reglages. C'est la surface principale et la seule consultable en ligne
+depuis un telephone (voir `docs/DEPLOIEMENT_APP_VEILLE.md` et `docs/SURFACES_CHRUTH.md`).
+
+Pour lancer les traitements par lots (generation, collectes) :
 
 ```bat
 COCKPIT_CHRUTH.bat

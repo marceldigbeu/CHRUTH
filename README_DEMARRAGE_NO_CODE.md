@@ -1,6 +1,20 @@
 # CHRUTH - Demarrage no-code
 
-## Ce qu'il faut faire
+## L'application CHRUTH (recommandee)
+
+Double-cliquer sur `LANCER_APP_CHRUTH.bat` : le navigateur ouvre l'application, une
+seule adresse pour quatre pages dans le menu de gauche :
+
+- **Veille appels d'offres** : consulter les AO, corriger le tri, suivre.
+- **Messages et CRM** : generer les messages (AO et prospects) et suivre le commercial.
+- **Pilotage** : les indicateurs du cockpit.
+- **Reglages** : destinataires, interrupteurs, fiche CHRUTH — vus par toutes les surfaces.
+
+C'est la seule surface qui peut aussi s'ouvrir en ligne, depuis un telephone, sans
+PC allume : voir `docs/DEPLOIEMENT_APP_VEILLE.md`. La carte de toutes les surfaces
+et leur role est dans `docs/SURFACES_CHRUTH.md`.
+
+## Les interfaces de traitement (alternatives)
 
 1. Double-cliquer sur `COCKPIT_CHRUTH.bat` : le navigateur s'ouvre sur le cockpit web CHRUTH.
 2. Laisser la fenetre noire ouverte pendant l'utilisation.

@@ -1,9 +1,0 @@
-{
-  "PUB_MAIRIE|CHAUDE": {
-    "email": "A l'attention de {denomination},\n\nNous sommes CHRUTH, spécialisés dans le nettoyage et la propreté des locaux. Nous avons remarqué que votre mairie, située à {ville}, pourrait bénéficier d'un entretien régulier pour maintenir un environnement sain et agréable pour les habitants.\n\nNotre équipe expérimentée peut vous aider à garantir la propreté de vos locaux, notamment dans les espaces communs et les bureaux. Nous proposons des services adaptés à votre besoin, allant du nettoyage quotidien au nettoyage spécialisé pour les surfaces sensibles.\n\nNous serions ravis de discuter plus en détail de nos solutions personnalisées pour votre mairie. N'hésitez pas à nous contacter pour fixer un rendez-vous.\n\nCordialement,\nL'équipe CHRUTH",
-    "script": "Bonjour, je m'appelle [Votre Nom] et je suis le représentant de CHRUTH. Nous sommes spécialisés dans le nettoyage et la propreté des locaux. Nous avons travaillé avec plusieurs communes similaires à {denomination} à {ville}, et nous sommes convaincus que nos services peuvent vous aider à améliorer l'hygiène et la propreté de vos locaux. Pouvez-vous me dire si vous êtes ouvert à discuter de nos solutions ? Nous serions ravis de fixer un rendez-vous pour en savoir plus.",
-    "source": "ia",
-    "categorie": "PUB_MAIRIE",
-    "priorite": "CHAUDE"
-  }
-}

@@ -33,7 +33,8 @@ try:
     st.set_page_config(page_title="CHRUTH — Messages IA", layout="wide")
 except st.errors.StreamlitAPIException:
     pass
-st.title("📨 CHRUTH — Générateur de messages (IA)")
+st.title("Messages et CRM")
+st.caption("Générer les messages (appels d'offres et prospects) et suivre le commercial.")
 
 
 # --- Barre laterale : choix du moteur LLM -----------------------------------
@@ -66,11 +67,26 @@ def charger_aos() -> pd.DataFrame:
     return pd.DataFrame([dict(r) for r in rows])
 
 
-def _zone_resultat(msg: dict) -> None:
-    st.caption(f"Source : **{msg.get('source','')}** "
+def _memoriser(msg: dict, cle: str) -> None:
+    """Range le message sous une clé de données (jamais une clé de widget).
+
+    Sans cela, le résultat n'est affiché que dans le run qui suit le clic : dès que
+    l'utilisateur édite le texte, Streamlit relance le script, le bouton repasse à
+    False et le message s'efface. Une clé de données simple survit aux reruns, là
+    où une clé partagée avec un widget serait purgée entre deux passages.
+    """
+    st.session_state[f"msg_{cle}"] = msg
+
+
+def _zone_resultat(cle: str) -> None:
+    msg = st.session_state.get(f"msg_{cle}")
+    if not msg:
+        return
+    st.caption(f"Source : **{msg.get('source', '')}** "
                "(ia = rédigé par le modèle ; defaut = brouillon type)")
-    st.text_area("✉️ Email (copier/coller, éditable)", msg.get("email", ""), height=260)
-    st.text_area("📞 Script d'appel", msg.get("script", ""), height=160)
+    st.text_area("✉️ Email (copier/coller, éditable)", value=msg.get("email", ""),
+                 height=260)
+    st.text_area("📞 Script d'appel", value=msg.get("script", ""), height=160)
 
 
 tab_ao, tab_prospects, tab_crm = st.tabs(
@@ -97,7 +113,8 @@ with tab_ao:
         if st.button("🪄 Générer le message", key="gen_ao", type="primary"):
             with st.spinner("Génération en cours…"):
                 msg = ao_messages.generer_message_ao(ao, temperature=temperature)
-            _zone_resultat(msg)
+            _memoriser(msg, "ao")
+        _zone_resultat("ao")
 
 # --- Onglet Prospects -------------------------------------------------------
 with tab_prospects:
@@ -107,7 +124,8 @@ with tab_prospects:
     categorie = col1.text_input("Catégorie", value="PRIV_BUREAU")
     priorite = col2.selectbox("Priorité", ["CHAUDE", "TIEDE"])
     c1, c2, c3 = st.columns(3)
-    denomination = c1.text_input("Dénomination (exemple)", value="CABINET DENTAIRE DU MARAIS")
+    denomination = c1.text_input("Dénomination (exemple)", value="CABINET DENTAIRE DU MARAIS",
+                                  key="denom_prospect")
     ville = c2.text_input("Ville (exemple)", value="PARIS 03")
     effectif = c3.text_input("Effectif (exemple)", value="10 a 19")
     if st.button("🪄 Générer le message", key="gen_prospect", type="primary"):
@@ -119,7 +137,8 @@ with tab_prospects:
             msg = {"email": pm.rendre(tpl["email"], ligne),
                    "script": pm.rendre(tpl["script"], ligne),
                    "source": tpl["source"]}
-        _zone_resultat(msg)
+            _memoriser(msg, "prospect")
+        _zone_resultat("prospect")
 
 # --- Onglet CRM / Suivi -----------------------------------------------------
 with tab_crm:
