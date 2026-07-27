@@ -33,6 +33,9 @@ em{color:#52606d;}
 <hr />
 <h2 id="0-lapplication-chruth">L'application CHRUTH (surface principale)</h2>
 <p>Pour <strong>consulter, trier, générer les messages et régler</strong> sans coder, ouvrir <strong><code>LANCER_APP_CHRUTH.bat</code></strong> : une seule adresse, quatre pages dans le menu de gauche — <strong>Veille appels d'offres</strong>, <strong>Messages et CRM</strong>, <strong>Pilotage</strong> et <strong>Réglages</strong>. C'est la surface principale, et la seule consultable en ligne depuis un téléphone (voir <code>docs/DEPLOIEMENT_APP_VEILLE.md</code> et <code>docs/SURFACES_CHRUTH.md</code>). Les sections ci-dessous décrivent la production des livrables Excel et les pipelines de données.</p>
+<h3>Tri apprenant des appels d'offres</h3>
+<p>Dans la page <strong>Veille appels d'offres</strong>, les boutons <strong>Pertinent</strong> et <strong>Pas pertinent</strong> ne corrigent pas seulement l'offre affichée : ils alimentent une mémoire compacte des décisions humaines. Lorsqu'une nouvelle offre déclenche une règle déjà contredite par une correction, elle est renvoyée à l'agent IA pour arbitrage. Il n'y a donc pas de second passage IA systématique sur tous les rejets.</p>
+<p>Pour éviter le sur-stockage, la mémoire est dédoublonnée par objet et plafonnée aux <strong>50 corrections les plus récentes</strong>. Les offres rejetées, expirées et jamais corrigées sont retirées de l'état ; une offre pertinente, corrigée ou encore active reste conservée. Sans date limite exploitable, un rejet non corrigé est élagué après <strong>90 jours</strong>.</p>
 <hr />
 <h2 id="1-ce-que-ca-fait-vue-densemble">1. Ce que ça fait (vue d'ensemble)</h2>
 <p>Il y a <strong>deux pipelines indépendants</strong> :</p>
@@ -98,6 +101,7 @@ python chruth_pipeline_master.py --collect  :: + recollecte toute la France (lon
 <h3 id="pipeline-ao-ao_weekly_updatepy">Pipeline AO (<code>ao_weekly_update.py</code>)</h3>
 <ol>
 <li><strong>Collecte</strong> (<code>ao_collect_boamp.py</code>) : requête ciblée à l'API BOAMP (mots-clés nettoyage/propreté + fenêtre <strong>14 jours</strong>), filtrage de pertinence, <strong>dédup</strong> dans une base <strong>SQLite</strong> (<code>data/ao_chruth.sqlite</code>).</li>
+<li><strong>Veille et apprentissage</strong> (<code>ao_maximilien_veille.py</code>, <code>ao_pertinence.py</code>, <code>veille_etat.py</code>) : tri déterministe puis arbitrage IA des cas ambigus ou contredits par une correction humaine ; la correction prime toujours, nourrit les prochains tris et les rejets expirés non corrigés sont élagués.</li>
 <li><strong>Scoring</strong> (<code>ao_scoring.py</code>) : note /100 (métier + zone IDF + budget + infos + délai) → priorité <strong>CHAUD / TIEDE / FROID / À VÉRIFIER</strong>.</li>
 <li><strong>DCE</strong> (<code>ao_dce.py</code>, <code>ao_dce_process.py</code>) : extrait le lien du dossier de consultation, télécharge les PDF directs (sans CAPTCHA) ou consomme les PDF déposés dans <code>dce_manuel/&lt;id_ao&gt;.pdf</code>, en extrait budget/contact (complète sans écraser).</li>
 <li><strong>Export</strong> (<code>ao_export_excel.py</code>) : assemble <code>AO_CHRUTH.xlsm</code> dans le gabarit macro <code>assets/AO_CHRUTH_TEMPLATE.xlsm</code> (conserve le bouton).</li>
@@ -135,6 +139,7 @@ python chruth_pipeline_master.py --collect  :: + recollecte toute la France (lon
 <li>La carte HTML peut rester ouverte (pas de verrou en écriture) ; fais juste <strong>Ctrl+F5</strong> pour voir la nouvelle version.</li>
 <li>Le tableur prospects a maintenant un <strong>nom fixe</strong> (<code>Base_Prospects_CHRUTH.xlsm</code>), écrasé à chaque run.</li>
 <li><strong>Bouton « Mettre à jour »</strong> dans chaque tableur : pas besoin de fermer le fichier avant — le bouton ferme, met à jour, et rouvre tout seul.</li>
+<li>Dans la veille, utiliser <strong>Pas pertinent</strong> lorsqu'une offre est mal classée : cette décision devient un exemple durable pour l'IA. Les offres rejetées ne sont pas renvoyées en masse au modèle ; seules les nouvelles offres dont la règle est contredite sont réexaminées.</li>
 <li>La collecte France des prospects est <strong>longue</strong> (~dizaines de minutes, ~43k établissements).</li>
 </ul>
 <hr />

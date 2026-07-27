@@ -176,6 +176,16 @@ python CHRUTH_PIPELINE_UNIQUE.py</pre>
 <li>Le statut est stocke dans <code>alertes_actives.flag</code>.</li>
 <li><code>ON</code> autorise les alertes. <code>OFF</code> bloque les envois.</li>
 </ol>
+<h3>Corriger le classement et faire apprendre le tri</h3>
+<ol>
+<li>Ouvrir l'application avec <code>LANCER_APP_CHRUTH.bat</code>.</li>
+<li>Aller dans <b>Veille appels d'offres</b>.</li>
+<li>Sur une offre mal classee, cliquer sur <b>Pertinent</b> ou <b>Pas pertinent</b>.</li>
+<li>La correction humaine devient immediatement le verdict qui fait foi pour cette offre.</li>
+<li>Une nouvelle offre qui contredit une correction sur la meme regle est reexaminee par l'IA.</li>
+</ol>
+<div class=note><b>Apprentissage cible :</b> toutes les offres rejetees ne sont pas renvoyees a l'IA. Seules les nouvelles offres dont une regle a deja ete contredite sont arbitrees de nouveau. Les 10 corrections les plus recentes servent d'exemples dans chaque arbitrage IA.</div>
+<div class=note><b>Stockage borne :</b> la memoire conserve au maximum 50 corrections, dedoublonnees par objet. Les offres rejetees, expirees et jamais corrigees sont elaguees. Les offres pertinentes, corrigees ou encore actives restent conservees. Sans date limite exploitable, un rejet non corrige est retire apres 90 jours.</div>
 
 <h2 id="messages">7. Generer les messages prospects et AO</h2>
 <h3>Rendre les messages plus precis</h3>
