@@ -14,6 +14,8 @@ import veille_etat
 FENETRE_JOURS = 7
 PRIORITES_PERTINENTES = ("CHAUD", "TIEDE", "TIÈDE")
 
+_RANG_PRIO = {"CHAUD": 3, "TIEDE": 2, "TIÈDE": 2, "FROID": 1, "": 0}
+
 # Indices de droit public dans le nom, quand la catégorie juridique manque.
 _MOTS_PUBLIC = ("mairie", "commune", "ville de", "departement", "département",
                 "prefecture", "préfecture", "region", "région", "hopital",
@@ -86,3 +88,32 @@ def collecter_aos_recents(jours: int = FENETRE_JOURS, aujourd_hui: date | None =
             "source": "Maximilien",
         })
     return aos
+
+
+def _cle(ao) -> str:
+    s = "".join(c for c in str(ao.get("siret") or "") if c.isdigit())
+    if len(s) == 14:
+        return "siret:" + s
+    normalized_name = " ".join(normalize_text(ao.get("acheteur") or "").split())
+    return "nom:" + normalized_name + "|" + str(ao.get("departement") or "")
+
+
+def extraire_acheteurs(aos: list[dict]) -> list[dict]:
+    par_cle: dict[str, dict] = {}
+    for ao in aos:
+        cle = _cle(ao)
+        a = par_cle.get(cle)
+        if a is None:
+            a = {"acheteur": ao.get("acheteur") or "", "siret": str(ao.get("siret") or ""),
+                 "siren": str(ao.get("siren") or ""), "ville": ao.get("ville") or "",
+                 "departement": str(ao.get("departement") or ""), "priorite": "",
+                 "nb_ao_semaine": 0, "aos": [], "source": ao.get("source") or ""}
+            par_cle[cle] = a
+        a["nb_ao_semaine"] += 1
+        a["aos"].append({"objet": ao.get("objet") or "", "date_publication": ao.get("date_publication") or "",
+                         "priorite": ao.get("priorite") or "", "url": ao.get("url") or ""})
+        if _RANG_PRIO.get(ao.get("priorite") or "", 0) > _RANG_PRIO.get(a["priorite"], 0):
+            a["priorite"] = ao.get("priorite") or ""
+        if not a["siret"] and ao.get("siret"):
+            a["siret"] = str(ao.get("siret"))
+    return list(par_cle.values())
