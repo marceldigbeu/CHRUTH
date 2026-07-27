@@ -2331,10 +2331,33 @@
       "url": "https://marches.maximilien.fr/entreprise/consultation/944239?orgAcronyme=b2g",
       "ville": "BOIS-COLOMBES",
       "vu_le": "2026-07-27T09:30:05.098134+00:00"
+    },
+    "MX-944299": {
+      "acheteur": "Ville de Boulogne-Billancourt",
+      "correction_humaine": null,
+      "date_limite": "2026-09-24",
+      "date_publication": "2026-07-27",
+      "departement": "92",
+      "lu": false,
+      "notifie_le": "2026-07-27T15:37:36.879033+00:00",
+      "objet": "26026 ENTRETIEN MENAGER ET NETTOYAGE DES SURFACES VITREES",
+      "priorite": "CHAUD",
+      "procedure": "AOO",
+      "score": 65,
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "mot-cle coeur dans l'intitule : nettoyage",
+        "terme": "nettoyage",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944299?orgAcronyme=p8x",
+      "ville": "Boulogne-Billancourt",
+      "vu_le": "2026-07-27T15:37:35.976073+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-07-27T12:43:19.787363+00:00",
+  "maj_le": "2026-07-27T15:37:36.879236+00:00",
   "version": 1
 }
