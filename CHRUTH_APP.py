@@ -11,13 +11,13 @@ from __future__ import annotations
 
 import streamlit as st
 
-st.set_page_config(page_title="CHRUTH", page_icon="🧹", layout="wide")
+st.set_page_config(page_title="CHRUTH", layout="wide")
 
 PAGES = [
-    st.Page("app_veille.py", title="Veille appels d'offres", icon="📡", default=True),
-    st.Page("app_messages.py", title="Messages et CRM", icon="📨"),
-    st.Page("pages_pilotage.py", title="Pilotage", icon="📊"),
-    st.Page("pages_reglages.py", title="Réglages", icon="⚙️"),
+    st.Page("app_veille.py", title="Veille appels d'offres", default=True),
+    st.Page("app_messages.py", title="Messages et CRM"),
+    st.Page("pages_pilotage.py", title="Pilotage"),
+    st.Page("pages_reglages.py", title="Réglages"),
 ]
 
 st.navigation(PAGES).run()

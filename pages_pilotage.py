@@ -12,7 +12,7 @@ import ao_pilotage
 import veille_depot
 
 try:
-    st.set_page_config(page_title="Pilotage CHRUTH", page_icon="🧹", layout="wide")
+    st.set_page_config(page_title="Pilotage CHRUTH", layout="wide")
 except st.errors.StreamlitAPIException:
     pass
 

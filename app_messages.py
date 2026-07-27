@@ -39,7 +39,7 @@ st.caption("Générer les messages (appels d'offres et prospects) et suivre le c
 
 # --- Barre laterale : choix du moteur LLM -----------------------------------
 with st.sidebar:
-    st.header("⚙️ Moteur IA")
+    st.header("Moteur IA")
     provider = st.selectbox(
         "Fournisseur", ["ollama", "anthropic", "mistral", "groq"],
         help="ollama = local/gratuit ; les autres = cle API dans .env (rapide, non bride).",
@@ -51,9 +51,9 @@ with st.sidebar:
         os.environ["CHRUTH_LLM_MODEL"] = modele.strip()
     dispo = llm_client.llm_disponible(provider)
     if dispo:
-        st.success("Fournisseur disponible ✅")
+        st.success("Fournisseur disponible")
     else:
-        st.warning("Indisponible (Ollama éteint ou clé absente) → repli déterministe.")
+        st.warning("Indisponible (Ollama éteint ou clé absente) : repli déterministe.")
     st.caption("Clés API : à mettre dans un fichier `.env` (voir `.env.template`).")
 
 
@@ -82,15 +82,16 @@ def _zone_resultat(cle: str) -> None:
     msg = st.session_state.get(f"msg_{cle}")
     if not msg:
         return
-    st.caption(f"Source : **{msg.get('source', '')}** "
-               "(ia = rédigé par le modèle ; defaut = brouillon type)")
-    st.text_area("✉️ Email (copier/coller, éditable)", value=msg.get("email", ""),
-                 height=260)
-    st.text_area("📞 Script d'appel", value=msg.get("script", ""), height=160)
+    with st.container(border=True):
+        st.caption(f"Source : **{msg.get('source', '')}** "
+                   "(ia = rédigé par le modèle ; defaut = brouillon type)")
+        st.text_area("Email (éditable)", value=msg.get("email", ""), height=260)
+        st.text_area("Script d'appel", value=msg.get("script", ""), height=160)
+        st.caption("Sélectionner le texte puis Ctrl+C pour copier.")
 
 
 tab_ao, tab_prospects, tab_crm = st.tabs(
-    ["📋 Appels d'offres", "🏢 Prospects (segment)", "📒 CRM / Suivi"])
+    ["Appels d'offres", "Prospects (segment)", "CRM / Suivi"])
 
 # --- Onglet AO --------------------------------------------------------------
 with tab_ao:
@@ -110,7 +111,7 @@ with tab_ao:
             st.write({k: ao.get(k) for k in
                       ("objet", "acheteur", "ville", "date_limite",
                        "budget_annuel_eur", "secteur", "categorie")})
-        if st.button("🪄 Générer le message", key="gen_ao", type="primary"):
+        if st.button("Générer le message", key="gen_ao", type="primary"):
             with st.spinner("Génération en cours…"):
                 msg = ao_messages.generer_message_ao(ao, temperature=temperature)
             _memoriser(msg, "ao")
@@ -128,7 +129,7 @@ with tab_prospects:
                                   key="denom_prospect")
     ville = c2.text_input("Ville (exemple)", value="PARIS 03")
     effectif = c3.text_input("Effectif (exemple)", value="10 a 19")
-    if st.button("🪄 Générer le message", key="gen_prospect", type="primary"):
+    if st.button("Générer le message", key="gen_prospect", type="primary"):
         with st.spinner("Génération en cours…"):
             templates = pm.generer_templates([(categorie, priorite)], refresh=True)
             tpl = templates[f"{categorie}|{priorite}"]
@@ -142,7 +143,7 @@ with tab_prospects:
 
 # --- Onglet CRM / Suivi -----------------------------------------------------
 with tab_crm:
-    st.write("Enregistre le **suivi commercial réel** (contact → devis → contrat). "
+    st.write("Enregistre le **suivi commercial réel** (contact, devis, contrat). "
              "Ces données alimenteront l'analyse de rentabilité réelle et du churn.")
     with st.form("crm_form", clear_on_submit=True):
         c1, c2, c3 = st.columns(3)
@@ -159,7 +160,7 @@ with tab_crm:
         f_debut = c8.text_input("Date début (AAAA-MM-JJ)")
         f_fin = c9.text_input("Date fin (si perdu/terminé)")
         f_comm = st.text_area("Commentaire")
-        soumis = st.form_submit_button("➕ Enregistrer")
+        soumis = st.form_submit_button("Enregistrer")
         if soumis and (f_denom or f_siret):
             crm.ajouter({
                 "denomination": f_denom, "siret": f_siret, "categorie": f_cat,
@@ -167,7 +168,7 @@ with tab_crm:
                 "montant_devis_eur": f_devis or "", "montant_contrat_annuel_eur": f_contrat or "",
                 "date_debut": f_debut, "date_fin": f_fin, "commentaire": f_comm,
             })
-            st.success("Entrée enregistrée ✅")
+            st.success("Entrée enregistrée.")
         elif soumis:
             st.warning("Renseigne au moins la société ou le SIRET.")
 

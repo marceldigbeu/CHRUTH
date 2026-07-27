@@ -40,7 +40,7 @@ PERIODES = {
 # set_page_config n'a le droit d'etre appele qu'une fois : l'entree multipage
 # (CHRUTH_APP.py) l'a deja fait. On garde l'appel pour l'usage en page isolee.
 try:
-    st.set_page_config(page_title="Veille CHRUTH", page_icon="🧹", layout="wide")
+    st.set_page_config(page_title="Veille CHRUTH", layout="wide")
 except st.errors.StreamlitAPIException:
     pass
 
@@ -109,6 +109,19 @@ with st.sidebar:
     voir_rejetes = st.checkbox("Afficher les AO rejetés par le tri", value=False,
                                key="voir_rejetes")
     non_lus_seuls = st.checkbox("Non lus seulement", value=False, key="non_lus")
+
+    actifs = []
+    if priorites:
+        actifs.append("priorité " + ", ".join(priorites))
+    if departements:
+        actifs.append("dépt " + ", ".join(departements))
+    if periode != "Tout":
+        actifs.append(periode.lower())
+    if voir_rejetes:
+        actifs.append("rejetés inclus")
+    if non_lus_seuls:
+        actifs.append("non lus seulement")
+    st.caption("Filtres actifs : " + ("; ".join(actifs) if actifs else "aucun"))
 
     st.divider()
     st.subheader("Notifications")
@@ -196,60 +209,65 @@ if not aos:
             "La veille écrit ici à chaque passage.")
 elif not retenus:
     st.warning("Aucun AO ne correspond aux filtres.")
+else:
+    total = len(aos)
+    resume = f"{len(retenus)} appel(s) d'offres affiché(s)"
+    if len(retenus) != total:
+        resume += f" sur {total}"
+    st.caption(resume)
 
 for id_ao, entree in retenus:
-    verdict = verdict_effectif(entree)
-    tri = entree.get("tri") or {}
-    corrige = bool(entree.get("correction_humaine"))
+    with st.container(border=True):
+        verdict = verdict_effectif(entree)
+        tri = entree.get("tri") or {}
+        corrige = bool(entree.get("correction_humaine"))
 
-    marque = "🔵" if not entree.get("lu") else "⚪"
-    titre = f"{marque} **{entree.get('objet', '(sans intitulé)')}**"
-    st.markdown(titre)
+        # Repere de nouveaute en texte (pas d'icone) : lisible et sobre.
+        prefixe = ":blue[**Nouveau**] · " if not entree.get("lu") else ""
+        st.markdown(f"{prefixe}**{entree.get('objet', '(sans intitulé)')}**")
 
-    publie = entree.get("date_publication") or "date inconnue"
-    ligne = (f"{entree.get('acheteur', '')} — {entree.get('ville', '')} "
-             f"({entree.get('departement') or '--'}) · publié le {publie} · limite "
-             f"{entree.get('date_limite') or 'non précisée'} · "
-             f"{entree.get('priorite', '')} {entree.get('score', '')}")
-    st.markdown(ligne)
+        publie = entree.get("date_publication") or "date inconnue"
+        ligne = (f"{entree.get('acheteur', '')} — {entree.get('ville', '')} "
+                 f"({entree.get('departement') or '--'}) · publié le {publie} · limite "
+                 f"{entree.get('date_limite') or 'non précisée'} · "
+                 f"{entree.get('priorite', '')} {entree.get('score', '')}")
+        st.markdown(ligne)
 
-    origine = "corrigé à la main" if corrige else f"tri {tri.get('etage', '')}"
-    st.markdown(f"Verdict : **{verdict}** — {tri.get('motif', '')} _({origine})_")
+        origine = "corrigé à la main" if corrige else f"tri {tri.get('etage', '')}"
+        st.markdown(f"Verdict : **{verdict}** — {tri.get('motif', '')} _({origine})_")
 
-    if entree.get("url"):
-        st.markdown(f"[Ouvrir la consultation]({entree['url']})")
+        if entree.get("url"):
+            st.markdown(f"[Ouvrir la consultation]({entree['url']})")
 
-    colonnes = st.columns([1, 1, 1, 2])
-    with colonnes[0]:
-        if st.button("Pertinent", key=f"ok_{id_ao}"):
-            veille_etat.corriger(etat, id_ao, "PERTINENT")
-            enregistrer(etat, sha, f"correction {id_ao} -> PERTINENT")
-            st.rerun()
-    with colonnes[1]:
-        if st.button("Pas pertinent", key=f"ko_{id_ao}"):
-            veille_etat.corriger(etat, id_ao, "REJETE")
-            enregistrer(etat, sha, f"correction {id_ao} -> REJETE")
-            st.rerun()
-    with colonnes[2]:
-        libelle = "Marquer non lu" if entree.get("lu") else "Marquer lu"
-        if st.button(libelle, key=f"lu_{id_ao}"):
-            veille_etat.marquer_lu(etat, id_ao, not entree.get("lu"))
-            enregistrer(etat, sha, f"lecture {id_ao}")
-            st.rerun()
-    with colonnes[3]:
-        courant = entree.get("traitement", "nouveau")
-        if courant not in TRAITEMENTS:
-            courant = "nouveau"
-        choisi = st.selectbox("Suivi", list(TRAITEMENTS),
-                              index=list(TRAITEMENTS).index(courant),
-                              format_func=lambda s: LIBELLE_TRAITEMENT.get(s, s),
-                              key=f"trait_{id_ao}", label_visibility="collapsed")
-        if choisi != courant:
-            veille_etat.definir_traitement(etat, id_ao, choisi)
-            enregistrer(etat, sha, f"suivi {id_ao} -> {choisi}")
-            st.rerun()
-
-    st.divider()
+        colonnes = st.columns([1, 1, 1, 2])
+        with colonnes[0]:
+            if st.button("Pertinent", key=f"ok_{id_ao}"):
+                veille_etat.corriger(etat, id_ao, "PERTINENT")
+                enregistrer(etat, sha, f"correction {id_ao} -> PERTINENT")
+                st.rerun()
+        with colonnes[1]:
+            if st.button("Pas pertinent", key=f"ko_{id_ao}"):
+                veille_etat.corriger(etat, id_ao, "REJETE")
+                enregistrer(etat, sha, f"correction {id_ao} -> REJETE")
+                st.rerun()
+        with colonnes[2]:
+            libelle = "Marquer non lu" if entree.get("lu") else "Marquer lu"
+            if st.button(libelle, key=f"lu_{id_ao}"):
+                veille_etat.marquer_lu(etat, id_ao, not entree.get("lu"))
+                enregistrer(etat, sha, f"lecture {id_ao}")
+                st.rerun()
+        with colonnes[3]:
+            courant = entree.get("traitement", "nouveau")
+            if courant not in TRAITEMENTS:
+                courant = "nouveau"
+            choisi = st.selectbox("Suivi", list(TRAITEMENTS),
+                                  index=list(TRAITEMENTS).index(courant),
+                                  format_func=lambda s: LIBELLE_TRAITEMENT.get(s, s),
+                                  key=f"trait_{id_ao}", label_visibility="collapsed")
+            if choisi != courant:
+                veille_etat.definir_traitement(etat, id_ao, choisi)
+                enregistrer(etat, sha, f"suivi {id_ao} -> {choisi}")
+                st.rerun()
 
 
 # --- Guide des messages -----------------------------------------------------
