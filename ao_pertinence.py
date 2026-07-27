@@ -145,6 +145,24 @@ def _lire_reponse(brut: str) -> tuple[str, str] | None:
     return (PERTINENT if verdict == "PERTINENT" else REJETE), motif
 
 
+def _correction_contredit(verdict_listes: Verdict, corrections: list[dict] | None) -> bool:
+    """Une correction porte-t-elle le meme terme declencheur et le verdict oppose ?
+
+    Termes vides exclus de part et d'autre : un AO arbitre par l'IA (terme "") ne
+    doit jamais declencher d'escalade.
+    """
+    terme = normalize_text(verdict_listes.terme or "")
+    if not terme:
+        return False
+    for c in corrections or []:
+        c_terme = normalize_text(str(c.get("terme") or ""))
+        c_verdict = str(c.get("verdict") or "").strip().upper()
+        if c_terme and c_terme == terme and c_verdict in (PERTINENT, REJETE) \
+                and c_verdict != verdict_listes.verdict:
+            return True
+    return False
+
+
 def trier(objet: str, detail: str = "", guide: str = "", client=None,
           corrections: list[dict] | None = None) -> Verdict:
     """Verdict final. L'IA n'est consultee que si les listes ne tranchent pas.
@@ -153,9 +171,10 @@ def trier(objet: str, detail: str = "", guide: str = "", client=None,
     negatif coute un marche.
     """
     verdict = trier_listes(objet, detail)
-    if verdict is not None:
+    if verdict is not None and not _correction_contredit(verdict, corrections):
         return verdict
 
+    # cas ambigu OU verdict deterministe contredit par une correction -> arbitrage IA
     if client is None:
         import llm_client as client  # import tardif : le module reste testable sans LLM
 
