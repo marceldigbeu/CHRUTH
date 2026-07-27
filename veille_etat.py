@@ -12,6 +12,7 @@ from pathlib import Path
 from typing import Any
 
 ETAT_VERSION = 1
+MEMOIRE_MAX = 50
 
 CHAMPS_AO = ("objet", "acheteur", "ville", "departement", "date_publication",
              "date_limite", "procedure", "url", "score", "priorite")
@@ -22,7 +23,8 @@ VERDICTS = ("PERTINENT", "REJETE")
 
 
 def _vide() -> dict[str, Any]:
-    return {"version": ETAT_VERSION, "maj_le": "", "aos": {}, "guide_messages": ""}
+    return {"version": ETAT_VERSION, "maj_le": "", "aos": {},
+            "guide_messages": "", "corrections_memoire": []}
 
 
 def charger(chemin: Path) -> dict[str, Any]:
@@ -42,6 +44,7 @@ def charger(chemin: Path) -> dict[str, Any]:
     data.setdefault("version", ETAT_VERSION)
     data.setdefault("guide_messages", "")
     data.setdefault("maj_le", "")
+    _amorcer_memoire(data)
     return data
 
 
@@ -89,11 +92,13 @@ def corriger(etat: dict[str, Any], id_ao: str, verdict: str, par: str = "app") -
     """Enregistre un jugement humain. Il prime ensuite sur le tri, definitivement."""
     if verdict not in VERDICTS:
         raise ValueError(f"verdict inconnu : {verdict} (attendus : {VERDICTS})")
-    _entree(etat, id_ao)["correction_humaine"] = {
+    entree = _entree(etat, id_ao)
+    entree["correction_humaine"] = {
         "verdict": verdict,
         "le": datetime.now(timezone.utc).isoformat(),
         "par": par,
     }
+    _memoriser_correction(etat, entree, verdict)
 
 
 def verdict_effectif(entree: dict[str, Any]) -> str:
@@ -148,3 +153,55 @@ def definir_notifications(etat: dict[str, Any], actif: bool) -> None:
 def definir_guide(etat: dict[str, Any], texte: str) -> None:
     """Guide qui pilote la redaction des messages ET le prompt de tri (spec 6.3)."""
     etat["guide_messages"] = texte or ""
+
+
+# --- Memoire des corrections -----------------------------------------------
+
+def _cle_objet(objet: str) -> str:
+    """Normalise un nom d'objet pour deduplication."""
+    return (objet or "").strip().casefold()
+
+
+def _amorcer_memoire(etat: dict[str, Any]) -> None:
+    """Reconstruit la memoire une fois depuis les AO corriges, si elle est absente.
+
+    Migration douce des etats anterieurs : sans terme disponible, il reste "".
+    """
+    if "corrections_memoire" in etat:
+        return
+    memoire = []
+    for e in etat.get("aos", {}).values():
+        corr = e.get("correction_humaine") or {}
+        if corr.get("verdict"):
+            memoire.append({
+                "objet": e.get("objet", ""),
+                "verdict": corr["verdict"],
+                "terme": (e.get("tri") or {}).get("terme", ""),
+                "date": corr.get("le", ""),
+            })
+    etat["corrections_memoire"] = memoire[-MEMOIRE_MAX:]
+
+
+def charger_dict(etat: dict[str, Any]) -> dict[str, Any]:
+    """Applique les migrations en memoire a un etat deja charge (testable sans fichier)."""
+    etat.setdefault("version", ETAT_VERSION)
+    etat.setdefault("guide_messages", "")
+    etat.setdefault("maj_le", "")
+    _amorcer_memoire(etat)
+    return etat
+
+
+def _memoriser_correction(etat: dict[str, Any], entree: dict[str, Any], verdict: str) -> None:
+    """Enregistre une correction dans la memoire, dédoublonnée par objet et plafonnée."""
+    objet = entree.get("objet", "")
+    terme = (entree.get("tri") or {}).get("terme", "")
+    memoire = [m for m in etat.setdefault("corrections_memoire", [])
+               if _cle_objet(m.get("objet", "")) != _cle_objet(objet)]
+    memoire.append({"objet": objet, "verdict": verdict, "terme": terme,
+                    "date": datetime.now(timezone.utc).isoformat()})
+    etat["corrections_memoire"] = memoire[-MEMOIRE_MAX:]
+
+
+def memoire_corrections(etat: dict[str, Any]) -> list[dict[str, Any]]:
+    """Les corrections a passer au tri, plus recentes d'abord."""
+    return list(reversed(etat.get("corrections_memoire", [])))
