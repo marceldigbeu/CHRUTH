@@ -31,6 +31,7 @@ class Verdict:
     verdict: str  # PERTINENT | REJETE
     etage: str    # listes | ia | correction
     motif: str
+    terme: str = ""  # mot-cle declencheur de l'etage 1 (sinon "")
 
 
 def _exclusions() -> list[str]:
@@ -75,11 +76,12 @@ def trier_listes(objet: str, detail: str = "") -> Verdict | None:
 
     for terme in _exclusions():
         if _present(terme, objet_norm):
-            return Verdict(REJETE, "listes", f"exclusion metier : {terme}")
+            return Verdict(REJETE, "listes", f"exclusion metier : {terme}", terme=terme)
 
     for mot in _mots_cles():
         if _present(mot, objet_norm):
-            return Verdict(PERTINENT, "listes", f"mot-cle coeur dans l'intitule : {mot}")
+            return Verdict(PERTINENT, "listes", f"mot-cle coeur dans l'intitule : {mot}",
+                           terme=mot)
 
     return None
 
