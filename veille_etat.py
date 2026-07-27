@@ -66,7 +66,8 @@ def ajouter(etat: dict[str, Any], ao: dict[str, Any], verdict,
     entree = {c: ao.get(c, "") for c in CHAMPS_AO}
     entree.update({
         "vu_le": ancien.get("vu_le") or datetime.now(timezone.utc).isoformat(),
-        "tri": {"verdict": verdict.verdict, "etage": verdict.etage, "motif": verdict.motif},
+        "tri": {"verdict": verdict.verdict, "etage": verdict.etage, "motif": verdict.motif,
+                "terme": getattr(verdict, "terme", "")},
         "correction_humaine": ancien.get("correction_humaine"),
         "traitement": ancien.get("traitement", "nouveau"),
         "notifie_le": notifie_le if notifie_le is not None else ancien.get("notifie_le"),
