@@ -65,3 +65,27 @@ def test_migration_reconstruit_la_memoire_depuis_les_ao_corriges():
     reconstruit = veille_etat.charger_dict(etat)  # helper de migration en memoire
     assert any(m["objet"] == "Vieux marche" and m["verdict"] == "REJETE"
                for m in reconstruit["corrections_memoire"])
+
+
+def test_migration_dedoublonne_les_objets_identiques():
+    """Deux AOs partageant le meme objet : la migration ne garde que le dernier verdict."""
+    etat = veille_etat._vide()
+    # Ajoute deux AOs avec le meme objet mais des verdicts et dates differents
+    for i, (idao, verdict) in enumerate([("A", "PERTINENT"), ("B", "REJETE")]):
+        veille_etat.ajouter(etat, {"id_ao": idao, "objet": "Nettoyage des locaux"},
+                            Verdict(verdict, "listes", "m", terme="nettoyage"))
+        # Simule des corrections a des dates differentes : B est la plus recente
+        etat["aos"][idao]["correction_humaine"] = {
+            "verdict": verdict,
+            "le": f"2026-07-2{i}T10:00:00+00:00",
+            "par": "app"
+        }
+    # Simule un etat ancien : supprime la memoire
+    del etat["corrections_memoire"]
+    # La migration doit deduire la memoire
+    reconstruit = veille_etat.charger_dict(etat)
+    memoire = reconstruit["corrections_memoire"]
+    # Verifie qu'il n'y a qu'UNE entree (dedoublonnee par objet)
+    assert len(memoire) == 1, f"Expected 1 entry, got {len(memoire)}: {memoire}"
+    # Et que c'est le verdict le plus recent (B = REJETE)
+    assert memoire[0]["verdict"] == "REJETE", f"Expected REJETE, got {memoire[0]['verdict']}"

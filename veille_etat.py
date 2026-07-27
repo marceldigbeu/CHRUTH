@@ -166,19 +166,25 @@ def _amorcer_memoire(etat: dict[str, Any]) -> None:
     """Reconstruit la memoire une fois depuis les AO corriges, si elle est absente.
 
     Migration douce des etats anterieurs : sans terme disponible, il reste "".
+    Dedoublonnage par objet (dernier verdict par date), comme le chemin d'ecriture.
     """
     if "corrections_memoire" in etat:
         return
-    memoire = []
+    par_objet: dict[str, dict[str, Any]] = {}
     for e in etat.get("aos", {}).values():
         corr = e.get("correction_humaine") or {}
-        if corr.get("verdict"):
-            memoire.append({
-                "objet": e.get("objet", ""),
-                "verdict": corr["verdict"],
-                "terme": (e.get("tri") or {}).get("terme", ""),
-                "date": corr.get("le", ""),
-            })
+        if not corr.get("verdict"):
+            continue
+        entree = {
+            "objet": e.get("objet", ""),
+            "verdict": corr["verdict"],
+            "terme": (e.get("tri") or {}).get("terme", ""),
+            "date": corr.get("le", ""),
+        }
+        cle = _cle_objet(entree["objet"])
+        if cle not in par_objet or entree["date"] >= par_objet[cle]["date"]:
+            par_objet[cle] = entree
+    memoire = sorted(par_objet.values(), key=lambda m: m.get("date", ""))
     etat["corrections_memoire"] = memoire[-MEMOIRE_MAX:]
 
 
