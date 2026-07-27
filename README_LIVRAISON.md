@@ -10,8 +10,9 @@ Pour une personne no-code, ouvrir en priorite l'application CHRUTH :
 LANCER_APP_CHRUTH.bat
 ```
 
-Une seule adresse, quatre pages : veille appels d'offres, messages et CRM,
-pilotage, reglages. C'est la surface principale et la seule consultable en ligne
+Une seule adresse, sept pages : veille appels d'offres, base de donnees, carte,
+messages et CRM, pilotage, reglages et mode developpeur lie au cockpit Excel.
+C'est la surface principale et la seule consultable en ligne
 depuis un telephone (voir `docs/DEPLOIEMENT_APP_VEILLE.md` et `docs/SURFACES_CHRUTH.md`).
 
 Pour lancer les traitements par lots (generation, collectes) :

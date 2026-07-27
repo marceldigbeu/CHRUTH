@@ -3,11 +3,14 @@
 ## L'application CHRUTH (recommandee)
 
 Double-cliquer sur `LANCER_APP_CHRUTH.bat` : le navigateur ouvre l'application, une
-seule adresse pour quatre pages dans le menu de gauche :
+seule adresse pour sept pages dans le menu de gauche :
 
 - **Veille appels d'offres** : consulter les AO, corriger le tri, suivre.
+- **Base de donnees** : consulter les AO Excel, filtrer les 132 000 prospects et telecharger les fichiers importants.
+- **Carte** : utiliser directement `output/Carte_Prospects_CHRUTH.html`.
 - **Messages et CRM** : generer les messages (AO et prospects) et suivre le commercial.
 - **Pilotage** : les indicateurs du cockpit.
+- **Developpeur** : inspecter et ouvrir `output/AO_CHRUTH.xlsm`, puis lancer sa mise a jour apres fermeture d'Excel.
 - **Reglages** : destinataires, interrupteurs, fiche CHRUTH — vus par toutes les surfaces.
 
 C'est la seule surface qui peut aussi s'ouvrir en ligne, depuis un telephone, sans

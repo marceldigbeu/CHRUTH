@@ -70,7 +70,10 @@ def test_requirements_couvre_toute_l_application():
 
 def test_la_garde_couvre_bien_chaque_page_de_la_navigation():
     """Sans ceci, ajouter une page la sortirait silencieusement du controle."""
-    assert _pages_declarees() == ["app_messages", "app_veille", "pages_pilotage", "pages_reglages"]
+    assert _pages_declarees() == [
+        "app_messages", "app_veille", "pages_carte", "pages_developpeur",
+        "pages_donnees", "pages_pilotage", "pages_reglages",
+    ]
 
 
 def test_streamlit_est_declare():

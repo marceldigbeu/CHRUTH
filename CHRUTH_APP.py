@@ -1,9 +1,8 @@
 """Application CHRUTH — point d'entree unique.
 
-Deux surfaces web coexistaient (veille et messages), chacune lancee a part et
-chacune sur le port 8501 : la seconde ne pouvait pas demarrer pendant la premiere.
-Elles sont ici deux pages d'une meme application, une seule adresse, un seul
-lancement.
+Les anciennes surfaces sont reunies dans une plateforme a sept pages : veille,
+base de donnees, carte, messages et CRM, pilotage, reglages et mode developpeur.
+Une seule adresse et un seul lancement suffisent.
 
 Lancer :  streamlit run CHRUTH_APP.py   (ou double-clic LANCER_APP_CHRUTH.bat)
 """
@@ -19,9 +18,12 @@ theme_chruth.appliquer()
 
 PAGES = [
     st.Page("app_veille.py", title="Veille appels d'offres", default=True),
+    st.Page("pages_donnees.py", title="Base de données"),
+    st.Page("pages_carte.py", title="Carte"),
     st.Page("app_messages.py", title="Messages et CRM"),
     st.Page("pages_pilotage.py", title="Pilotage"),
     st.Page("pages_reglages.py", title="Réglages"),
+    st.Page("pages_developpeur.py", title="Développeur"),
 ]
 
 st.navigation(PAGES).run()

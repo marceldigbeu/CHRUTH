@@ -5,7 +5,7 @@ toutes les mêmes réglages, via `reglages.py`.
 
 | Surface | Usage | Évolue ? |
 |---|---|---|
-| **Plateforme Streamlit** (`LANCER_APP_CHRUTH.bat`) | Veille, tri, messages, CRM, réglages. Seule accessible au téléphone | **Oui** |
+| **Plateforme Streamlit** (`LANCER_APP_CHRUTH.bat`) | Veille, base AO/prospects, carte, fichiers, messages, CRM, pilotage, réglages et mode développeur relié à Excel. Seule accessible au téléphone | **Oui** |
 | Cockpit Excel `AO_CHRUTH.xlsm` | Consulter, filtrer, annoter. Ses boutons écrivent dans la source unique | Gelé |
 | Cockpit web `COCKPIT_CHRUTH.bat` | Lancer les traitements | Gelé |
 | Interface Windows `OUVRIR_MOI_CHRUTH.bat` | Lancer les traitements | Gelé |

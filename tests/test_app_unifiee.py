@@ -42,7 +42,8 @@ def test_la_page_messages_est_atteignable(etat_local, tmp_path, monkeypatch):
 def test_toutes_les_pages_sont_declarees():
     """Une page oubliee ici devient une page inaccessible, sans erreur visible."""
     source = (RACINE / "CHRUTH_APP.py").read_text(encoding="utf-8")
-    for page in ("app_veille.py", "app_messages.py", "pages_pilotage.py", "pages_reglages.py"):
+    for page in ("app_veille.py", "pages_donnees.py", "pages_carte.py", "app_messages.py",
+                 "pages_pilotage.py", "pages_reglages.py", "pages_developpeur.py"):
         assert page in source, f"page non declaree dans la navigation : {page}"
 
 

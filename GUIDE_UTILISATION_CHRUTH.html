@@ -47,8 +47,10 @@
 <ol>
 <li>Double-cliquer sur <code>LANCER_APP_CHRUTH.bat</code>.</li>
 <li>Le navigateur ouvre l'application. Si rien ne s'ouvre, saisir <code>http://localhost:8501</code>.</li>
-<li>Une seule adresse, quatre pages dans le menu de gauche : <b>Veille appels d'offres</b>, <b>Messages et CRM</b>, <b>Pilotage</b>, <b>Reglages</b>.</li>
+<li>Une seule adresse, sept pages dans le menu de gauche : <b>Veille appels d'offres</b>, <b>Base de donnees</b>, <b>Carte</b>, <b>Messages et CRM</b>, <b>Pilotage</b>, <b>Reglages</b>, <b>Developpeur</b>.</li>
 </ol>
+<div class="note"><b>Donnees integrees :</b> la page <b>Base de donnees</b> lit les appels d'offres dans <code>output/AO_CHRUTH.xlsm</code>, filtre les prospects depuis <code>output/prospects_enrichis.csv</code> et donne acces aux fichiers importants. La page <b>Carte</b> affiche directement <code>output/Carte_Prospects_CHRUTH.html</code>.</div>
+<div class="warn"><b>Mode developpeur :</b> cette page est desactivee par defaut. Apres activation, elle montre les feuilles du classeur AO, permet de l'ouvrir dans Excel et de lancer <code>ao_weekly_update.py</code>. Fermer Excel avant la mise a jour : si le classeur est verrouille, le bouton reste bloque pour proteger le fichier.</div>
 <div class="note">C'est la surface principale, et la seule consultable en ligne depuis un telephone sans PC allume. Mise en ligne : <code>docs/DEPLOIEMENT_APP_VEILLE.md</code>. Carte de toutes les surfaces : <code>docs/SURFACES_CHRUTH.md</code>.</div>
 <h3>Traitements par lots (cockpit)</h3>
 <ol>
@@ -68,7 +70,7 @@
 <h2 id="fichiers">3. Quel fichier ouvrir selon le besoin</h2>
 <table>
 <tr><th>Besoin</th><th>Fichier a ouvrir</th><th>Ce que cela fait</th></tr>
-<tr><td>Consulter, trier, generer, regler (surface principale)</td><td><code>LANCER_APP_CHRUTH.bat</code></td><td>Ouvre l'application CHRUTH : veille, messages et CRM, pilotage, reglages. Seule surface utilisable en ligne / au telephone.</td></tr>
+<tr><td>Consulter, trier, generer, regler (surface principale)</td><td><code>LANCER_APP_CHRUTH.bat</code></td><td>Ouvre l'application CHRUTH : veille, base de donnees, carte, messages et CRM, pilotage, reglages et mode developpeur relie a Excel. Seule surface utilisable en ligne / au telephone.</td></tr>
 <tr><td>Lancer les traitements par lots</td><td><code>COCKPIT_CHRUTH.bat</code></td><td>Ouvre le cockpit web pour generer et collecter.</td></tr>
 <tr><td>Regenerer tous les livrables</td><td><code>LANCER_PIPELINE_CHRUTH.bat</code></td><td>Lance <code>python CHRUTH_PIPELINE_UNIQUE.py</code> en mode local, sans nouvelle collecte internet.</td></tr>
 <tr><td>Mettre a jour les AO</td><td><code>LANCER_UPDATE_AO_CHRUTH.bat</code></td><td>Lance <code>ao_weekly_update.py</code> et regenere <code>output/AO_CHRUTH.xlsm</code>.</td></tr>
