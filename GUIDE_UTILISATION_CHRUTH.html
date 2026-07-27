@@ -12,7 +12,7 @@
 <body>
 <div class="page">
 <h1>CHRUTH - Guide d'utilisation pas a pas</h1>
-<div class="subtitle">Version HTML de reference - mise a jour le 07/07/2026. Ce guide explique comment generer les livrables, les mettre a jour et automatiser les alertes sans coder.</div>
+<div class="subtitle">Version HTML de reference - mise a jour le 27/07/2026. Ce guide explique comment utiliser l'application CHRUTH, generer les livrables, les mettre a jour et automatiser les alertes sans coder.</div>
 
 <div class="toc"><b>Sommaire</b>
 <ol>
@@ -43,7 +43,14 @@
 <div class="warn"><b>Important :</b> les classeurs generes peuvent etre remplaces a la prochaine generation. Pour des annotations manuelles longues, faire une copie datee avant de regenerer.</div>
 
 <h2 id="demarrage">2. Demarrage rapide</h2>
-<h3>Utilisation recommandee</h3>
+<h3>L'application CHRUTH (recommande)</h3>
+<ol>
+<li>Double-cliquer sur <code>LANCER_APP_CHRUTH.bat</code>.</li>
+<li>Le navigateur ouvre l'application. Si rien ne s'ouvre, saisir <code>http://localhost:8501</code>.</li>
+<li>Une seule adresse, quatre pages dans le menu de gauche : <b>Veille appels d'offres</b>, <b>Messages et CRM</b>, <b>Pilotage</b>, <b>Reglages</b>.</li>
+</ol>
+<div class="note">C'est la surface principale, et la seule consultable en ligne depuis un telephone sans PC allume. Mise en ligne : <code>docs/DEPLOIEMENT_APP_VEILLE.md</code>. Carte de toutes les surfaces : <code>docs/SURFACES_CHRUTH.md</code>.</div>
+<h3>Traitements par lots (cockpit)</h3>
 <ol>
 <li>Ouvrir le dossier <code>CHRUTH_LIVRAISON_NO_CODE</code>.</li>
 <li>Double-cliquer sur <code>COCKPIT_CHRUTH.bat</code>.</li>
@@ -61,7 +68,8 @@
 <h2 id="fichiers">3. Quel fichier ouvrir selon le besoin</h2>
 <table>
 <tr><th>Besoin</th><th>Fichier a ouvrir</th><th>Ce que cela fait</th></tr>
-<tr><td>Tout piloter sans coder</td><td><code>COCKPIT_CHRUTH.bat</code></td><td>Ouvre le cockpit web. C'est la porte d'entree principale.</td></tr>
+<tr><td>Consulter, trier, generer, regler (surface principale)</td><td><code>LANCER_APP_CHRUTH.bat</code></td><td>Ouvre l'application CHRUTH : veille, messages et CRM, pilotage, reglages. Seule surface utilisable en ligne / au telephone.</td></tr>
+<tr><td>Lancer les traitements par lots</td><td><code>COCKPIT_CHRUTH.bat</code></td><td>Ouvre le cockpit web pour generer et collecter.</td></tr>
 <tr><td>Regenerer tous les livrables</td><td><code>LANCER_PIPELINE_CHRUTH.bat</code></td><td>Lance <code>python CHRUTH_PIPELINE_UNIQUE.py</code> en mode local, sans nouvelle collecte internet.</td></tr>
 <tr><td>Mettre a jour les AO</td><td><code>LANCER_UPDATE_AO_CHRUTH.bat</code></td><td>Lance <code>ao_weekly_update.py</code> et regenere <code>output/AO_CHRUTH.xlsm</code>.</td></tr>
 <tr><td>Travailler les AO dans Excel</td><td><code>output/AO_CHRUTH.xlsm</code></td><td>Cockpit appels d'offres : pilotage, AO chauds, CRM AO, destinataires email.</td></tr>
