@@ -1,6 +1,6 @@
 {
   "generated_at": "2026-07-03T08:09:26",
-  "root": "%USERPROFILE%\\Downloads\\CHRUTH_LIVRAISON_NO_CODE",
+  "root": ".",
   "log": "logs\\pipeline_unique_20260703_072709.log",
   "missions": {
     "1_data_foundation": [

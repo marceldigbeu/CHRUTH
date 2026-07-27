@@ -46,7 +46,7 @@ def test_sans_configuration_la_source_est_locale(monkeypatch):
 
 def _config_github(monkeypatch):
     monkeypatch.setenv("CHRUTH_VEILLE_SOURCE", "github")
-    monkeypatch.setenv("CHRUTH_GITHUB_REPO", "<votre-compte>/CHRUTH")
+    monkeypatch.setenv("CHRUTH_GITHUB_REPO", "organisation/CHRUTH")
     monkeypatch.setenv("CHRUTH_GITHUB_TOKEN", "jeton-de-test")
 
 
@@ -108,7 +108,7 @@ def test_un_conflit_persistant_leve(monkeypatch):
 
 def test_sans_jeton_l_ecriture_est_refusee_clairement(monkeypatch):
     monkeypatch.setenv("CHRUTH_VEILLE_SOURCE", "github")
-    monkeypatch.setenv("CHRUTH_GITHUB_REPO", "<votre-compte>/CHRUTH")
+    monkeypatch.setenv("CHRUTH_GITHUB_REPO", "organisation/CHRUTH")
     monkeypatch.delenv("CHRUTH_GITHUB_TOKEN", raising=False)
     assert vd.ecriture_possible() is False
     with pytest.raises(PermissionError):

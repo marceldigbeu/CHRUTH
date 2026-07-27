@@ -14,7 +14,7 @@ Tant que le workflow est sur `feat/veille-maximilien`, il ne se déclenchera jam
 
 | Nom | Valeur |
 |---|---|
-| `CHRUTH_SMTP_USER` | `maintainers@users.noreply.github.com` |
+| `CHRUTH_SMTP_USER` | `expediteur@gmail.com` |
 | `CHRUTH_SMTP_PASSWORD` | le mot de passe d'application Gmail (16 caractères) |
 | `CHRUTH_ALERTE_DEST` | les destinataires, séparés par des virgules |
 

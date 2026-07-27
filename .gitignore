@@ -18,9 +18,6 @@ venv/
 # Notebook genere (regenerable via outils/build_notebook_unifie.py)
 CHRUTH_Pipeline_Unifiee.ipynb
 
-# Runtime ruflo (data/logs/sessions regenerables, ne pas versionner)
-
-
 # Secrets alertes email (ne JAMAIS committer)
 alertes_secrets.json
 # Liste de destinataires des alertes (emails = donnees perso)

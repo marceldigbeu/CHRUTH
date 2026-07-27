@@ -95,7 +95,8 @@ ANTHROPIC_API_KEY = "<ou MISTRAL_API_KEY, ou GROQ_API_KEY>"
 
 ### 5. Vérifier
 
-Quatre pages dans le menu de gauche : Veille, Messages et CRM, Pilotage, Réglages.
+Sept pages dans le menu de gauche : Veille, Base de données, Carte, Messages et CRM,
+Pilotage, Réglages et Développeur.
 
 - Le fil affiche les AO, du plus récemment publié au plus ancien.
 - « Afficher les AO rejetés par le tri » les fait apparaître avec leur motif.

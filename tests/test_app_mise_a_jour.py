@@ -64,7 +64,7 @@ def test_en_local_la_mise_a_jour_collecte_et_rafraichit_le_fil(tmp_path, monkeyp
 
 def test_en_mode_github_la_mise_a_jour_ne_collecte_jamais_en_local(monkeypatch):
     monkeypatch.setenv("CHRUTH_VEILLE_SOURCE", "github")
-    monkeypatch.setenv("CHRUTH_GITHUB_REPO", "<votre-compte>/CHRUTH")
+    monkeypatch.setenv("CHRUTH_GITHUB_REPO", "organisation/CHRUTH")
     monkeypatch.setenv("CHRUTH_GITHUB_TOKEN", "jeton-de-test")
     monkeypatch.delenv("CHRUTH_VEILLE_GUIDE", raising=False)
     monkeypatch.setattr(veille_depot, "lire", lambda: (_etat_vide(), "sha1"))

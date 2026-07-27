@@ -33,7 +33,7 @@ adresse par ligne.
 Le pipeline local les lit au run suivant, le tableur les affiche après sa
 prochaine régénération.
 
-**Aujourd'hui** : `destinataire1@exemple.fr` et `maintainers@users.noreply.github.com`.
+**Exemple** : `destinataire1@exemple.fr` et `destinataire2@exemple.fr`.
 
 ### Depuis le tableur
 
@@ -52,7 +52,7 @@ Ouvrir `destinataires.txt` dans le Bloc-notes :
 ```
 # Destinataires CHRUTH - une adresse email par ligne.
 destinataire1@exemple.fr
-maintainers@users.noreply.github.com
+destinataire2@exemple.fr
 ```
 
 Une adresse par ligne. Les lignes vides et celles commençant par `#` sont
@@ -74,7 +74,7 @@ plusieurs adresses séparées par des virgules.
 
 ## 2. Changer l'expéditeur
 
-**Aujourd'hui** : `maintainers@users.noreply.github.com`.
+**Exemple** : `expediteur@gmail.com`.
 
 L'envoi passe par Gmail, qui exige un **mot de passe d'application** — pas le mot
 de passe du compte. Il se crée sur https://myaccount.google.com/apppasswords
