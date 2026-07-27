@@ -11,7 +11,11 @@ from __future__ import annotations
 
 import streamlit as st
 
+import theme_chruth
+
 st.set_page_config(page_title="CHRUTH", layout="wide")
+
+theme_chruth.appliquer()
 
 PAGES = [
     st.Page("app_veille.py", title="Veille appels d'offres", default=True),
