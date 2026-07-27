@@ -2287,9 +2287,53 @@
       "url": "https://marches.maximilien.fr/entreprise/consultation/944106?orgAcronyme=a1b",
       "ville": "CHATOU",
       "vu_le": "2026-07-24T12:13:09.325978+00:00"
+    },
+    "MX-944197": {
+      "acheteur": "Ville de Boulogne-Billancourt",
+      "correction_humaine": null,
+      "date_limite": "2026-09-03",
+      "date_publication": "2026-07-27",
+      "departement": "92",
+      "lu": false,
+      "notifie_le": "2026-07-27T09:30:05.899118+00:00",
+      "objet": "26012 GESTION DU SERVICE DE TELEASSISTANCE POUR LES PERSONNES AGEES OU EN SITUATION DE HANDICAP, LOCATION DES APPAREILS ET PRESTATIONS DE",
+      "priorite": "TIEDE",
+      "procedure": "MAPA",
+      "score": 45,
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944197?orgAcronyme=p8x",
+      "ville": "Boulogne-Billancourt",
+      "vu_le": "2026-07-27T09:30:05.096615+00:00"
+    },
+    "MX-944239": {
+      "acheteur": "COMMUNE DE BOIS-COLOMBES",
+      "correction_humaine": null,
+      "date_limite": "2026-08-21",
+      "date_publication": "2026-07-27",
+      "departement": "92",
+      "lu": false,
+      "notifie_le": "2026-07-27T09:30:06.516784+00:00",
+      "objet": "GESTION DES APPELS ET SUIVI DES INTERVENTIONS, DIFFUSION AUTOMATIQUE DE MESSAGES ENREGISTRES, LOCATION, INSTALLATION ET DESINSTALLATION A",
+      "priorite": "TIEDE",
+      "procedure": "MAPA",
+      "score": 45,
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944239?orgAcronyme=b2g",
+      "ville": "BOIS-COLOMBES",
+      "vu_le": "2026-07-27T09:30:05.098134+00:00"
     }
   },
   "guide_messages": "",
-  "maj_le": "2026-07-24T20:11:04.380530+00:00",
+  "maj_le": "2026-07-27T09:30:06.516928+00:00",
   "version": 1
 }
