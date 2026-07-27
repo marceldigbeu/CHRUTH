@@ -26,6 +26,12 @@ LIBELLE_TRAITEMENT = {
     "repondu": "Répondu",
     "abandonne": "Abandonné",
 }
+
+# Couleurs Streamlit (:couleur[texte]) pilotees par la donnee : la priorite et le
+# verdict se lisent d'un coup d'oeil, sans avoir a decoder un chiffre.
+COULEUR_PRIORITE = {"CHAUD": "red", "CHAUDE": "red", "TIEDE": "orange",
+                    "TIÈDE": "orange", "FROID": "gray", "FROIDE": "gray"}
+COULEUR_VERDICT = {"PERTINENT": "green", "REJETE": "red"}
 FICHE_AMORCE = Path(__file__).resolve().parent / "config_chruth" / "fiche_chruth.md"
 
 # Fenetres de fraicheur proposees, en jours. None = pas de borne.
@@ -227,14 +233,18 @@ for id_ao, entree in retenus:
         st.markdown(f"{prefixe}**{entree.get('objet', '(sans intitulé)')}**")
 
         publie = entree.get("date_publication") or "date inconnue"
+        prio = str(entree.get("priorite") or "")
+        c_prio = COULEUR_PRIORITE.get(prio.upper(), "gray")
+        prio_txt = f":{c_prio}[{prio} {entree.get('score', '')}]".strip() if prio else ""
         ligne = (f"{entree.get('acheteur', '')} — {entree.get('ville', '')} "
                  f"({entree.get('departement') or '--'}) · publié le {publie} · limite "
-                 f"{entree.get('date_limite') or 'non précisée'} · "
-                 f"{entree.get('priorite', '')} {entree.get('score', '')}")
+                 f"{entree.get('date_limite') or 'non précisée'} · {prio_txt}")
         st.markdown(ligne)
 
         origine = "corrigé à la main" if corrige else f"tri {tri.get('etage', '')}"
-        st.markdown(f"Verdict : **{verdict}** — {tri.get('motif', '')} _({origine})_")
+        c_verdict = COULEUR_VERDICT.get(verdict, "gray")
+        st.markdown(f"Verdict : :{c_verdict}[**{verdict}**] — {tri.get('motif', '')} "
+                    f"_({origine})_")
 
         if entree.get("url"):
             st.markdown(f"[Ouvrir la consultation]({entree['url']})")

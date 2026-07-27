@@ -83,7 +83,9 @@ def _zone_resultat(cle: str) -> None:
     if not msg:
         return
     with st.container(border=True):
-        st.caption(f"Source : **{msg.get('source', '')}** "
+        src = msg.get("source", "")
+        c_src = "violet" if src == "ia" else "gray"
+        st.caption(f"Source : :{c_src}[**{src}**] "
                    "(ia = rédigé par le modèle ; defaut = brouillon type)")
         st.text_area("Email (éditable)", value=msg.get("email", ""), height=260)
         st.text_area("Script d'appel", value=msg.get("script", ""), height=160)
