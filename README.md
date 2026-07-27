@@ -18,8 +18,9 @@ Pour une personne no-code, ouvrir l'application CHRUTH :
 LANCER_APP_CHRUTH.bat
 ```
 
-Une seule adresse, sept pages : veille appels d'offres, base de donnees, carte,
-messages et CRM, pilotage, reglages et mode developpeur lie a `AO_CHRUTH.xlsm`.
+Une seule adresse, huit pages : veille appels d'offres, collecte, base de donnees,
+carte, messages et CRM, pilotage, reglages et mode developpeur lie a `AO_CHRUTH.xlsm`.
+La page **Collecte** lance les AO, les prospects ou les deux et affiche le journal en direct.
 C'est la surface principale, et la seule consultable en ligne depuis un
 telephone (voir `docs/DEPLOIEMENT_APP_VEILLE.md` et `docs/SURFACES_CHRUTH.md`).
 

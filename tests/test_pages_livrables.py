@@ -33,6 +33,7 @@ def output_test(tmp_path, monkeypatch):
     ]).to_csv(output / "prospects_enrichis.csv", index=False)
     (output / "Carte_Prospects_CHRUTH.html").write_text(
         "<html><body><h1>Carte test</h1></body></html>", encoding="utf-8")
+    (tmp_path / "CHRUTH_PIPELINE_UNIQUE.py").write_text("print('test')\n", encoding="utf-8")
     monkeypatch.setenv("CHRUTH_OUTPUT_DIR", str(output))
     return output
 
@@ -55,6 +56,14 @@ def test_la_page_carte_charge_le_html(output_test):
     at.run()
     assert not at.exception
     assert "Carte des prospects" in [t.value for t in at.title]
+
+
+def test_la_page_collecte_est_prete_sans_lancer_le_pipeline(output_test):
+    at = AppTest.from_file(str(RACINE / "pages_collecte.py"), default_timeout=90)
+    at.run()
+    assert not at.exception
+    assert "Collecte des données" in [t.value for t in at.title]
+    assert at.button(key="lancer_collecte").disabled
 
 
 def test_le_mode_developpeur_lit_directement_le_classeur(output_test):

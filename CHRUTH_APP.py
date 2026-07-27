@@ -1,7 +1,7 @@
 """Application CHRUTH — point d'entree unique.
 
-Les anciennes surfaces sont reunies dans une plateforme a sept pages : veille,
-base de donnees, carte, messages et CRM, pilotage, reglages et mode developpeur.
+Les anciennes surfaces sont reunies dans une plateforme a huit pages : veille,
+collecte, base de donnees, carte, messages et CRM, pilotage, reglages et mode developpeur.
 Une seule adresse et un seul lancement suffisent.
 
 Lancer :  streamlit run CHRUTH_APP.py   (ou double-clic LANCER_APP_CHRUTH.bat)
@@ -18,6 +18,7 @@ theme_chruth.appliquer()
 
 PAGES = [
     st.Page("app_veille.py", title="Veille appels d'offres", default=True),
+    st.Page("pages_collecte.py", title="Collecte"),
     st.Page("pages_donnees.py", title="Base de données"),
     st.Page("pages_carte.py", title="Carte"),
     st.Page("app_messages.py", title="Messages et CRM"),

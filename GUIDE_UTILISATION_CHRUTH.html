@@ -47,8 +47,9 @@
 <ol>
 <li>Double-cliquer sur <code>LANCER_APP_CHRUTH.bat</code>.</li>
 <li>Le navigateur ouvre l'application. Si rien ne s'ouvre, saisir <code>http://localhost:8501</code>.</li>
-<li>Une seule adresse, sept pages dans le menu de gauche : <b>Veille appels d'offres</b>, <b>Base de donnees</b>, <b>Carte</b>, <b>Messages et CRM</b>, <b>Pilotage</b>, <b>Reglages</b>, <b>Developpeur</b>.</li>
+<li>Une seule adresse, huit pages dans le menu de gauche : <b>Veille appels d'offres</b>, <b>Collecte</b>, <b>Base de donnees</b>, <b>Carte</b>, <b>Messages et CRM</b>, <b>Pilotage</b>, <b>Reglages</b>, <b>Developpeur</b>.</li>
 </ol>
+<div class="note"><b>Collecter depuis Streamlit :</b> ouvrir la page <b>Collecte</b>, choisir les appels d'offres, les prospects ou les deux, sélectionner le périmètre, fermer les classeurs Excel concernés puis confirmer. Le journal s'actualise automatiquement toutes les trois secondes.</div>
 <div class="note"><b>Donnees integrees :</b> la page <b>Base de donnees</b> lit les appels d'offres dans <code>output/AO_CHRUTH.xlsm</code>, filtre les prospects depuis <code>output/prospects_enrichis.csv</code> et donne acces aux fichiers importants. La page <b>Carte</b> affiche directement <code>output/Carte_Prospects_CHRUTH.html</code>.</div>
 <div class="warn"><b>Mode developpeur :</b> cette page est desactivee par defaut. Apres activation, elle montre les feuilles du classeur AO, permet de l'ouvrir dans Excel et de lancer <code>ao_weekly_update.py</code>. Fermer Excel avant la mise a jour : si le classeur est verrouille, le bouton reste bloque pour proteger le fichier.</div>
 <div class="note">C'est la surface principale, et la seule consultable en ligne depuis un telephone sans PC allume. Mise en ligne : <code>docs/DEPLOIEMENT_APP_VEILLE.md</code>. Carte de toutes les surfaces : <code>docs/SURFACES_CHRUTH.md</code>.</div>
