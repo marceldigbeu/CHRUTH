@@ -88,6 +88,29 @@
       "ville": "Aubervilliers",
       "vu_le": "2026-07-23T15:02:18.479093+00:00"
     },
+    "MX-935730": {
+      "acheteur": "Conseil Régional d'Ile-de-France",
+      "correction_humaine": null,
+      "date_limite": "2026-09-07",
+      "date_publication": "2026-07-28",
+      "departement": "93",
+      "lu": false,
+      "notifie_le": "2026-07-28T16:56:50.750536+00:00",
+      "objet": "Mission d’Assistance à Maîtrise d’Ouvrage Technique et Qualité Environnementale « AMO TQE » (Lot 1) et en matière d’économie",
+      "priorite": "FROID",
+      "procedure": "MAPA",
+      "score": 35,
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/935730?orgAcronyme=t5y",
+      "ville": "Saint-Ouen-sur-Seine",
+      "vu_le": "2026-07-28T16:56:49.741073+00:00"
+    },
     "MX-935781": {
       "acheteur": "CD94 - Conseil départemental du Val-de-Marne",
       "correction_humaine": null,
@@ -2337,6 +2360,6 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-07-28T15:12:43.604249+00:00",
+  "maj_le": "2026-07-28T16:56:50.750723+00:00",
   "version": 1
 }
