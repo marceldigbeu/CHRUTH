@@ -7,6 +7,7 @@ prospection (celle-ci est mise en sommeil, non supprimée).
 from __future__ import annotations
 
 from datetime import date, timedelta
+from pathlib import Path
 
 import pandas as pd
 from ao_extract_fields import normalize_text
@@ -18,6 +19,10 @@ PRIORITES_PERTINENTES = ("CHAUD", "TIEDE", "TIÈDE")
 COLONNES = ["acheteur", "type", "type_incertain", "priorite", "nb_ao_semaine",
             "departement", "ville", "code_postal", "adresse", "effectif",
             "nature_juridique", "siret", "siren", "enrichi", "source", "aos"]
+
+RACINE = Path(__file__).resolve().parent
+XLSX_DEFAUT = RACINE / "output" / "Acheteurs_Semaine_CHRUTH.xlsx"
+CSV_DEFAUT = RACINE / "output" / "Acheteurs_Semaine_CHRUTH.csv"
 
 _RANG_PRIO = {"CHAUD": 3, "TIEDE": 2, "TIÈDE": 2, "FROID": 1, "": 0}
 
@@ -168,3 +173,34 @@ def construire(jours: int = FENETRE_JOURS, aujourd_hui=None, records_boamp=None,
         df["_rang"] = df["priorite"].map({"CHAUD": 3, "TIEDE": 2, "TIÈDE": 2}).fillna(0)
         df = df.sort_values(["_rang", "nb_ao_semaine"], ascending=False).drop(columns="_rang").reset_index(drop=True)
     return df
+
+
+def _aplatir_aos(aos) -> str:
+    if not isinstance(aos, list):
+        return str(aos or "")
+    return " | ".join(f"{a.get('objet','')} ({a.get('date_publication','')}, {a.get('priorite','')})"
+                      for a in aos)
+
+
+def exporter(df, xlsx_path: Path, csv_path: Path) -> None:
+    plat = df.copy()
+    if "aos" in plat.columns:
+        plat["aos"] = plat["aos"].map(_aplatir_aos)
+    Path(xlsx_path).parent.mkdir(parents=True, exist_ok=True)
+    plat.to_excel(xlsx_path, index=False)
+    plat.to_csv(csv_path, index=False, encoding="utf-8")
+
+
+def main(argv: list[str] | None = None) -> int:
+    import sys
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    df = construire()
+    exporter(df, XLSX_DEFAUT, CSV_DEFAUT)
+    pub = int((df["type"] == "public").sum()) if not df.empty else 0
+    print(f"[ACHETEURS-SEMAINE] {len(df)} acheteur(s) — {pub} public(s), {len(df) - pub} prive-droit")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
