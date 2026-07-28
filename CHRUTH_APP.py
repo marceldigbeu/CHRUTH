@@ -20,6 +20,7 @@ PAGES = [
     st.Page("app_veille.py", title="Veille appels d'offres", default=True),
     st.Page("pages_collecte.py", title="Collecte"),
     st.Page("pages_donnees.py", title="Base de données"),
+    st.Page("pages_acheteurs.py", title="Acheteurs de la semaine"),
     st.Page("pages_carte.py", title="Carte"),
     st.Page("app_messages.py", title="Messages et CRM"),
     st.Page("pages_pilotage.py", title="Pilotage"),
