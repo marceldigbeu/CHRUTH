@@ -249,6 +249,7 @@
     { id:"veille", t:"Veille appels d'offres" },
     { id:"collecte", t:"Collecte" },
     { id:"base", t:"Base de données" },
+    { id:"acheteurs", t:"Acheteurs de la semaine" },
     { id:"carte", t:"Carte" },
     { id:"messages", t:"Messages et CRM" },
     { id:"pilotage", t:"Pilotage" },
@@ -283,6 +284,7 @@
     if (id === "pilotage") return renderPilotage();
     if (id === "reglages") return renderReglages();
     if (id === "collecte") return renderCollecte();
+    if (id === "acheteurs") return renderAcheteurs();
     if (id === "carte") return renderInfo("Carte", "La carte interactive des prospects (132 000 sociétés géolocalisées) est produite par le pipeline Python dans <b>output/Carte_Prospects_CHRUTH.html</b>. Elle ne peut pas être embarquée ici : ce fichier reste une interface, pas un moteur de données.");
     if (id === "dev") return renderInfo("Développeur", "Le cockpit Excel <b>output/AO_CHRUTH.xlsm</b> et sa macro « Mettre à jour » vivent sur le poste. Cette page, côté Python, sert à l'inspecter et à relancer sa mise à jour après fermeture d'Excel.");
   }
@@ -516,6 +518,39 @@
       log.textContent += (i ? "\n" : "") + lignes[i++]; setTimeout(step, 420);
     })();
   }
+
+  // Acheteurs de la semaine
+  var ACH = [
+    { nom:"Mairie de Créteil", type:"public", sous:"Collectivité territoriale", cp:"94000", ville:"Créteil", dept:"94", eff:"250 à 499", nb:2, prio:"CHAUD",
+      aos:[{o:"Nettoyage des locaux administratifs et vitrerie", d:"22.07", p:"CHAUD"}, {o:"Entretien des écoles", d:"24.07", p:"TIÈDE"}] },
+    { nom:"Immobilière 3F", type:"prive", sous:"Bailleur social · ESH", cp:"93000", ville:"Bobigny", dept:"93", eff:"1000 à 1999", nb:1, prio:"CHAUD",
+      aos:[{o:"Entretien des parties communes et remise en état", d:"21.07", p:"CHAUD"}] },
+    { nom:"SEM d'aménagement des Hauts-de-Seine", type:"prive", sous:"Société d'économie mixte", cp:"92000", ville:"Nanterre", dept:"92", eff:"50 à 99", nb:1, prio:"TIÈDE",
+      aos:[{o:"Propreté des espaces d'accueil et sanitaires", d:"16.07", p:"TIÈDE"}] }
+  ];
+  var achFiltre = "tous";
+  function renderAcheteurs() {
+    var vis = ACH.filter(function (a) { return achFiltre === "tous" || a.type === achFiltre; });
+    var pub = vis.filter(function (a) { return a.type === "public"; }).length;
+    var h = '<div class="page actif"><p class="kicker">Cibles chaudes · 7 derniers jours</p>' +
+      '<h1>Acheteurs de la semaine</h1>' +
+      '<p class="intro">Les organisations ayant publié un appel d\'offres de propreté pertinent dans les 7 derniers jours, classées <em>public / privé-droit</em> et enrichies (effectif, adresse). Remplace la prospection « toutes entreprises ».</p>' +
+      '<div class="barre"><span class="tally"><b>' + vis.length + '</b> acheteurs · <span class="pub"><b>' + pub + '</b> publics</span> · <span class="prv"><b>' + (vis.length - pub) + '</b> privé-droit</span></span>' +
+      '<span class="filtre" role="group" aria-label="Type">' +
+        fbtnA("tous", "Tous") + fbtnA("public", "Public") + fbtnA("prive", "Privé-droit") + '</span></div><div class="registre">';
+    vis.forEach(function (a) {
+      h += '<article class="rec" data-buyer="' + a.type + '"><div class="prio ' + (a.prio === "CHAUD" ? "chaud" : "tiede") + '">' + a.prio + '<span class="sc">' + a.nb + ' AO</span></div>' +
+        '<div><h3>' + a.nom + '</h3><p class="ach">' + a.cp + ' ' + a.ville + ' (' + a.dept + ') · effectif ' + a.eff + '</p>' +
+        '<p class="ref">' + a.aos.map(function (x) { return '<span>' + x.o + ' — ' + x.d + ' · ' + x.p + '</span>'; }).join("") + '</p></div>' +
+        '<div class="type ' + a.type + '"><span class="t">' + (a.type === "public" ? "Public" : "Privé-droit") + '</span><span class="sous">' + a.sous + '</span></div></article>';
+    });
+    h += '</div></div>';
+    main.innerHTML = h;
+    Array.prototype.forEach.call(main.querySelectorAll(".filtre button"), function (b) {
+      b.onclick = function () { achFiltre = b.dataset.f; renderAcheteurs(); };
+    });
+  }
+  function fbtnA(f, lib) { return '<button data-f="' + f + '" aria-pressed="' + (achFiltre === f) + '">' + lib + '</button>'; }
 
   function renderInfo(titre, corps) {
     main.innerHTML = '<div class="page actif"><p class="kicker">Information</p><h1>' + esc(titre) + '</h1>' +
