@@ -37,3 +37,28 @@ def test_le_filtre_public_prive_existe(monkeypatch):
     at = AppTest.from_file(PAGE, default_timeout=60)
     at.run()
     assert any(w.key == "type_acheteur" for w in at.radio) or not at.exception
+
+
+def test_page_affiche_info_quand_dataframe_vide(monkeypatch):
+    """Quand construire() retourne un DataFrame vide, affiche un message info et ne crashe pas."""
+    monkeypatch.setattr(asem, "construire", lambda *a, **k: pd.DataFrame(columns=asem.COLONNES))
+    at = AppTest.from_file(PAGE, default_timeout=60)
+    at.run()
+    assert not at.exception
+    assert len(at.info) >= 1
+
+
+def test_filtre_public_cache_les_lignes_privees(monkeypatch):
+    """Quand on sélectionne 'Public' au radio, les lignes privé-droit sont cachées."""
+    monkeypatch.setattr(asem, "construire", lambda *a, **k: _df())
+    at = AppTest.from_file(PAGE, default_timeout=60)
+    at.run()
+    assert not at.exception
+
+    # Sélectionner "Public"
+    at.radio(key="type_acheteur").set_value("Public").run()
+
+    # Vérifier que seule la ligne publique est affichée
+    textes = " ".join(m.value for m in at.markdown)
+    assert "Créteil" in textes  # public row still shown
+    assert "Immobilière 3F" not in textes  # prive row hidden
