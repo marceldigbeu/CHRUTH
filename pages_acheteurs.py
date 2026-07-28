@@ -46,5 +46,5 @@ else:
                 lien = f"[{ao.get('objet','')}]({ao.get('url','')})" if ao.get("url") else ao.get("objet", "")
                 st.markdown(f"- {lien} — publié {ao.get('date_publication','')} · {ao.get('priorite','')}")
 
-    st.download_button("Exporter en CSV", df.assign(aos=df["aos"].map(asem._aplatir_aos)).to_csv(index=False),
+    st.download_button("Exporter en CSV", vue.assign(aos=vue["aos"].map(asem._aplatir_aos)).to_csv(index=False),
                        file_name="Acheteurs_Semaine_CHRUTH.csv", mime="text/csv")

@@ -18,6 +18,13 @@ def test_enrichir_remplit_et_classe():
     assert out["type"] == "public" and out["type_incertain"] is False
 
 
+def test_enrichir_decode_effectif_en_libelle_lisible():
+    """L'effectif doit être le libellé humain (config.TRANCHE_EFFECTIF), pas le code INSEE brut."""
+    a = {"acheteur": "Mairie", "siret": "21750001600019", "departement": "75"}
+    out = asem.enrichir(a, chercher=_fake_chercher)
+    assert out["effectif"] == "1000 à 1999 salariés"  # code "42" décodé, pas "42" brut
+
+
 def test_enrichir_best_effort_si_pas_de_fiche():
     a = {"acheteur": "Immobilière 3F", "siret": "", "departement": "93"}
     out = asem.enrichir(a, chercher=_fake_chercher)   # pas de SIRET -> pas de fiche

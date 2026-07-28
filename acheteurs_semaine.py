@@ -11,6 +11,7 @@ from pathlib import Path
 
 import pandas as pd
 from ao_extract_fields import normalize_text
+from clean_classify import decode_effectif
 import veille_etat
 
 FENETRE_JOURS = 7
@@ -147,7 +148,7 @@ def enrichir(acheteur: dict, chercher=None) -> dict:
         a["adresse"] = fiche.get("adresse") or ""
         a["code_postal"] = fiche.get("code_postal") or ""
         a["ville"] = a.get("ville") or fiche.get("libelle_commune") or ""
-        a["effectif"] = fiche.get("tranche_effectif_salarie") or ""
+        a["effectif"] = decode_effectif(fiche.get("tranche_effectif_salarie"))[0]
         a["nature_juridique"] = fiche.get("nature_juridique") or ""
         a["enrichi"] = True
     else:
