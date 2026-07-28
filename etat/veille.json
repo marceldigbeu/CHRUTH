@@ -352,28 +352,6 @@
       "ville": "Viry-Chatillon",
       "vu_le": "2026-07-23T15:02:18.483180+00:00"
     },
-    "MX-939925": {
-      "acheteur": "RESAH",
-      "correction_humaine": null,
-      "date_limite": "2026-07-27",
-      "date_publication": "2026-06-10",
-      "departement": "75",
-      "lu": false,
-      "notifie_le": null,
-      "objet": "Prestations 4D :  Dératisation, Désinsectisation, Désinfection, Dépigeonnisation et services associés",
-      "priorite": "FROID",
-      "procedure": "AOO",
-      "score": 10,
-      "traitement": "nouveau",
-      "tri": {
-        "etage": "listes",
-        "motif": "exclusion metier : deratisation",
-        "verdict": "REJETE"
-      },
-      "url": "https://marches.maximilien.fr/entreprise/consultation/939925?orgAcronyme=a0z",
-      "ville": "Paris",
-      "vu_le": "2026-07-23T15:02:18.490413+00:00"
-    },
     "MX-939956": {
       "acheteur": "Ville de Rueil-Malmaison",
       "correction_humaine": null,
@@ -549,28 +527,6 @@
       "url": "https://marches.maximilien.fr/entreprise/consultation/940979?orgAcronyme=g3h",
       "ville": "Melun",
       "vu_le": "2026-07-23T15:02:18.437753+00:00"
-    },
-    "MX-941155": {
-      "acheteur": "Ville de Rueil-Malmaison",
-      "correction_humaine": null,
-      "date_limite": "2026-07-27",
-      "date_publication": "2026-06-22",
-      "departement": "92",
-      "lu": false,
-      "notifie_le": null,
-      "objet": "Prestations de santé au travail et de médecine préventive pour les agents de la Mairie de Rueil-Malmaison",
-      "priorite": "FROID",
-      "procedure": "AOO",
-      "score": 5,
-      "traitement": "nouveau",
-      "tri": {
-        "etage": "listes",
-        "motif": "exclusion metier : sante au travail",
-        "verdict": "REJETE"
-      },
-      "url": "https://marches.maximilien.fr/entreprise/consultation/941155?orgAcronyme=d7h",
-      "ville": "Rueil-Malmaison Cedex",
-      "vu_le": "2026-07-23T15:02:18.490520+00:00"
     },
     "MX-941168": {
       "acheteur": "Ville de Paris",
@@ -2358,6 +2314,6 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-07-27T20:16:19.877619+00:00",
+  "maj_le": "2026-07-28T08:14:19.123083+00:00",
   "version": 1
 }
