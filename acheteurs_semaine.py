@@ -7,6 +7,7 @@ prospection (celle-ci est mise en sommeil, non supprimée).
 from __future__ import annotations
 
 from datetime import date, timedelta
+import html
 from pathlib import Path
 
 import pandas as pd
@@ -61,6 +62,12 @@ def _date_ok(datep, aujourd_hui, jours) -> bool:
     return aujourd_hui - timedelta(days=jours) <= d <= aujourd_hui
 
 
+def _texte(valeur) -> str:
+    """Champ texte propre : les sources (BOAMP, Maximilien) renvoient du HTML
+    encodé (« Mairie d&#039;ANTONY », « &amp; »). On décode pour l'affichage."""
+    return html.unescape(str(valeur or "")).strip()
+
+
 def collecter_aos_recents(jours: int = FENETRE_JOURS, aujourd_hui: date | None = None,
                           records_boamp=None, etat_maximilien=None) -> list[dict]:
     aujourd_hui = aujourd_hui or date.today()
@@ -79,10 +86,10 @@ def collecter_aos_recents(jours: int = FENETRE_JOURS, aujourd_hui: date | None =
         if not _date_ok(r.get("date_publication"), aujourd_hui, jours):
             continue
         aos.append({
-            "acheteur": r.get("acheteur") or "", "siret": str(r.get("siret_acheteur") or ""),
-            "siren": str(r.get("siren_acheteur") or ""), "ville": r.get("ville") or "",
+            "acheteur": _texte(r.get("acheteur")), "siret": str(r.get("siret_acheteur") or ""),
+            "siren": str(r.get("siren_acheteur") or ""), "ville": _texte(r.get("ville")),
             "departement": str(r.get("departement") or ""), "date_publication": str(r.get("date_publication") or ""),
-            "url": r.get("url_avis") or "", "objet": r.get("objet") or "",
+            "url": r.get("url_avis") or "", "objet": _texte(r.get("objet")),
             "priorite": str(r.get("priorite") or "").upper(), "source": "BOAMP",
         })
 
@@ -92,10 +99,10 @@ def collecter_aos_recents(jours: int = FENETRE_JOURS, aujourd_hui: date | None =
         if not _date_ok(e.get("date_publication"), aujourd_hui, jours):
             continue
         aos.append({
-            "acheteur": e.get("acheteur") or "", "siret": "", "siren": "",
-            "ville": e.get("ville") or "", "departement": str(e.get("departement") or ""),
+            "acheteur": _texte(e.get("acheteur")), "siret": "", "siren": "",
+            "ville": _texte(e.get("ville")), "departement": str(e.get("departement") or ""),
             "date_publication": str(e.get("date_publication") or ""), "url": e.get("url") or "",
-            "objet": e.get("objet") or "", "priorite": str(e.get("priorite") or "").upper(),
+            "objet": _texte(e.get("objet")), "priorite": str(e.get("priorite") or "").upper(),
             "source": "Maximilien",
         })
     return aos

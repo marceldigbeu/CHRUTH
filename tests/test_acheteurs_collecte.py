@@ -19,6 +19,20 @@ def _max(objet, verdict, datep, ach="Ville Y"):
 AUJ = date(2026, 7, 27)
 
 
+def test_les_entites_html_sont_decodees_dans_les_champs_texte():
+    """BOAMP renvoie du texte encodé HTML (ex. « Mairie d&#039;ANTONY ») : on le décode."""
+    boamp = [_boamp("Entretien &amp; propreté", "CHAUD", "2026-07-24",
+                    ach="Mairie d&#039;ANTONY")]
+    maxi = {"aos": {"MX-1": _max("Nettoyage &#233;coles", "PERTINENT", "2026-07-24",
+                                 ach="Ville d&#039;Y")}}
+    aos = asem.collecter_aos_recents(aujourd_hui=AUJ, records_boamp=boamp, etat_maximilien=maxi)
+    par_source = {a["source"]: a for a in aos}
+    assert par_source["BOAMP"]["acheteur"] == "Mairie d'ANTONY"
+    assert par_source["BOAMP"]["objet"] == "Entretien & propreté"
+    assert par_source["Maximilien"]["acheteur"] == "Ville d'Y"
+    assert par_source["Maximilien"]["objet"] == "Nettoyage écoles"
+
+
 def test_garde_pertinent_dans_la_fenetre_ecarte_le_reste():
     boamp = [
         _boamp("Nettoyage récent", "CHAUD", "2026-07-24"),         # gardé
