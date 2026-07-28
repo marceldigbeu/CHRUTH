@@ -8,11 +8,16 @@ from __future__ import annotations
 
 from datetime import date, timedelta
 
+import pandas as pd
 from ao_extract_fields import normalize_text
 import veille_etat
 
 FENETRE_JOURS = 7
 PRIORITES_PERTINENTES = ("CHAUD", "TIEDE", "TIÈDE")
+
+COLONNES = ["acheteur", "type", "type_incertain", "priorite", "nb_ao_semaine",
+            "departement", "ville", "code_postal", "adresse", "effectif",
+            "nature_juridique", "siret", "siren", "enrichi", "source", "aos"]
 
 _RANG_PRIO = {"CHAUD": 3, "TIEDE": 2, "TIÈDE": 2, "FROID": 1, "": 0}
 
@@ -117,3 +122,49 @@ def extraire_acheteurs(aos: list[dict]) -> list[dict]:
         if not a["siret"] and ao.get("siret"):
             a["siret"] = str(ao.get("siret"))
     return list(par_cle.values())
+
+
+def enrichir(acheteur: dict, chercher=None) -> dict:
+    """Enrichit un acheteur avec données SIRET (adresse, code_postal, effectif, nature_juridique).
+    Classe toujours le type (public/prive) via classer().
+    Best-effort: pas de SIRET, pas de fiche, ou chercher qui lève -> enrichi=False, row conservée.
+    """
+    if chercher is None:
+        from collect_api_entreprises import fetch_by_siret as chercher
+    a = dict(acheteur)
+    fiche = None
+    if a.get("siret"):
+        try:
+            fiche = chercher(str(a["siret"]))
+        except Exception:  # noqa: BLE001 — best-effort
+            fiche = None
+    if fiche:
+        a["adresse"] = fiche.get("adresse") or ""
+        a["code_postal"] = fiche.get("code_postal") or ""
+        a["ville"] = a.get("ville") or fiche.get("libelle_commune") or ""
+        a["effectif"] = fiche.get("tranche_effectif_salarie") or ""
+        a["nature_juridique"] = fiche.get("nature_juridique") or ""
+        a["enrichi"] = True
+    else:
+        a.setdefault("adresse", ""); a.setdefault("code_postal", "")
+        a.setdefault("effectif", ""); a["nature_juridique"] = ""; a["enrichi"] = False
+    a["type"], a["type_incertain"] = classer(a.get("nature_juridique", ""), a.get("acheteur", ""))
+    return a
+
+
+def construire(jours: int = FENETRE_JOURS, aujourd_hui=None, records_boamp=None,
+               etat_maximilien=None, chercher=None) -> "pd.DataFrame":
+    """Pipeline complet: collecte AOs récents -> extrait acheteurs -> enrichit chacun
+    -> assemble en DataFrame avec COLONNES fixes, trié par priorité (CHAUD>TIEDE) puis nb_ao_semaine desc.
+    """
+    aos = collecter_aos_recents(jours, aujourd_hui, records_boamp, etat_maximilien)
+    acheteurs = [enrichir(a, chercher) for a in extraire_acheteurs(aos)]
+    df = pd.DataFrame(acheteurs)
+    for c in COLONNES:
+        if c not in df.columns:
+            df[c] = "" if c != "nb_ao_semaine" else 0
+    df = df[COLONNES]
+    if not df.empty:
+        df["_rang"] = df["priorite"].map({"CHAUD": 3, "TIEDE": 2, "TIÈDE": 2}).fillna(0)
+        df = df.sort_values(["_rang", "nb_ao_semaine"], ascending=False).drop(columns="_rang").reset_index(drop=True)
+    return df
