@@ -2356,10 +2356,56 @@
       "url": "https://marches.maximilien.fr/entreprise/consultation/944299?orgAcronyme=p8x",
       "ville": "Boulogne-Billancourt",
       "vu_le": "2026-07-27T15:37:35.976073+00:00"
+    },
+    "MX-944320": {
+      "acheteur": "Office public communautaire de Plaine Commune",
+      "correction_humaine": null,
+      "date_limite": "2026-09-10",
+      "date_publication": "2026-07-29",
+      "departement": "93",
+      "lu": false,
+      "notifie_le": "2026-07-29T11:00:51.917431+00:00",
+      "objet": "MARCHE DE MAITRISE D’OEUVRE POUR LA REHABILITATION DES 174 LOGEMENTS DE LA RESIDENCE PABLO PICASSO A SAINT-DENIS (93200)",
+      "priorite": "FROID",
+      "procedure": "PAN",
+      "score": 20,
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944320?orgAcronyme=b4e",
+      "ville": "Saint-Denis",
+      "vu_le": "2026-07-29T11:00:50.471332+00:00"
+    },
+    "MX-944400": {
+      "acheteur": "GHT GPNE",
+      "correction_humaine": null,
+      "date_limite": "2026-09-04",
+      "date_publication": "2026-07-29",
+      "departement": "93",
+      "lu": false,
+      "notifie_le": "2026-07-29T11:00:53.096194+00:00",
+      "objet": "TRANSPORTS SANITAIRES POUR LE GHT GRAND PARIS NORD-EST",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 20,
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944400?orgAcronyme=a1j",
+      "ville": "Montfermeil",
+      "vu_le": "2026-07-29T11:00:50.472634+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-07-29T08:19:54.475115+00:00",
+  "maj_le": "2026-07-29T11:00:53.096390+00:00",
   "version": 1
 }
