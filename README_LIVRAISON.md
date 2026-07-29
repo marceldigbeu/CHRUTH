@@ -10,11 +10,19 @@ Pour une personne no-code, ouvrir en priorite l'application CHRUTH :
 LANCER_APP_CHRUTH.bat
 ```
 
-Une seule adresse, huit pages : veille appels d'offres, collecte, base de donnees,
-carte, messages et CRM, pilotage, reglages et mode developpeur lie au cockpit Excel.
-La page **Collecte** lance les AO, les prospects ou les deux et suit leur journal.
-C'est la surface principale et la seule consultable en ligne
-depuis un telephone (voir `docs/DEPLOIEMENT_APP_VEILLE.md` et `docs/SURFACES_CHRUTH.md`).
+Une seule adresse, dix pages : accueil, veille appels d'offres, collecte, base de
+donnees, acheteurs de la semaine, carte, messages et CRM, pilotage, reglages et
+mode developpeur lie au cockpit Excel.
+
+L'**Accueil** ouvre l'application : echeances les plus proches et AO retenus par
+le tri. La page **Veille** filtre par une jauge de score et permet de basculer
+vers la redaction sur le marche choisi. La page **Collecte** lance les AO, les
+prospects ou les deux et suit leur journal. La page **Reglages** porte les
+destinataires, l'adresse d'envoi et la fiche CHRUTH.
+
+C'est la surface principale et la seule consultable en ligne depuis un telephone
+(voir `docs/DEPLOIEMENT_APP_VEILLE.md`, protection de l'acces dans
+`docs/GUIDE_CONNEXION.md`, carte des surfaces dans `docs/SURFACES_CHRUTH.md`).
 
 Pour lancer les traitements par lots (generation, collectes) :
 
@@ -77,12 +85,35 @@ Le pack exclut les secrets locaux :
 - `.env`
 - `alertes_secrets.json`
 - `destinataires.txt`
+- `.streamlit/secrets.toml`
 
-Les fichiers exemples restent inclus. Les identifiants Gmail et destinataires doivent etre saisis dans l'onglet `Email` de l'interface sur le poste utilisateur.
+Les fichiers exemples restent inclus. Les identifiants Gmail et les destinataires
+se saisissent sur le poste utilisateur : page **Reglages** de l'application, ou
+onglet `Email` du cockpit.
+
+Pour produire une copie verifiee plutot qu'un simple pack, preferer :
+
+```bat
+python outils/preparer_dossier_demo.py
+```
+
+Ce script refuse d'ecrire s'il detecte un fichier de secrets, ecarte les
+sauvegardes horodatees et masque les adresses recopiees dans la documentation
+ou les exports.
 
 ## Email et destinataires
 
 Dans le cockpit Excel `output/AO_CHRUTH.xlsm`, l'onglet `Parametres` permet de saisir les destinataires des alertes en colonne B a partir de `B5`. Le bouton `Enregistrer_Destinataires` met a jour `destinataires.txt` et le champ `destinataire` de `alertes_secrets.json`, sans toucher a `smtp_user` ni `smtp_password`.
+
+L'adresse d'envoi et son mot de passe d'application se modifient dans la page
+**Reglages** de l'application. Les deux se saisissent ensemble : ils forment une
+paire, et les changer separement casse tous les envois. Le mot de passe est ecrit
+dans `alertes_secrets.json`, jamais dans les reglages partages, et n'est jamais
+reaffiche.
+
+Les interrupteurs (alertes, collecte) et la fiche CHRUTH sont partages entre
+toutes les surfaces : les modifier dans l'application, dans le classeur ou dans
+le cockpit revient au meme.
 
 ## Livrables principaux
 

@@ -95,10 +95,15 @@ ANTHROPIC_API_KEY = "<ou MISTRAL_API_KEY, ou GROQ_API_KEY>"
 
 ### 5. Vérifier
 
-Huit pages dans le menu de gauche : Veille, Collecte, Base de données, Carte,
-Messages et CRM, Pilotage, Réglages et Développeur.
+Dix pages dans le menu de gauche : Accueil, Veille, Collecte, Base de données,
+Acheteurs de la semaine, Carte, Messages et CRM, Pilotage, Réglages et
+Développeur.
 
+- L'application ouvre sur l'**Accueil** : échéances les plus proches et AO
+  retenus par le tri. En ligne, la base locale n'existe pas — les chiffres qui
+  en viennent restent donc à zéro, et c'est normal.
 - Le fil affiche les AO, du plus récemment publié au plus ancien.
+- La jauge **Score minimum** de la barre latérale filtre la liste.
 - « Afficher les AO rejetés par le tri » les fait apparaître avec leur motif.
 - Un clic sur **Pas pertinent** survit à un rechargement de la page.
 - Le bouton **Mettre à jour maintenant** déclenche le workflow — il ne collecte
