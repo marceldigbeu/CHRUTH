@@ -350,6 +350,20 @@ python outils\set_notifications.py ON</pre>
 <li>Mettre <code>CHRUTH_NOTIFICATIONS=OFF</code> pour suspendre les envois sans supprimer les secrets.</li>
 </ol>
 
+<h3>Le fichier HTML autonome</h3>
+<p><code>CHRUTH_PLATEFORME.html</code> reproduit la plateforme dans <b>un seul fichier</b>, ouvrable sans Python, sans serveur et sans internet — pratique pour consulter la veille sur un telephone ou l'envoyer a quelqu'un.</p>
+<ol>
+<li>Le regenerer apres une collecte :</li>
+</ol>
+<pre>python outils/generer_plateforme_html.py</pre>
+<ol start="2">
+<li>Verifier sans rien reecrire :</li>
+</ol>
+<pre>python outils/generer_plateforme_html.py --verifier</pre>
+<div class="note">Il portait jusqu'ici huit appels d'offres d'exemple ecrits a la main. Il embarque desormais les marches reels, les mieux notes d'abord, <b>expires et rejetes par le tri exclus</b>, ainsi que les acheteurs de la semaine. La date des donnees est inscrite en haut du fichier.</div>
+<div class="warn"><b>Aucune adresse email n'y entre</b>, par construction : ni destinataires, ni expediteur. Le generateur refuse d'ecrire s'il en detecte une. C'est ce qui rend le fichier envoyable tel quel.</div>
+<div class="small">Le fichier reste autonome : les donnees sont ecrites dedans, jamais chargees a cote. Un fichier unique se deplace, un dossier se disperse.</div>
+
 <h2 id="github">11. Mettre a jour GitHub ou creer un dossier portable</h2>
 <h3>Creer un dossier portable</h3>
 <pre>python CHRUTH_PIPELINE_UNIQUE.py --pack</pre>
