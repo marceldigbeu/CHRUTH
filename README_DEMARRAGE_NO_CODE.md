@@ -3,20 +3,29 @@
 ## L'application CHRUTH (recommandee)
 
 Double-cliquer sur `LANCER_APP_CHRUTH.bat` : le navigateur ouvre l'application, une
-seule adresse pour huit pages dans le menu de gauche :
+seule adresse pour dix pages dans le menu de gauche :
 
-- **Veille appels d'offres** : consulter les AO, corriger le tri, suivre.
+- **Accueil** : ce qui est urgent, si le systeme tourne, ou aller ensuite. Les
+  echeances les plus proches avec un code couleur, et les AO retenus par le tri.
+- **Veille appels d'offres** : consulter les AO, corriger le tri, suivre. Une
+  jauge **Score minimum** et un classement par score y filtrent la liste, et le
+  bouton **Rediger un message** bascule vers la redaction sur le marche choisi.
 - **Collecte** : lancer les collectes AO/prospects, choisir le périmètre et suivre le journal.
 - **Base de donnees** : consulter les AO Excel, filtrer les 132 000 prospects et telecharger les fichiers importants.
+- **Acheteurs de la semaine** : qui a publie ces sept derniers jours.
 - **Carte** : utiliser directement `output/Carte_Prospects_CHRUTH.html`.
-- **Messages et CRM** : generer les messages (AO et prospects) et suivre le commercial.
-- **Pilotage** : les indicateurs du cockpit.
+- **Messages et CRM** : generer les messages (AO et prospects) et suivre le
+  commercial. La longueur des reponses est plafonnee et le cout en tokens
+  affiche avant chaque redaction.
+- **Pilotage** : ce qui attend, ce que la collecte a filtre, et ou sont les marches.
+- **Reglages** : destinataires, adresse d'envoi, interrupteurs, fiche CHRUTH —
+  vus par toutes les surfaces.
 - **Developpeur** : inspecter et ouvrir `output/AO_CHRUTH.xlsm`, puis lancer sa mise a jour apres fermeture d'Excel.
-- **Reglages** : destinataires, interrupteurs, fiche CHRUTH — vus par toutes les surfaces.
 
 C'est la seule surface qui peut aussi s'ouvrir en ligne, depuis un telephone, sans
-PC allume : voir `docs/DEPLOIEMENT_APP_VEILLE.md`. La carte de toutes les surfaces
-et leur role est dans `docs/SURFACES_CHRUTH.md`.
+PC allume : voir `docs/DEPLOIEMENT_APP_VEILLE.md`. Une page de connexion peut alors
+la proteger (`docs/GUIDE_CONNEXION.md`) ; en local, aucune connexion n'est demandee.
+La carte de toutes les surfaces et leur role est dans `docs/SURFACES_CHRUTH.md`.
 
 ## Les interfaces de traitement (alternatives)
 
@@ -77,7 +86,28 @@ Le resultat est aussi ecrit dans `output/_message_ao.txt`.
 
 ## Rendre les messages precis
 
-Remplir une fois `config_chruth/fiche_chruth.md` avec des faits vrais : activite, zone IDF, prestations, points forts, et ce qu'il ne faut pas pretendre. L'IA n'utilise que cette fiche pour parler de CHRUTH.
+Remplir une fois la fiche CHRUTH avec des faits vrais : activite, zone IDF,
+prestations, points forts, et ce qu'il ne faut pas pretendre. L'IA n'utilise que
+cette fiche pour parler de CHRUTH, et refuse d'inventer ce qui n'y figure pas.
+
+Deux endroits au choix, le meme contenu : la page **Reglages** de l'application,
+ou le fichier `config_chruth/fiche_chruth.md`. La saisie de l'application prime ;
+le fichier sert quand elle est vide.
+
+**La signature est un cas a part.** Elle n'est pas redigee par l'IA — un modele
+inventerait un numero plausible et faux — mais recopiee telle quelle depuis une
+section dont le titre commence par « Coordonnees » :
+
+```markdown
+## Coordonnées
+- Site : chruth.fr
+- Email : contact@chruth.fr
+- Téléphone : 01 23 45 67 89
+```
+
+Un titre different, `## Contact` par exemple, ne produit aucune signature. Un
+seul champ suffit a la declencher. Laisser vide plutot qu'approximer : un lien
+faux coute plus cher que pas de lien.
 
 Le moteur se regle tout seul : une cle cloud dans `.env` si disponible, sinon Ollama local, sinon brouillon type.
 
