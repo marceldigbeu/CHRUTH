@@ -7,6 +7,7 @@ from __future__ import annotations
 
 import streamlit as st
 
+import identifiants_smtp
 import reglages
 
 try:
@@ -30,13 +31,48 @@ with st.container(border=True):
         reglages.ecrire({"destinataires": adresses})
         st.success(f"{len(adresses)} destinataire(s) enregistré(s).")
 
-# --- Expediteur (lecture seule) --------------------------------------------
+# --- Expediteur et mot de passe d'application -------------------------------
 with st.container(border=True):
     st.subheader("Expéditeur")
-    st.markdown(f"Les alertes partent de **{valeurs.get('expediteur') or 'non renseigné'}**.")
-    st.caption("Non modifiable ici : l'adresse et son mot de passe d'application forment une "
-               "paire. Les changer séparément casserait tous les envois. Ils se modifient "
-               "ensemble dans alertes_secrets.json et les secrets GitHub.")
+    st.markdown(f"Les alertes partent de **{identifiants_smtp.expediteur() or 'non renseigné'}**.")
+    if identifiants_smtp.mot_de_passe_defini():
+        st.markdown("Mot de passe d'application : :green[enregistré].")
+    else:
+        st.markdown("Mot de passe d'application : :red[absent] — aucun email ne peut partir.")
+
+    # L'adresse et son mot de passe forment une paire : les changer separement
+    # casse tous les envois. Un seul formulaire, un seul enregistrement.
+    with st.form("identifiants_envoi"):
+        nouvel_expediteur = st.text_input(
+            "Adresse d'envoi", value=identifiants_smtp.expediteur(),
+            placeholder="envoi@exemple.fr", key="expediteur_envoi")
+        nouveau_mdp = st.text_input(
+            "Mot de passe d'application", type="password", key="mdp_application",
+            placeholder="laisser vide pour conserver celui déjà enregistré",
+            help="Mot de passe d'APPLICATION Google, pas le mot de passe du compte. "
+                 "Les espaces affichés par Google sont retirés automatiquement.")
+        if st.form_submit_button("Enregistrer les identifiants", type="primary"):
+            if not nouvel_expediteur.strip():
+                st.warning("Renseigner l'adresse d'envoi.")
+            elif not (identifiants_smtp.mot_de_passe_defini() or nouveau_mdp.strip()):
+                st.warning("Aucun mot de passe enregistré : en saisir un, "
+                           "sinon les envois échoueront.")
+            else:
+                identifiants_smtp.ecrire({"smtp_user": nouvel_expediteur,
+                                          "smtp_password": nouveau_mdp})
+                # L'adresse (non secrete) va aussi dans les reglages partages,
+                # ou les autres surfaces l'affichent. Le mot de passe, jamais.
+                reglages.ecrire({"expediteur": nouvel_expediteur.strip()})
+                st.success("Identifiants enregistrés.")
+                st.rerun()
+
+    st.caption("Le mot de passe est écrit dans `alertes_secrets.json`, fichier local "
+               "ignoré par git et exclu des livraisons. Il ne part jamais en ligne, "
+               "et n'est jamais réaffiché ici.")
+    if identifiants_smtp.mot_de_passe_defini() and st.button(
+            "Oublier le mot de passe", key="oublier_mdp"):
+        identifiants_smtp.oublier("smtp_password")
+        st.rerun()
 
 # --- Interrupteurs ---------------------------------------------------------
 with st.container(border=True):
