@@ -22,6 +22,29 @@
       "ville": "PARIS",
       "vu_le": "2026-07-23T15:02:18.426738+00:00"
     },
+    "MX-932788": {
+      "acheteur": "PREFECTURE DE POLICE DE PARIS",
+      "correction_humaine": null,
+      "date_limite": "2026-09-01",
+      "date_publication": "2026-07-29",
+      "departement": "75",
+      "lu": false,
+      "notifie_le": "2026-07-29T15:26:07.096996+00:00",
+      "objet": "Prestation de service social au profit du personnel de la Brigade de Sapeurs-Pompiers de Paris",
+      "priorite": "TIEDE",
+      "procedure": "MAPA",
+      "score": 45,
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/932788?orgAcronyme=a2l",
+      "ville": "PARIS",
+      "vu_le": "2026-07-29T15:26:05.238774+00:00"
+    },
     "MX-933515": {
       "acheteur": "Commune de Montfermeil",
       "correction_humaine": null,
@@ -1784,6 +1807,29 @@
       "ville": "Paris",
       "vu_le": "2026-07-24T14:19:22.111343+00:00"
     },
+    "MX-943301": {
+      "acheteur": "Ville de Paris",
+      "correction_humaine": null,
+      "date_limite": "2026-09-08",
+      "date_publication": "2026-07-29",
+      "departement": "75",
+      "lu": false,
+      "notifie_le": "2026-07-29T15:26:09.227089+00:00",
+      "objet": "Accord cadre à bons de commande de formations SST dans le cadre de la prévention des risques liés aux Troubles Musculo Squelettiques",
+      "priorite": "TIEDE",
+      "procedure": "MAPA",
+      "score": 45,
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/943301?orgAcronyme=r8t",
+      "ville": "Paris",
+      "vu_le": "2026-07-29T15:26:05.241605+00:00"
+    },
     "MX-943339": {
       "acheteur": "Mairie de Villejuif",
       "correction_humaine": null,
@@ -2334,6 +2380,29 @@
       "ville": "BOIS-COLOMBES",
       "vu_le": "2026-07-27T09:30:05.098134+00:00"
     },
+    "MX-944289": {
+      "acheteur": "Commune de Pontault-Combault",
+      "correction_humaine": null,
+      "date_limite": "2026-09-14",
+      "date_publication": "2026-07-29",
+      "departement": "77",
+      "lu": false,
+      "notifie_le": "2026-07-29T15:26:08.351916+00:00",
+      "objet": "Formations",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 30,
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944289?orgAcronyme=g8e",
+      "ville": "Pontault-Combault",
+      "vu_le": "2026-07-29T15:26:05.240250+00:00"
+    },
     "MX-944299": {
       "acheteur": "Ville de Boulogne-Billancourt",
       "correction_humaine": null,
@@ -2406,6 +2475,6 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-07-29T13:02:53.767368+00:00",
+  "maj_le": "2026-07-29T15:26:09.227368+00:00",
   "version": 1
 }
