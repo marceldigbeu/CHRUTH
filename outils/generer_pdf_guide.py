@@ -1,4 +1,4 @@
-"""Regenere le PDF du guide a partir de sa version HTML de reference.
+"""Produit le PDF d'un guide, depuis sa version HTML ou Markdown.
 
 Le PDF et le HTML sont deux vues du meme document, et jusqu'ici seul le HTML
 etait tenu a jour : le PDF livre au client decrivait une application qui avait
@@ -9,11 +9,15 @@ Deux moteurs, dans cet ordre :
      `@media print` et `@page A4` deja ecrites dans la feuille de style ;
   2. PyMuPDF a defaut, qui rend un PDF correct mais ignore ces regles.
 
-Usage :  python outils/generer_pdf_guide.py [source.html] [cible.pdf]
+Une source Markdown est d'abord habillee de la feuille de style du guide de
+reference, pour que tous les documents livres se ressemblent.
+
+Usage :  python outils/generer_pdf_guide.py [source.html|.md] [cible.pdf]
 """
 from __future__ import annotations
 
 import os
+import re
 import shutil
 import subprocess
 import sys
@@ -44,6 +48,35 @@ def trouver_navigateur() -> str | None:
     return None
 
 
+def _style_de_reference() -> str:
+    """Feuille de style du guide HTML, reprise telle quelle.
+
+    On ne recopie pas le CSS ici : deux copies divergeraient, et les documents
+    livres cesseraient de se ressembler apres la premiere retouche.
+    """
+    if not SOURCE_DEFAUT.is_file():
+        return ""
+    texte = SOURCE_DEFAUT.read_text(encoding="utf-8")
+    trouve = re.search(r"<style>.*?</style>", texte, re.S)
+    return trouve.group(0) if trouve else ""
+
+
+def markdown_vers_html(source: Path, cible: Path) -> Path:
+    """Habille un Markdown de la mise en forme des guides et l'ecrit en HTML."""
+    import markdown
+
+    corps = markdown.markdown(
+        source.read_text(encoding="utf-8"),
+        extensions=["tables", "fenced_code", "toc", "sane_lists"])
+    titre = source.stem.replace("_", " ").title()
+    cible.write_text(
+        '<!DOCTYPE html>\n<html lang="fr"><head><meta charset="utf-8">'
+        f"<title>{titre}</title>{_style_de_reference()}</head>"
+        f'<body><div class="page">{corps}</div></body></html>',
+        encoding="utf-8")
+    return cible
+
+
 def _via_navigateur(source: Path, cible: Path, navigateur: str) -> bool:
     """Impression sans interface. Renvoie False si le navigateur n'a rien produit."""
     # Profil jetable : sans lui, une instance de Chrome deja ouverte capte la
@@ -53,7 +86,10 @@ def _via_navigateur(source: Path, cible: Path, navigateur: str) -> bool:
             navigateur, "--headless", "--disable-gpu", "--no-sandbox",
             f"--user-data-dir={profil}",
             "--no-pdf-header-footer",
-            f"--print-to-pdf={cible}",
+            # Chemin absolu : le navigateur ecrit sinon dans SON dossier courant,
+            # le controle plus bas ne trouve rien, et on retombe en silence sur
+            # le moteur de repli — qui ignore la mise en page d'impression.
+            f"--print-to-pdf={cible.resolve()}",
             source.resolve().as_uri(),
         ]
         try:
@@ -90,12 +126,21 @@ def generer(source: Path = SOURCE_DEFAUT, cible: Path = CIBLE_DEFAUT) -> tuple[b
     if not source.is_file():
         return False, f"source introuvable : {source}"
 
+    temporaire = None
+    if source.suffix.lower() in (".md", ".markdown"):
+        temporaire = source.with_suffix(".rendu.html")
+        source = markdown_vers_html(source, temporaire)
+
     navigateur = trouver_navigateur()
-    if navigateur and _via_navigateur(source, cible, navigateur):
-        return True, Path(navigateur).stem
-    if _via_pymupdf(source, cible):
-        return True, "pymupdf (mise en page print ignoree)"
-    return False, "aucun moteur disponible"
+    try:
+        if navigateur and _via_navigateur(source, cible, navigateur):
+            return True, Path(navigateur).stem
+        if _via_pymupdf(source, cible):
+            return True, "pymupdf (mise en page print ignoree)"
+        return False, "aucun moteur disponible"
+    finally:
+        if temporaire is not None and temporaire.is_file():
+            temporaire.unlink()
 
 
 def main(argv: list[str]) -> int:
