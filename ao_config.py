@@ -306,13 +306,28 @@ def set_notifications(actif: bool, flag_file: Path | None = None) -> None:
         "ON" if actif else "OFF", encoding="utf-8")
 
 
-def collecte_active(flag_file: Path | None = None) -> bool:
-    """True si la collecte reseau est activee. Defaut : active si le fichier manque."""
+def _drapeau_collecte(flag_file: Path | None = None) -> bool:
+    """Etat lu dans le drapeau local seul. Active si le fichier manque."""
     try:
         return Path(flag_file or COLLECTE_ACTIVE_FILE).read_text(
             encoding="utf-8").strip().upper() != "OFF"
     except FileNotFoundError:
         return True
+
+
+def collecte_active(flag_file: Path | None = None) -> bool:
+    """True si la collecte reseau est activee.
+
+    Meme hierarchie que pour les notifications : les reglages partages font
+    autorite, le drapeau local sert de repli. Sans cela, couper la collecte
+    depuis l'application laissait la mise a jour hebdomadaire et
+    `ao_alertes_run` continuer d'interroger le reseau.
+    """
+    try:
+        import reglages
+        return bool(reglages.lire().get("collecte", True))
+    except Exception:  # noqa: BLE001 — hors ligne ou etat illisible
+        return _drapeau_collecte(flag_file)
 
 
 def set_collecte(actif: bool, flag_file: Path | None = None) -> None:

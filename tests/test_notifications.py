@@ -1,5 +1,5 @@
 import ao_alertes
-from ao_config import (_drapeau_notifications, collecte_active, set_collecte,
+from ao_config import (_drapeau_collecte, _drapeau_notifications, set_collecte,
                        set_notifications)
 from ao_export_excel import vba_module_text
 
@@ -29,15 +29,15 @@ def test_off_insensible_casse_et_espaces(tmp_path):
 
 
 def test_collecte_defaut_actif_si_fichier_absent(tmp_path):
-    assert collecte_active(tmp_path / "absent.flag") is True
+    assert _drapeau_collecte(tmp_path / "absent.flag") is True
 
 
 def test_collecte_set_off_puis_on(tmp_path):
     flag = tmp_path / "collecte_active.flag"
     set_collecte(False, flag)
-    assert collecte_active(flag) is False
+    assert _drapeau_collecte(flag) is False
     set_collecte(True, flag)
-    assert collecte_active(flag) is True
+    assert _drapeau_collecte(flag) is True
 
 
 def test_main_off_n_envoie_aucun_email(monkeypatch):
