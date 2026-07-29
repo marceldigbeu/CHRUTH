@@ -144,5 +144,6 @@ Supprimes car regenerables ou non utiles a l'entreprise : historique Git local, 
 - `output/LIRE_MOI_LIVRABLES.md` : correspondance missions -> livrables.
 - `docs/MISSION_CHRUTH.md` : couverture des missions de la fiche de poste.
 - `docs/GUIDE_CONNEXION.md` : activer la page de connexion.
+- `docs/GUIDE_PUBLICATION.md` : quoi publier, et ce qu'il faut vérifier avant.
 - `docs/GUIDE_CHANGER_LES_REGLAGES.md` : ou se changent les reglages.
 - `prompts/PROMPTS_CHRUTH.md` : prompts et logique IA.

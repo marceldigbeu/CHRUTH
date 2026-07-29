@@ -400,6 +400,7 @@ python outils\set_notifications.py ON</pre>
 <li>En cas de doute, revoquer la cle IA ou le mot de passe d'application Gmail, puis en creer un nouveau.</li>
 <li><code>.streamlit/secrets.toml</code> contient les identifiants de connexion et la liste des acces. Il reste local.</li>
 </ul>
+<div class="danger"><b>Avant de publier quoi que ce soit :</b> le depot suit encore 40 fichiers du dossier <code>output/</code>, dont la base de 132 502 prospects avec leurs adresses. La regle <code>output/</code> du <code>.gitignore</code> est arrivee apres leur mise sous suivi, et ne les en sort pas. Rendre le depot public les publierait immediatement, et l'historique les conserverait. Marche a suivre : <code>docs/GUIDE_PUBLICATION.md</code>.</div>
 
 <h2 id="connexion">14. Acces et connexion</h2>
 <p>L'application peut demander une connexion avant d'afficher quoi que ce soit. <b>Tant que rien n'est configure, elle demarre sans connexion</b> : c'est le mode poste local, et c'est normal.</p>
