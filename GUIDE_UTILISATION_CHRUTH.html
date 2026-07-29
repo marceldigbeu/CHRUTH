@@ -12,7 +12,7 @@
 <body>
 <div class="page">
 <h1>CHRUTH - Guide d'utilisation pas a pas</h1>
-<div class="subtitle">Version HTML de reference - mise a jour le 27/07/2026. Ce guide explique comment utiliser l'application CHRUTH, generer les livrables, les mettre a jour et automatiser les alertes sans coder.</div>
+<div class="subtitle">Version HTML de reference - mise a jour le 29/07/2026. Ce guide explique comment utiliser l'application CHRUTH, generer les livrables, les mettre a jour et automatiser les alertes sans coder.</div>
 
 <div class="toc"><b>Sommaire</b>
 <ol>
@@ -29,6 +29,7 @@
 <li><a href="#github">Mettre a jour GitHub ou creer un dossier portable</a></li>
 <li><a href="#depannage">Depannage</a></li>
 <li><a href="#securite">Securite</a></li>
+<li><a href="#connexion">Acces et connexion</a></li>
 </ol>
 </div>
 
@@ -47,8 +48,10 @@
 <ol>
 <li>Double-cliquer sur <code>LANCER_APP_CHRUTH.bat</code>.</li>
 <li>Le navigateur ouvre l'application. Si rien ne s'ouvre, saisir <code>http://localhost:8501</code>.</li>
-<li>Une seule adresse, huit pages dans le menu de gauche : <b>Veille appels d'offres</b>, <b>Collecte</b>, <b>Base de donnees</b>, <b>Carte</b>, <b>Messages et CRM</b>, <b>Pilotage</b>, <b>Reglages</b>, <b>Developpeur</b>.</li>
+<li>Une seule adresse, dix pages dans le menu de gauche : <b>Accueil</b>, <b>Veille appels d'offres</b>, <b>Collecte</b>, <b>Base de donnees</b>, <b>Acheteurs de la semaine</b>, <b>Carte</b>, <b>Messages et CRM</b>, <b>Pilotage</b>, <b>Reglages</b>, <b>Developpeur</b>.</li>
 </ol>
+<div class="note"><b>La page Accueil</b> ouvre l'application et repond a trois questions dans cet ordre : ce qui est urgent, si le systeme tourne, ou aller ensuite. Elle affiche quatre chiffres (appels d'offres en base, chauds, sous veille, juges pertinents), les <b>echeances les plus proches</b> avec un code couleur — rouge sous 7 jours, orange sous 15, vert au-dela — puis les <b>AO retenus par le tri</b> avec leur motif. Chaque ligne porte un lien direct vers l'avis d'origine.</div>
+<div class="small">Les deux blocs ne viennent pas de la meme source : les echeances sortent de la base collectee, les retenus sortent du jugement de la veille. Un marche peut etre juge pertinent sans etre encore en base — les fusionner masquerait ce decalage.</div>
 <div class="note"><b>Collecter depuis Streamlit :</b> ouvrir la page <b>Collecte</b>, choisir les appels d'offres, les prospects ou les deux, sélectionner le périmètre, fermer les classeurs Excel concernés puis confirmer. Le journal s'actualise automatiquement toutes les trois secondes.</div>
 <div class="note"><b>Donnees integrees :</b> la page <b>Base de donnees</b> lit les appels d'offres dans <code>output/AO_CHRUTH.xlsm</code>, filtre les prospects depuis <code>output/prospects_enrichis.csv</code> et donne acces aux fichiers importants. La page <b>Carte</b> affiche directement <code>output/Carte_Prospects_CHRUTH.html</code>.</div>
 <div class="warn"><b>Mode developpeur :</b> cette page est desactivee par defaut. Apres activation, elle montre les feuilles du classeur AO, permet de l'ouvrir dans Excel et de lancer <code>ao_weekly_update.py</code>. Fermer Excel avant la mise a jour : si le classeur est verrouille, le bouton reste bloque pour proteger le fichier.</div>
@@ -146,6 +149,17 @@ python CHRUTH_PIPELINE_UNIQUE.py</pre>
 </ol>
 
 <h2 id="ao">6. Mettre a jour les appels d'offres et les alertes</h2>
+
+<h3>Trier avec la jauge de score</h3>
+<p>Dans la page <b>Veille appels d'offres</b>, la barre de gauche contient une jauge <b>Score minimum</b> et un choix <b>Classer par</b>.</p>
+<ol>
+<li>Deplacer la jauge pour ne garder que les marches au-dessus d'un score.</li>
+<li>Choisir <b>Score decroissant</b> pour placer les mieux notes en tete, ou <b>Fraicheur</b> pour les plus recemment publies.</li>
+<li>La ligne <b>Filtres actifs</b> sous les filtres rappelle ce qui est en place. Une liste courte s'explique la, pas par une base vide.</li>
+</ol>
+<div class="note"><b>Le score va desormais a la decimale</b> (par exemple 71,4 et non 71). Avant, il ne prenait que 17 valeurs possibles, toutes multiples de 5, et 21 marches se retrouvaient a egalite sur 65 : trier ne triait presque rien. Le bareme compte maintenant en continu le budget, le delai restant, la densite de termes metier et la completude du dossier. La jauge avance par pas de 0,5.</div>
+<div class="warn"><b>Effet sur les priorites :</b> le nouveau bareme est plus severe sur les delais courts. Les seuils restent CHAUD a 65 et TIEDE a 40, donc la liste des chauds s'est resserree. Un marche a echeance dans trois jours descend, ce qui est voulu : on ne repond pas serieusement en trois jours.</div>
+
 <h3>Mettre a jour les AO depuis Excel</h3>
 <ol>
 <li>Ouvrir <code>output/AO_CHRUTH.xlsm</code>.</li>
@@ -172,7 +186,18 @@ python CHRUTH_PIPELINE_UNIQUE.py</pre>
 <li>Excel lance <code>outils/sync_destinataires.py</code>.</li>
 <li>Le script met a jour <code>destinataires.txt</code> et le champ <code>destinataire</code> de <code>alertes_secrets.json</code>.</li>
 </ol>
-<div class="note">Ce bouton ne change pas le compte expediteur. Pour changer l'adresse qui envoie les emails, modifier l'onglet Email du cockpit ou les champs <code>smtp_user</code> et <code>smtp_password</code> dans <code>alertes_secrets.json</code>.</div>
+<div class="note">Ce bouton ne change pas le compte expediteur. Voir ci-dessous pour l'adresse d'envoi.</div>
+
+<h3>Changer l'adresse d'envoi et le mot de passe d'application</h3>
+<ol>
+<li>Ouvrir l'application, page <b>Reglages</b>, bloc <b>Expediteur</b>.</li>
+<li>Saisir l'<b>adresse d'envoi</b> et le <b>mot de passe d'application</b>, puis <b>Enregistrer les identifiants</b>.</li>
+<li>La page indique si un mot de passe est enregistre, sans jamais le reafficher.</li>
+</ol>
+<div class="note">Les deux champs se saisissent <b>ensemble</b> : l'adresse et son mot de passe forment une paire, et les changer separement casse tous les envois. Laisser le champ mot de passe vide conserve celui deja enregistre — c'est le cas normal quand on ne modifie que l'adresse. Le bouton <b>Oublier le mot de passe</b> l'efface, geste a faire si on soupconne une fuite.</div>
+<div class="small">Il s'agit du mot de passe d'<b>application</b> Google, pas du mot de passe du compte. Les espaces que Google affiche (<code>abcd efgh ijkl mnop</code>) sont retires automatiquement : colles tels quels, ils font echouer l'envoi.</div>
+<div class="warn">Ce mot de passe est ecrit dans <code>alertes_secrets.json</code>, fichier local exclu de git et des livraisons. Il n'entre jamais dans les reglages partages, qui sont publies en ligne avec l'etat de la veille.</div>
+
 <h3>Activer ou couper les alertes</h3>
 <ol>
 <li>Utiliser le bouton ON/OFF dans <code>AO_CHRUTH.xlsm</code> si present.</li>
@@ -198,6 +223,25 @@ python CHRUTH_PIPELINE_UNIQUE.py</pre>
 <li>Enregistrer.</li>
 <li>Si une IA cloud est souhaitee, renseigner une cle dans <code>.env</code>. Sans cle, le systeme utilise des modeles de texte.</li>
 </ol>
+<h3>Rediger un message depuis l'application</h3>
+<ol>
+<li>Depuis la page <b>Veille appels d'offres</b>, cliquer sur <b>Rediger un message</b> sous le marche choisi.</li>
+<li>L'application bascule sur <b>Messages et CRM</b> avec ce marche <b>deja selectionne</b>.</li>
+<li>Le message redige lors de la collecte s'affiche immediatement. Le bouton <b>Regenerer le message</b> ne sert qu'a le refaire.</li>
+</ol>
+<div class="note">Si le marche vient de la veille mais n'est pas encore dans la base, la page le dit. Elle ne selectionne pas un autre marche en silence.</div>
+
+<h3>Maitriser la longueur et le cout</h3>
+<p>Dans la barre de gauche de <b>Messages et CRM</b> :</p>
+<ul>
+<li><b>Longueur maximale (tokens)</b> plafonne la reponse, de 256 a 2048. Compter environ 4 caracteres par token ; un email de prospection tient sous 800.</li>
+<li>Avant chaque redaction, trois compteurs affichent <b>tokens envoyes</b>, <b>plafond de la reponse</b> et <b>total au pire</b>.</li>
+<li><b>Recharger les donnees</b> relit la base sans relancer l'application, utile si la collecte a tourne pendant que l'app etait ouverte.</li>
+</ul>
+<div class="warn"><b>Pourquoi ce plafond :</b> sur une API facturee au token, rien d'autre n'arrete une reponse qui part en boucle. Le texte envoye est lui aussi tronque si necessaire, et la coupe est signalee par <code>[...]</code> — un texte coupe en silence produit une reponse etrange sans qu'on comprenne pourquoi.</div>
+<div class="note">Les compteurs rendent visible que la <b>fiche CHRUTH est recopiee dans chaque message</b> : une fiche a rallonge se paie a chaque appel d'offres, pas une seule fois.</div>
+<div class="small">Pendant la redaction, un encadre indique le fournisseur, le volume envoye et l'etape en cours. Avec un modele local, compter 2 a 3 minutes : c'est normal, et l'encadre evite de croire que rien ne se passe.</div>
+
 <h3>Message prospect depuis le cockpit</h3>
 <ol>
 <li>Lancer <code>COCKPIT_CHRUTH.bat</code>.</li>
@@ -329,7 +373,29 @@ python outils\set_notifications.py ON</pre>
 <li><code>destinataires.txt</code> contient les adresses qui recoivent les alertes. Il reste local.</li>
 <li><code>alertes_secrets.example.json</code> et <code>destinataires.example.txt</code> sont des exemples partageables.</li>
 <li>En cas de doute, revoquer la cle IA ou le mot de passe d'application Gmail, puis en creer un nouveau.</li>
+<li><code>.streamlit/secrets.toml</code> contient les identifiants de connexion et la liste des acces. Il reste local.</li>
 </ul>
+
+<h2 id="connexion">14. Acces et connexion</h2>
+<p>L'application peut demander une connexion avant d'afficher quoi que ce soit. <b>Tant que rien n'est configure, elle demarre sans connexion</b> : c'est le mode poste local, et c'est normal.</p>
+<div class="note"><b>Aucun mot de passe n'est stocke ni envoye par l'application.</b> L'identification est deleguee a Google, qui gere deja les mots de passe et la double authentification. L'application ne repond qu'a une question : cette adresse a-t-elle le droit d'entrer.</div>
+<h3>Ouvrir ou fermer un acces</h3>
+<ol>
+<li>Ouvrir <code>.streamlit/secrets.toml</code> (le modele est dans <code>.streamlit/secrets.toml.template</code>).</li>
+<li>Ajouter ou retirer une adresse dans la liste <code>emails</code> de la section <code>[acces]</code>.</li>
+<li>Relancer l'application.</li>
+</ol>
+<table>
+<tr><th>Objectif</th><th>Geste</th></tr>
+<tr><td>Ouvrir l'acces a quelqu'un</td><td>Ajouter son adresse dans <code>emails</code></td></tr>
+<tr><td>Retirer un acces</td><td>Retirer son adresse de <code>emails</code></td></tr>
+<tr><td>Ouvrir a tout compte Google</td><td>Laisser <code>emails = []</code></td></tr>
+<tr><td>Desactiver la connexion</td><td>Commenter toute la section <code>[auth]</code></td></tr>
+<tr><td>Deconnecter tout le monde</td><td>Changer <code>cookie_secret</code></td></tr>
+</table>
+<div class="warn">La liste des acces vit <b>hors de l'application</b>, dans un fichier que seul l'administrateur peut modifier. Un droit d'acces modifiable depuis l'application protegee ne protegerait rien.</div>
+<p>Mise en service complete, avec la creation de l'identifiant Google : <code>docs/GUIDE_CONNEXION.md</code>.</p>
+<div class="small">Une personne dont l'adresse n'est pas dans la liste voit un message qui nomme les administrateurs a contacter. Un refus sans recours transformerait un reglage a corriger en impasse.</div>
 <p class="small" style="margin-top:40px;border-top:1px solid var(--line);padding-top:12px">CHRUTH - Guide d'utilisation. Version HTML de reference. Documentation complementaire : <code>README.md</code>, <code>README_DEMARRAGE_NO_CODE.md</code>, <code>README_LIVRAISON.md</code>, <code>docs/MISSION_CHRUTH.md</code>, <code>prompts/PROMPTS_CHRUTH.md</code>.</p>
 </div>
 </body>
