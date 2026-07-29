@@ -30,6 +30,45 @@ _CLES = {
 }
 
 
+# --- Budget de tokens -------------------------------------------------------
+# Un email de prospection tient largement sous 1024 tokens. Le plafond n'est pas
+# la pour brider la redaction mais pour empecher qu'une reponse parte en boucle :
+# sur une API facturee au token, rien d'autre ne l'arrete.
+MAX_TOKENS_DEFAUT = 1024
+# Entree : la fiche CHRUTH et l'intitule du marche sont recopies dans le prompt.
+# Un texte de marche a rallonge ferait payer l'entree avant meme la reponse.
+MAX_TOKENS_ENTREE_DEFAUT = 6000
+# Environ quatre caracteres par token en francais. C'est un ordre de grandeur
+# assume : seul le fournisseur compte vraiment, et il ne le dit qu'apres coup.
+CARACTERES_PAR_TOKEN = 4
+MARQUE_TRONCATURE = "[...]"
+
+
+def estimer_tokens(texte: str | None) -> int:
+    """Estimation du cout en tokens d'un texte, pour l'afficher avant de payer."""
+    longueur = len(str(texte or ""))
+    if not longueur:
+        return 0
+    return max(1, round(longueur / CARACTERES_PAR_TOKEN))
+
+
+def tronquer(texte: str, max_tokens: int) -> str:
+    """Coupe un texte au plafond de tokens, en signalant la coupe.
+
+    Un plafond nul ou negatif n'est pas une demande de texte vide mais une
+    valeur de reglage aberrante : on retombe sur le plafond par defaut plutot
+    que d'envoyer un prompt sans contenu.
+    """
+    texte = str(texte or "")
+    if max_tokens <= 0:
+        max_tokens = MAX_TOKENS_ENTREE_DEFAUT
+    limite = max_tokens * CARACTERES_PAR_TOKEN
+    if len(texte) <= limite:
+        return texte
+    garde = max(0, limite - len(MARQUE_TRONCATURE) - 1)
+    return texte[:garde].rstrip() + " " + MARQUE_TRONCATURE
+
+
 def _provider() -> str:
     return os.environ.get("CHRUTH_LLM_PROVIDER", DEFAULT_PROVIDER).strip().lower()
 
@@ -86,39 +125,51 @@ def moteur_auto() -> str | None:
 
 
 def generer(prompt: str, system: str = "", provider: str | None = None,
-            model: str | None = None, timeout: int = 120, temperature: float = 0.3) -> str:
+            model: str | None = None, timeout: int = 120, temperature: float = 0.3,
+            max_tokens: int = MAX_TOKENS_DEFAUT,
+            max_tokens_entree: int = MAX_TOKENS_ENTREE_DEFAUT) -> str:
+    """Genere un texte, entree tronquee et sortie bornee.
+
+    Les deux plafonds sont volontairement separes : l'entree depend de ce qu'on
+    recopie du marche et de la fiche, la sortie de la longueur de message qu'on
+    veut. Les confondre obligerait a rogner l'une pour allonger l'autre.
+    """
     provider = provider or _provider()
     model = model or _model(provider)
+    prompt = tronquer(prompt, max_tokens_entree)
     if provider == "ollama":
-        return _gen_ollama(prompt, system, model, timeout, temperature)
+        return _gen_ollama(prompt, system, model, timeout, temperature, max_tokens)
     if provider == "anthropic":
-        return _gen_anthropic(prompt, system, model, timeout, temperature)
+        return _gen_anthropic(prompt, system, model, timeout, temperature, max_tokens)
     if provider in ("mistral", "groq"):
-        return _gen_openai_like(prompt, system, model, timeout, temperature, provider)
+        return _gen_openai_like(prompt, system, model, timeout, temperature, provider, max_tokens)
     if provider == "gemini":
-        return _gen_gemini(prompt, system, model, timeout, temperature)
+        return _gen_gemini(prompt, system, model, timeout, temperature, max_tokens)
     raise ValueError(f"Fournisseur LLM inconnu : {provider}")
 
 
-def _gen_ollama(prompt: str, system: str, model: str, timeout: int, temperature: float) -> str:
+def _gen_ollama(prompt: str, system: str, model: str, timeout: int, temperature: float,
+                max_tokens: int = MAX_TOKENS_DEFAUT) -> str:
     payload = {"model": model, "prompt": prompt, "system": system, "stream": False,
-               "options": {"temperature": temperature}}
+               "options": {"temperature": temperature, "num_predict": max_tokens}}
     r = requests.post(_ollama_host() + "/api/generate", json=payload, timeout=timeout)
     r.raise_for_status()
     return str(r.json().get("response", "")).strip()
 
 
-def _gen_anthropic(prompt: str, system: str, model: str, timeout: int, temperature: float) -> str:
+def _gen_anthropic(prompt: str, system: str, model: str, timeout: int, temperature: float,
+                   max_tokens: int = MAX_TOKENS_DEFAUT) -> str:
     headers = {"x-api-key": os.environ.get("ANTHROPIC_API_KEY", ""),
                "anthropic-version": "2023-06-01", "content-type": "application/json"}
-    payload = {"model": model, "max_tokens": 1024, "system": system, "temperature": temperature,
+    payload = {"model": model, "max_tokens": max_tokens, "system": system, "temperature": temperature,
                "messages": [{"role": "user", "content": prompt}]}
     r = requests.post("https://api.anthropic.com/v1/messages", json=payload, headers=headers, timeout=timeout)
     r.raise_for_status()
     return "".join(b.get("text", "") for b in r.json().get("content", [])).strip()
 
 
-def _gen_gemini(prompt: str, system: str, model: str, timeout: int, temperature: float) -> str:
+def _gen_gemini(prompt: str, system: str, model: str, timeout: int, temperature: float,
+                max_tokens: int = MAX_TOKENS_DEFAUT) -> str:
     url = (
         "https://generativelanguage.googleapis.com/v1beta/models/"
         f"{model}:generateContent"
@@ -127,7 +178,7 @@ def _gen_gemini(prompt: str, system: str, model: str, timeout: int, temperature:
                "Content-Type": "application/json"}
     payload: dict = {
         "contents": [{"role": "user", "parts": [{"text": prompt}]}],
-        "generationConfig": {"temperature": temperature, "maxOutputTokens": 1024},
+        "generationConfig": {"temperature": temperature, "maxOutputTokens": max_tokens},
     }
     if system:
         payload["system_instruction"] = {"parts": [{"text": system}]}
@@ -141,14 +192,16 @@ def _gen_gemini(prompt: str, system: str, model: str, timeout: int, temperature:
 
 
 def _gen_openai_like(prompt: str, system: str, model: str, timeout: int,
-                     temperature: float, provider: str) -> str:
+                     temperature: float, provider: str,
+                     max_tokens: int = MAX_TOKENS_DEFAUT) -> str:
     url = {"mistral": "https://api.mistral.ai/v1/chat/completions",
            "groq": "https://api.groq.com/openai/v1/chat/completions"}[provider]
     headers = {"Authorization": f"Bearer {os.environ.get(_CLES[provider], '')}",
                "Content-Type": "application/json"}
     messages = ([{"role": "system", "content": system}] if system else []) + \
                [{"role": "user", "content": prompt}]
-    payload = {"model": model, "messages": messages, "temperature": temperature}
+    payload = {"model": model, "messages": messages, "temperature": temperature,
+               "max_tokens": max_tokens}
     r = requests.post(url, json=payload, headers=headers, timeout=timeout)
     r.raise_for_status()
     return str(r.json()["choices"][0]["message"]["content"]).strip()

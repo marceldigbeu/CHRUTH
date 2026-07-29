@@ -22,6 +22,7 @@ import streamlit as st
 
 import ao_messages
 import crm
+import liens_source
 import llm_client
 import prospect_messages as pm
 from ao_config import AO_DB_PATH
@@ -46,6 +47,16 @@ with st.sidebar:
     )
     modele = st.text_input("Modèle", value=llm_client.DEFAULT_MODELS.get(provider, ""))
     temperature = st.slider("Température", 0.0, 1.0, 0.2, 0.05)
+
+    # Plafond de sortie. Sur une API facturee au token, c'est le seul frein :
+    # rien d'autre n'empeche une reponse de partir en boucle.
+    max_tokens = st.slider("Longueur maximale (tokens)", 256, 2048,
+                           llm_client.MAX_TOKENS_DEFAUT, 128, key="max_tokens",
+                           help="Environ 4 caractères par token. Un email de "
+                                "prospection tient sous 800 tokens.")
+    st.caption(f"Soit environ {max_tokens * llm_client.CARACTERES_PAR_TOKEN:,} caractères"
+               .replace(",", " "))
+
     os.environ["CHRUTH_LLM_PROVIDER"] = provider
     if modele.strip():
         os.environ["CHRUTH_LLM_MODEL"] = modele.strip()
@@ -56,13 +67,31 @@ with st.sidebar:
         st.warning("Indisponible (Ollama éteint ou clé absente) : repli déterministe.")
     st.caption("Clés API : à mettre dans un fichier `.env` (voir `.env.template`).")
 
+    st.divider()
+    if st.button("Recharger les données", key="recharger",
+                 help="Relit la base. À utiliser si la collecte a tourné "
+                      "pendant que l'application était ouverte."):
+        st.cache_data.clear()
+        st.rerun()
+
 
 @st.cache_data(show_spinner=False)
 def charger_aos() -> pd.DataFrame:
+    """AO a demarcher : prioritaires ET non rejetes par le tri.
+
+    Le score seul ne suffit pas a decider qu'un marche nous concerne : il compte
+    des mots-cles, et une formation « lutte contre les discriminations » ou un
+    marche de paie en collectionne autant qu'un marche de nettoyage. Le verdict
+    d'`ao_pertinence` tranche, lui, sur le fond — sans ce filtre la liste s'ouvre
+    sur des marches qu'on ne repondra jamais. Les AO pas encore tries (verdict
+    vide) restent affiches : on cache ce qui est juge hors sujet, pas ce qui
+    n'a pas encore ete juge.
+    """
     with connect(AO_DB_PATH) as c:
         rows = c.execute(
             "SELECT * FROM ao_records WHERE priorite IN ('CHAUD','TIEDE') "
-            "ORDER BY CAST(score_chruth AS INTEGER) DESC"
+            "AND COALESCE(verdict_tri, '') <> 'REJETE' "
+            "ORDER BY CAST(score_chruth AS REAL) DESC"
         ).fetchall()
     return pd.DataFrame([dict(r) for r in rows])
 
@@ -86,7 +115,8 @@ def _zone_resultat(cle: str) -> None:
         src = msg.get("source", "")
         c_src = "violet" if src == "ia" else "gray"
         st.caption(f"Source : :{c_src}[**{src}**] "
-                   "(ia = rédigé par le modèle ; defaut = brouillon type)")
+                   "(ia = rédigé par le modèle ; base = déjà enregistré lors "
+                   "d'un passage précédent ; defaut = brouillon type)")
         st.text_area("Email (éditable)", value=msg.get("email", ""), height=260)
         st.text_area("Script d'appel", value=msg.get("script", ""), height=160)
         st.caption("Sélectionner le texte puis Ctrl+C pour copier.")
@@ -106,18 +136,72 @@ with tab_ao:
             f"[{r.priorite}] {str(r.objet)[:80]} — {r.acheteur}"
             for r in aos.itertuples()
         ]
+        # Marche arrive depuis la page Veille : on le presente deja selectionne.
+        # Sans cela il faut le retrouver a la main dans une liste de 85 lignes.
+        defaut = 0
+        demande = st.session_state.pop("ao_a_rediger", None)
+        if demande is not None:
+            positions = [i for i, v in enumerate(aos["id_ao"]) if str(v) == str(demande)]
+            if positions:
+                defaut = positions[0]
+            else:
+                st.warning(f"Le marché {demande} vient de la veille mais n'est pas "
+                           "encore dans la base : lance une collecte pour l'y faire entrer.")
+
         idx = st.selectbox("Choisis un appel d'offres", range(len(libelles)),
-                           format_func=lambda i: libelles[i])
+                           index=defaut, format_func=lambda i: libelles[i])
         ao = aos.iloc[idx].to_dict()
         with st.expander("Détails de l'AO"):
             st.write({k: ao.get(k) for k in
                       ("objet", "acheteur", "ville", "date_limite",
                        "budget_annuel_eur", "secteur", "categorie")})
-        if st.button("Générer le message", key="gen_ao", type="primary"):
-            with st.spinner("Génération en cours…"):
-                msg = ao_messages.generer_message_ao(ao, temperature=temperature)
-            _memoriser(msg, "ao")
-        _zone_resultat("ao")
+
+        # On ecrit a un acheteur a partir d'un avis : pouvoir le relire avant
+        # d'envoyer evite les messages qui citent de travers l'objet du marche.
+        source = liens_source.premiere_source(ao)
+        if source:
+            st.markdown(f"[Ouvrir l'avis d'origine]({source})")
+
+        # Ce que coutera la redaction, avant de la lancer : sur une API facturee
+        # au token, on ne veut pas decouvrir le montant apres coup.
+        cout = ao_messages.cout_estime(ao, max_tokens=max_tokens)
+        c1, c2, c3 = st.columns(3)
+        c1.metric("Tokens envoyés", f"{cout['entree']:,}".replace(",", " "))
+        c2.metric("Réponse (plafond)", f"{cout['sortie_max']:,}".replace(",", " "))
+        c3.metric("Total au pire", f"{cout['total_max']:,}".replace(",", " "))
+        st.caption("Estimation à environ 4 caractères par token. Le décompte exact "
+                   "reste celui du fournisseur.")
+
+        # Une cle par AO : partager "msg_ao" ferait s'afficher le message du
+        # marche precedent des qu'on change de ligne dans la liste.
+        cle = f"ao_{ao.get('id_ao')}"
+        if st.button("Regénérer le message", key="gen_ao", type="primary"):
+            # `st.status` plutot qu'un spinner : il nomme l'etape en cours et
+            # reste a l'ecran une fois fini. Sur trois minutes d'attente locale,
+            # un simple sablier laisse croire que rien ne se passe.
+            with st.status("Rédaction en cours…", expanded=True) as etat:
+                st.write(f"Fournisseur : **{provider}** · modèle : **{modele or 'défaut'}**")
+                st.write(f"Envoi d'environ **{cout['entree']} tokens**, "
+                         f"réponse plafonnée à **{max_tokens}**.")
+                if provider == "ollama":
+                    st.write("Modèle local : compter 2 à 3 minutes.")
+                msg = ao_messages.generer_message_ao(ao, temperature=temperature,
+                                                     max_tokens=max_tokens)
+                origine = msg.get("source", "")
+                etat.update(label=f"Message rédigé (source : {origine})", state="complete",
+                            expanded=False)
+            _memoriser(msg, cle)
+
+        # Le message redige lors de la collecte est deja en base : on l'affiche
+        # sans rien recalculer. Regenerer prend plusieurs minutes sur un modele
+        # local — attendre ce delai pour relire un texte deja ecrit n'a pas de sens.
+        if not st.session_state.get(f"msg_{cle}"):
+            existant = str(ao.get("proposition_message") or "").strip()
+            if existant:
+                _memoriser({"email": existant,
+                            "script": str(ao.get("script_appel") or ""),
+                            "source": "base"}, cle)
+        _zone_resultat(cle)
 
 # --- Onglet Prospects -------------------------------------------------------
 with tab_prospects:
@@ -176,9 +260,16 @@ with tab_crm:
 
     df_crm = crm.charger()
     k = crm.kpis(df_crm)
+    if not k["nb_total"]:
+        # Quatre zeros sans explication se lisent comme une panne. On dit d'ou ils
+        # viennent : ce sont des compteurs vides, pas un calcul qui a echoue.
+        st.info("Aucun suivi commercial enregistré pour l'instant : les indicateurs "
+                "ci-dessous restent donc à zéro. Ils se calculent au fil des entrées "
+                "saisies dans le formulaire.")
     m1, m2, m3, m4 = st.columns(4)
     m1.metric("Entrées", k["nb_total"])
     m2.metric("Taux de conversion", f"{k['taux_conversion'] * 100:.0f}%")
     m3.metric("CA signé / an", f"{k['ca_signe_annuel_eur']:,.0f} €")
     m4.metric("Taux de churn", f"{k['taux_churn'] * 100:.0f}%")
-    st.dataframe(df_crm, width="stretch")
+    if k["nb_total"]:
+        st.dataframe(df_crm, width="stretch")

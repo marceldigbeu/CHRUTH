@@ -140,7 +140,26 @@ def _signer(data: dict, fiche: str) -> dict:
             "script": signature.apposer(str(data.get("script") or ""), fiche)}
 
 
-def generer_message_ao(record, client=None, temperature: float = 0.2, fiche=None) -> dict:
+def cout_estime(record, fiche=None, max_tokens: int | None = None) -> dict:
+    """Ce que coutera la redaction de cet AO, avant de la lancer.
+
+    L'entree est mesurable exactement — c'est le prompt qu'on s'apprete a
+    envoyer. La sortie ne l'est pas : on affiche donc son plafond, qui est le
+    pire cas, seul chiffre honnete tant que le modele n'a pas repondu.
+    """
+    import llm_client
+
+    if fiche is None:
+        from prospect_messages import fiche_chruth
+        fiche = fiche_chruth()
+    system, prompt = prompt_ao(record, fiche=fiche or "")
+    entree = llm_client.estimer_tokens(system) + llm_client.estimer_tokens(prompt)
+    sortie_max = llm_client.MAX_TOKENS_DEFAUT if max_tokens is None else max_tokens
+    return {"entree": entree, "sortie_max": sortie_max, "total_max": entree + sortie_max}
+
+
+def generer_message_ao(record, client=None, temperature: float = 0.2, fiche=None,
+                       max_tokens: int | None = None) -> dict:
     if client is None:
         import llm_client as client
     if fiche is None:
@@ -161,8 +180,12 @@ def generer_message_ao(record, client=None, temperature: float = 0.2, fiche=None
             system, prompt = prompt_ao(record, fiche=fiche or "")
             # cloud rapide (60s) ; Ollama à froid peut dépasser (300s)
             timeout = 300 if provider == "ollama" else 60
+            # Plafond de sortie : sans lui, une API facturee au token n'a aucune
+            # borne. `None` laisse la valeur par defaut du client.
+            options = {} if max_tokens is None else {"max_tokens": max_tokens}
             data = _parser_reponse(client.generer(
-                prompt, system, provider=provider, temperature=temperature, timeout=timeout))
+                prompt, system, provider=provider, temperature=temperature,
+                timeout=timeout, **options))
             if data:
                 return _signer({**data, "source": "ia"}, fiche or "")
         except Exception:
