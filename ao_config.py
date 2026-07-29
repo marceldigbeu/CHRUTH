@@ -266,8 +266,8 @@ COLLECTE_ACTIVE_FILE = BASE_DIR / "collecte_active.flag"
 # rediriger ALERTE_ACTIVE_FILE reste sans effet, et la suite de tests eteint pour
 # de bon les notifications du poste en ecrivant les vrais drapeaux.
 
-def notifications_actives(flag_file: Path | None = None) -> bool:
-    """True si les alertes email sont activees. Defaut : actives si le fichier manque."""
+def _drapeau_notifications(flag_file: Path | None = None) -> bool:
+    """Etat lu dans le drapeau local seul. Actives si le fichier manque."""
     try:
         return Path(flag_file or ALERTE_ACTIVE_FILE).read_text(
             encoding="utf-8").strip().upper() != "OFF"
@@ -275,8 +275,33 @@ def notifications_actives(flag_file: Path | None = None) -> bool:
         return True
 
 
+def notifications_actives(flag_file: Path | None = None) -> bool:
+    """True si les alertes email sont activees.
+
+    Les reglages partages font autorite, le drapeau local ne sert que de repli.
+    Sans cette hierarchie, deux interrupteurs coexistaient pour la meme
+    question : le classeur et le cockpit pilotaient le drapeau, tandis que
+    `ao_alertes` — qui decide de l'envoi reel — lisait les reglages. Couper les
+    alertes depuis Excel ne les coupait donc pas, et le classeur affichait OFF
+    pendant que les emails continuaient de partir.
+
+    L'import est fait ici et non en tete de module : `reglages` importe
+    `ao_config`, et l'inverse en tete creerait un cycle.
+    """
+    try:
+        import reglages
+        return bool(reglages.lire().get("notifications", True))
+    except Exception:  # noqa: BLE001 — hors ligne ou etat illisible
+        return _drapeau_notifications(flag_file)
+
+
 def set_notifications(actif: bool, flag_file: Path | None = None) -> None:
-    """Persiste l'etat ON/OFF des alertes email."""
+    """Persiste l'etat ON/OFF dans le drapeau local.
+
+    N'ecrit pas les reglages partages : `outils/set_notifications.appliquer`
+    s'en charge deja, et le faire ici aussi produirait deux ecritures pour un
+    seul clic.
+    """
     Path(flag_file or ALERTE_ACTIVE_FILE).write_text(
         "ON" if actif else "OFF", encoding="utf-8")
 
