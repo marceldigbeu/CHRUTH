@@ -16,6 +16,7 @@ Usage :  python outils/generer_plateforme_html.py [--verifier]
 from __future__ import annotations
 
 import sys
+import re
 from datetime import datetime
 from pathlib import Path
 
@@ -41,13 +42,16 @@ def _acheteurs_de_la_semaine() -> list[dict]:
 
 
 def _horodatage(html: str) -> str:
-    """Inscrit la date de generation dans le sous-titre du fichier."""
-    import re
+    """Inscrit la date de generation dans une variable JavaScript dediee.
+
+    Surtout pas dans le HTML des fonctions de rendu : leurs balises vivent a
+    l'interieur de litteraux de chaine JavaScript, et y glisser un retour a la
+    ligne rompt la chaine — le script entier cesse alors de s'executer et la
+    page s'affiche vide. C'est arrive.
+    """
     marque = datetime.now().strftime("%d/%m/%Y à %H:%M")
-    nouveau = f"Données au {marque}"
-    if "Données au " in html:
-        return re.sub(r"Données au [^<\"']*", nouveau, html, count=1)
-    return html.replace("</h1>", f"</h1>\n<p class=\"aide\">{nouveau}</p>", 1)
+    return re.sub(r'var GENERE_LE = "[^"]*";',
+                  f'var GENERE_LE = "{marque}";', html, count=1)
 
 
 def generer(fichier: Path = FICHIER) -> dict:
