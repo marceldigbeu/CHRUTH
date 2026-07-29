@@ -662,7 +662,7 @@ class App(tk.Tk):
             with connect(AO_DB_PATH) as conn:
                 rows = conn.execute(
                     "SELECT * FROM ao_records WHERE priorite IN ('CHAUD','TIEDE') "
-                    "ORDER BY CAST(score_chruth AS INTEGER) DESC LIMIT 200"
+                    "ORDER BY CAST(score_chruth AS REAL) DESC LIMIT 200"
                 ).fetchall()
             records = [dict(row) for row in rows]
             if not records:
