@@ -48,3 +48,6 @@ etat/
 
 # Cache local des reglages : la source de verite est la branche ao-state.
 reglages_cache.json
+
+# Secrets Streamlit : identifiants OAuth et liste des acces (jamais commiter)
+.streamlit/secrets.toml
