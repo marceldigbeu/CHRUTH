@@ -392,7 +392,10 @@
   }
 
   // Messages et CRM
-  var msgSel = AOS[0].id;
+  // Base vide : le miroir livre sans donnees est un modele, et il doit rester
+  // consultable. Lire AOS[0] sans garde faisait echouer tout le script, donc
+  // la page entiere, avant meme le premier affichage.
+  var msgSel = AOS.length ? AOS[0].id : "";
   function renderMessages() {
     var h = '<div class="page actif"><p class="kicker">Rédaction &amp; suivi commercial</p><h1>Messages et CRM</h1>' +
       '<div class="section"><h2>Message pour un appel d\'offres</h2>' +

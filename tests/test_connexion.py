@@ -6,8 +6,8 @@ import pytest
 from connexion import (authentification_configuree, est_admin, est_autorise,
                        lire_acces, message_refus, normaliser)
 
-AUTORISES = ["collaboratrice@exemple.fr", "Marcel@Exemple.fr"]
-ADMINS = ["marcel@exemple.fr"]
+AUTORISES = ["collaboratrice@exemple.fr", "Responsable@Exemple.fr"]
+ADMINS = ["responsable@exemple.fr"]
 
 
 def test_une_adresse_de_la_liste_entre():
@@ -16,7 +16,7 @@ def test_une_adresse_de_la_liste_entre():
 
 def test_la_comparaison_ignore_la_casse_et_les_espaces():
     """Les fournisseurs d'identite ne renvoient pas tous la meme casse."""
-    assert est_autorise("  MARCEL@exemple.FR ", AUTORISES)
+    assert est_autorise("  RESPONSABLE@exemple.FR ", AUTORISES)
 
 
 def test_une_adresse_absente_de_la_liste_est_refusee():
@@ -42,14 +42,14 @@ def test_les_entrees_vides_de_la_liste_sont_ignorees():
 
 
 def test_l_admin_est_reconnu():
-    assert est_admin("marcel@exemple.fr", ADMINS)
-    assert est_admin("MARCEL@EXEMPLE.FR", ADMINS)
+    assert est_admin("responsable@exemple.fr", ADMINS)
+    assert est_admin("RESPONSABLE@EXEMPLE.FR", ADMINS)
 
 
 def test_sans_liste_d_admin_personne_n_est_admin():
     """L'inverse de l'acces : un droit d'administration par defaut serait
     accorde a tort."""
-    assert not est_admin("marcel@exemple.fr", [])
+    assert not est_admin("responsable@exemple.fr", [])
     assert not est_admin("", [])
 
 
@@ -93,7 +93,7 @@ def test_l_authentification_est_detectee_quand_elle_est_configuree():
 def test_le_refus_nomme_l_administrateur_a_contacter():
     message = message_refus("inconnu@ailleurs.fr", ADMINS)
     assert "inconnu@ailleurs.fr" in message
-    assert "marcel@exemple.fr" in message
+    assert "responsable@exemple.fr" in message
 
 
 def test_le_refus_reste_lisible_sans_administrateur_declare():
