@@ -81,3 +81,56 @@ def test_les_fonctions_recentes_sont_documentees(sujet):
     """Une fonction livree mais non documentee n'existe pas pour l'utilisateur."""
     guide = _sans_accents(GUIDE_HTML.read_text(encoding="utf-8")).lower()
     assert sujet in guide, f"sujet absent du guide : {sujet}"
+
+
+# --- Tous les guides PDF, pas seulement celui d'utilisation -----------------
+# La derive s'est produite deux fois : le PDF du guide d'utilisation, puis celui
+# du deploiement, qui annoncait encore huit pages apres la mise a jour de sa
+# source. Une verification manuelle ne suffit visiblement pas.
+
+PAIRES = [
+    ("GUIDE_UTILISATION_CHRUTH.html", "GUIDE_UTILISATION_CHRUTH.pdf"),
+    ("docs/DEPLOIEMENT_APP_VEILLE.md", "docs/GUIDE_DEPLOIEMENT.pdf"),
+    ("docs/GUIDE_CONNEXION.md", "docs/GUIDE_CONNEXION.pdf"),
+    ("docs/GUIDE_PUBLICATION.md", "docs/GUIDE_PUBLICATION.pdf"),
+    ("README_DEMARRAGE_NO_CODE.md", "docs/GUIDE_INSTALLATION.pdf"),
+]
+
+
+def _titres(chemin: Path) -> list[str]:
+    texte = chemin.read_text(encoding="utf-8")
+    if chemin.suffix == ".html":
+        return [re.sub(r"<[^>]+>", "", m).strip()
+                for m in re.findall(r"<h2[^>]*>.*?</h2>", texte, re.S)]
+    return [l.lstrip("# ").strip() for l in texte.splitlines()
+            if re.match(r"^#{1,2} \S", l)]
+
+
+@pytest.mark.parametrize("source,pdf", PAIRES, ids=[p[1] for p in PAIRES])
+def test_chaque_pdf_couvre_sa_source(source, pdf):
+    """Un PDF qui a perdu une section de sa source n'a pas ete regenere."""
+    chemin_source, chemin_pdf = RACINE / source, RACINE / pdf
+    assert chemin_source.is_file(), f"source absente : {source}"
+    assert chemin_pdf.is_file(), f"PDF absent : {pdf}"
+
+    fitz = pytest.importorskip("fitz", reason="PyMuPDF requis pour lire le PDF")
+    with fitz.open(chemin_pdf) as doc:
+        texte = _sans_accents("\n".join(p.get_text() for p in doc)).lower()
+
+    manquants = [t for t in _titres(chemin_source)
+                 if _sans_accents(t).lower() not in texte]
+    assert not manquants, (
+        f"sections absentes de {pdf} : {manquants}. "
+        f"Regenerer : python outils/generer_pdf_guide.py {source} {pdf}")
+
+
+@pytest.mark.parametrize("pdf", [p[1] for p in PAIRES])
+def test_aucun_pdf_ne_porte_de_nom_propre(pdf):
+    """Les guides sont destines a etre transmis : ils ne doivent identifier
+    personne, et ne pas contredire la documentation en vigueur."""
+    fitz = pytest.importorskip("fitz", reason="PyMuPDF requis pour lire le PDF")
+    with fitz.open(RACINE / pdf) as doc:
+        texte = "\n".join(p.get_text() for p in doc).lower()
+
+    for interdit in ("marceldigbeu", "digbeu", "huit pages"):
+        assert interdit not in texte, f"{pdf} contient encore « {interdit} »"
