@@ -150,6 +150,17 @@ python CHRUTH_PIPELINE_UNIQUE.py</pre>
 
 <h2 id="ao">6. Mettre a jour les appels d'offres et les alertes</h2>
 
+<h3>Piloter la veille</h3>
+<p>La page <b>Pilotage</b> repond a deux questions : qu'est-ce qui attend, et est-ce que la collecte fait son travail.</p>
+<ul>
+<li><b>Ce qui attend</b> : les echeances sous 7, 15 et 30 jours, et le nombre d'AO <b>en attente de tri</b>. Les paliers sont cumulatifs.</li>
+<li><b>Ce que la collecte a filtre</b> : au dernier passage, combien d'avis ont ete examines, combien retenus, et <b>pourquoi les autres ont ete ecartes</b>. Un motif qui gonfle anormalement signale un filtre a revoir plutot qu'un marche absent.</li>
+<li><b>Rythme des publications</b> : les AO par semaine. Un creux prolonge vient plus souvent d'une collecte arretee que d'un marche calme.</li>
+<li><b>Ou sont les marches</b> : repartition par priorite, par departement et par categorie.</li>
+<li><b>A reprendre a la main</b> : budgets a verifier, marches sans contact, AO non tries. Une ligne a zero ne s'affiche pas.</li>
+</ul>
+<div class="note">Cette page ne montre volontairement <b>pas</b> d'entonnoir commercial (contacts, rendez-vous, taux de transformation) : les colonnes de suivi sont vides tant que personne ne les remplit, et un bloc entierement a zero se lit comme une panne. Le suivi commercial se saisit dans l'onglet <b>CRM / Suivi</b> de la page Messages.</div>
+
 <h3>Trier avec la jauge de score</h3>
 <p>Dans la page <b>Veille appels d'offres</b>, la barre de gauche contient une jauge <b>Score minimum</b> et un choix <b>Classer par</b>.</p>
 <ol>
