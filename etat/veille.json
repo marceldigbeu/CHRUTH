@@ -927,28 +927,6 @@
       "ville": "CERGY-PONTOISE",
       "vu_le": "2026-07-23T15:02:18.432260+00:00"
     },
-    "MX-942040": {
-      "acheteur": "Etablissement public territorial Plaine Commune",
-      "correction_humaine": null,
-      "date_limite": "2026-07-29",
-      "date_publication": "2026-06-26",
-      "departement": "93",
-      "lu": false,
-      "notifie_le": null,
-      "objet": "Prestations de service de médecine professionnelle et préventive au bénéfice des agents de Plaine Commune",
-      "priorite": "FROID",
-      "procedure": "MAPA",
-      "score": 30,
-      "traitement": "nouveau",
-      "tri": {
-        "etage": "listes",
-        "motif": "exclusion metier : medecine professionnelle",
-        "verdict": "REJETE"
-      },
-      "url": "https://marches.maximilien.fr/entreprise/consultation/942040?orgAcronyme=p2q",
-      "ville": "Saint-Denis",
-      "vu_le": "2026-07-23T15:02:18.484661+00:00"
-    },
     "MX-942071": {
       "acheteur": "Commune de Saint-Clair-Sur-Epte",
       "correction_humaine": null,
@@ -2475,6 +2453,6 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-07-29T19:50:59.644923+00:00",
+  "maj_le": "2026-07-30T08:07:46.566741+00:00",
   "version": 1
 }
