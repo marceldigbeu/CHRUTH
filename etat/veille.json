@@ -2314,6 +2314,29 @@
       "ville": "CHATOU",
       "vu_le": "2026-07-24T12:13:09.325978+00:00"
     },
+    "MX-944157": {
+      "acheteur": "EPT PARIS OUEST LA DÉFENSE",
+      "correction_humaine": null,
+      "date_limite": "2026-09-30",
+      "date_publication": "2026-07-30",
+      "departement": "92",
+      "lu": false,
+      "notifie_le": "2026-07-30T16:21:02.184832+00:00",
+      "objet": "Marché de services d'assurance",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 20,
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944157?orgAcronyme=d7g",
+      "ville": "Nanterre",
+      "vu_le": "2026-07-30T16:21:00.743483+00:00"
+    },
     "MX-944197": {
       "acheteur": "Ville de Boulogne-Billancourt",
       "correction_humaine": null,
@@ -2453,6 +2476,6 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-07-30T14:39:34.634098+00:00",
+  "maj_le": "2026-07-30T16:21:02.185032+00:00",
   "version": 1
 }
