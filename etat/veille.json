@@ -2450,6 +2450,29 @@
       "ville": "Saint-Denis",
       "vu_le": "2026-07-29T11:00:50.471332+00:00"
     },
+    "MX-944391": {
+      "acheteur": "Mairie d'Arcueil",
+      "correction_humaine": null,
+      "date_limite": "2026-08-31",
+      "date_publication": "2026-07-31",
+      "departement": "94",
+      "lu": false,
+      "notifie_le": "2026-07-31T15:35:37.613367+00:00",
+      "objet": "Organisation et mise en œuvre des séjours de vacances et classes de découverte pour les enfants et les jeunes de la ville d’Arcueil.",
+      "priorite": "TIEDE",
+      "procedure": "MAPA",
+      "score": 45,
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944391?orgAcronyme=d5k",
+      "ville": "Arcueil",
+      "vu_le": "2026-07-31T15:35:35.463248+00:00"
+    },
     "MX-944400": {
       "acheteur": "GHT GPNE",
       "correction_humaine": null,
@@ -2472,10 +2495,33 @@
       "url": "https://marches.maximilien.fr/entreprise/consultation/944400?orgAcronyme=a1j",
       "ville": "Montfermeil",
       "vu_le": "2026-07-29T11:00:50.472634+00:00"
+    },
+    "MX-944490": {
+      "acheteur": "Commune de  CHATOU",
+      "correction_humaine": null,
+      "date_limite": "2026-10-14",
+      "date_publication": "2026-07-31",
+      "departement": "78",
+      "lu": false,
+      "notifie_le": "2026-07-31T15:35:39.130630+00:00",
+      "objet": "PRESTATIONS DE SERVICE D'ASSURANCE POUR LA COMMUNE DE CHATOU",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 30,
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944490?orgAcronyme=a1b",
+      "ville": "CHATOU",
+      "vu_le": "2026-07-31T15:35:35.464578+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-07-31T13:12:03.026944+00:00",
+  "maj_le": "2026-07-31T15:35:39.130831+00:00",
   "version": 1
 }
