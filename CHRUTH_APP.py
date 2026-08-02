@@ -8,7 +8,6 @@ import theme_chruth
 
 st.set_page_config(
     page_title="CHRUTH · Veille marchés publics",
-    page_icon="🟢",
     layout="wide",
     initial_sidebar_state="expanded",
 )
@@ -53,16 +52,16 @@ if not garde():
 theme_chruth.appliquer()
 
 PAGES = [
-    st.Page("pages_accueil.py", title="Accueil", icon="🏠", default=True),
-    st.Page("app_veille.py", title="Veille appels d'offres", icon="📡"),
-    st.Page("pages_collecte.py", title="Collecte", icon="🔄"),
-    st.Page("pages_donnees.py", title="Base de données", icon="🗃️"),
-    st.Page("pages_acheteurs.py", title="Acheteurs de la semaine", icon="🏛️"),
-    st.Page("pages_carte.py", title="Carte", icon="🗺️"),
-    st.Page("app_messages.py", title="Messages et CRM", icon="✉️"),
-    st.Page("pages_pilotage.py", title="Pilotage", icon="📊"),
-    st.Page("pages_reglages.py", title="Réglages", icon="⚙️"),
-    st.Page("pages_developpeur.py", title="Développeur", icon="🛠️"),
+    st.Page("pages_accueil.py", title="Accueil", default=True),
+    st.Page("app_veille.py", title="Veille appels d'offres"),
+    st.Page("pages_collecte.py", title="Collecte"),
+    st.Page("pages_donnees.py", title="Base de données"),
+    st.Page("pages_acheteurs.py", title="Acheteurs de la semaine"),
+    st.Page("pages_carte.py", title="Carte"),
+    st.Page("app_messages.py", title="Messages et CRM"),
+    st.Page("pages_pilotage.py", title="Pilotage"),
+    st.Page("pages_reglages.py", title="Réglages"),
+    st.Page("pages_developpeur.py", title="Développeur"),
 ]
 
 st.navigation(PAGES).run()
