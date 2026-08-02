@@ -15,9 +15,11 @@ from pathlib import Path
 
 import streamlit as st
 
+import ao_db
 import ao_maximilien_veille
 import veille_depot
 import veille_etat
+import veille_sources
 from veille_etat import TRAITEMENTS, verdict_effectif
 
 LIBELLE_TRAITEMENT = {
@@ -54,8 +56,14 @@ except st.errors.StreamlitAPIException:
 # --- Etat ------------------------------------------------------------------
 
 def charger():
-    """Etat frais a chaque passage : la veille tourne toutes les 30 min en parallele."""
-    return veille_depot.lire()
+    """Fusionne l'état partagé et la base BOAMP produite dans Streamlit."""
+    etat, sha = veille_depot.lire()
+    try:
+        records = ao_db.fetch_records()
+    except Exception:  # la veille partagée reste utilisable si SQLite est indisponible
+        return etat, sha, 0
+    etat, ajoutes = veille_sources.fusionner_boamp(etat, records)
+    return etat, sha, ajoutes
 
 
 def mettre_a_jour() -> str:
@@ -88,7 +96,7 @@ def enregistrer(etat, sha, message: str) -> None:
         st.error(f"Enregistrement impossible : {exc}")
 
 
-etat, sha = charger()
+etat, sha, ao_boamp_ajoutes = charger()
 aos = etat.get("aos", {})
 
 
@@ -167,7 +175,10 @@ with st.sidebar:
         st.rerun()
 
     st.divider()
-    st.caption(f"Source : {veille_depot.source()}")
+    sources = [veille_depot.source()]
+    if ao_boamp_ajoutes:
+        sources.append(f"base BOAMP ({ao_boamp_ajoutes} ajoutés)")
+    st.caption("Sources : " + " + ".join(sources))
     if etat.get("maj_le"):
         st.caption(f"État mis à jour : {etat['maj_le'][:16].replace('T', ' ')}")
     st.caption(f"{len(aos)} AO dans l'état")
