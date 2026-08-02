@@ -84,6 +84,7 @@ def _capturer(monkeypatch, charge):
 
 def test_anthropic_recoit_le_plafond_demande(monkeypatch):
     monkeypatch.setenv("ANTHROPIC_API_KEY", "cle-de-test")
+    monkeypatch.setenv("CHRUTH_LLM_MODEL", "modele-test")
     vu = _capturer(monkeypatch, {"content": [{"text": "ok"}]})
     llm_client.generer("prompt", provider="anthropic", max_tokens=256)
     assert vu["payload"]["max_tokens"] == 256
@@ -115,6 +116,7 @@ def test_ollama_recoit_aussi_le_plafond(monkeypatch):
 
 def test_le_prompt_trop_long_est_tronque_avant_l_envoi(monkeypatch):
     monkeypatch.setenv("ANTHROPIC_API_KEY", "cle-de-test")
+    monkeypatch.setenv("CHRUTH_LLM_MODEL", "modele-test")
     vu = _capturer(monkeypatch, {"content": [{"text": "ok"}]})
     llm_client.generer("mot " * 20000, provider="anthropic", max_tokens_entree=200)
     envoye = vu["payload"]["messages"][0]["content"]
@@ -123,6 +125,7 @@ def test_le_prompt_trop_long_est_tronque_avant_l_envoi(monkeypatch):
 
 def test_sans_plafond_explicite_la_valeur_par_defaut_s_applique(monkeypatch):
     monkeypatch.setenv("ANTHROPIC_API_KEY", "cle-de-test")
+    monkeypatch.setenv("CHRUTH_LLM_MODEL", "modele-test")
     vu = _capturer(monkeypatch, {"content": [{"text": "ok"}]})
     llm_client.generer("prompt", provider="anthropic")
     assert vu["payload"]["max_tokens"] == llm_client.MAX_TOKENS_DEFAUT

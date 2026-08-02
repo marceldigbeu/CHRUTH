@@ -18,6 +18,8 @@ def test_disponible_cloud_selon_cle(monkeypatch):
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
     assert llm_client.llm_disponible() is False
     monkeypatch.setenv("ANTHROPIC_API_KEY", "x")
+    assert llm_client.llm_disponible() is False
+    monkeypatch.setenv("CHRUTH_LLM_MODEL", "modele-test")
     assert llm_client.llm_disponible() is True
 
 
