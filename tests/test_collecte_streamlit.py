@@ -18,6 +18,7 @@ def test_commande_ao_ne_retraite_pas_les_prospects_ni_la_finance(tmp_path):
     assert "--collect-ao" in commande
     assert "--skip-prospects" in commande
     assert "--skip-finance" in commande
+    assert "--leave-collecte-on" in commande
     assert commande[-2:] == ["--regions", "Île-de-France"]
 
 
