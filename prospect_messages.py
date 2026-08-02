@@ -29,14 +29,41 @@ def fiche_chruth(path: Path | str = FICHE_PATH) -> str:
     """Profil CHRUTH injecte dans les prompts (style SEKOIA _get_company_profile).
 
     Lit la fiche, retire les commentaires <!-- ... --> et les titres de section
-    restes vides. Renvoie "" si le fichier est absent ou ne contient aucun fait
-    rempli (=> comportement generique conserve).
+    restes vides. Renvoie "" si aucune source ne contient de fait rempli
+    (=> comportement generique conserve).
+
+    Les reglages partages priment sur le fichier. Sans cela, la fiche saisie
+    dans la page Reglages etait ecrite dans les reglages et relue depuis le
+    fichier : la remplir depuis l'application n'avait aucun effet, et les
+    messages partaient sans coordonnees ni signature.
+
+    Une fiche vide cote reglages n'est pas une decision mais l'etat par defaut :
+    on laisse alors le fichier parler, ce qui garde utilisable l'edition directe
+    de `config_chruth/fiche_chruth.md`.
     """
+    depuis_reglages = ""
     try:
-        brut = Path(path).read_text(encoding="utf-8")
+        import reglages
+        depuis_reglages = str(reglages.lire().get("fiche_chruth") or "")
+    except Exception:  # noqa: BLE001 — hors ligne : le fichier prend le relais
+        depuis_reglages = ""
+
+    # On juge la vacuite sur le contenu NETTOYE, pas sur la chaine brute : le
+    # gabarit livre fait 787 caracteres de titres et de commentaires, donc
+    # « non vide » au sens d'une chaine, alors qu'il ne porte aucun fait. Sans
+    # cette distinction, un gabarit stocke dans les reglages empeche a jamais
+    # le fichier de servir.
+    if _faits_de(depuis_reglages):
+        return _faits_de(depuis_reglages)
+    try:
+        return _faits_de(Path(path).read_text(encoding="utf-8"))
     except Exception:
         return ""
-    sans_com = re.sub(r"<!--.*?-->", "", brut, flags=re.DOTALL)
+
+
+def _faits_de(brut: str) -> str:
+    """Contenu utile d'une fiche : sans commentaires, sans section vide."""
+    sans_com = re.sub(r"<!--.*?-->", "", brut or "", flags=re.DOTALL)
     lignes = sans_com.splitlines()
     out: list[str] = []
     i = 0

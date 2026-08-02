@@ -94,10 +94,27 @@ aos = etat.get("aos", {})
 
 # --- Barre laterale : filtres ----------------------------------------------
 
+def score_de(entree: dict) -> float:
+    """Score de l'AO en nombre. 0 si absent ou illisible — un score manquant ne
+    doit pas faire disparaitre l'AO d'un filtre, seulement le placer en bas."""
+    try:
+        return float(entree.get("score") or 0)
+    except (TypeError, ValueError):
+        return 0.0
+
+
 with st.sidebar:
     st.header("Filtres")
     priorites_vues = sorted({str(a.get("priorite") or "?") for a in aos.values()})
     priorites = st.multiselect("Priorité", priorites_vues, default=[], key="priorites")
+
+    # La jauge : le score etant continu a la decimale, le pas de 0,5 separe
+    # reellement les AO — avec l'ancien bareme en paliers de 5, la deplacer
+    # d'un cran faisait disparaitre des dizaines de marches d'un coup.
+    score_min = st.slider("Score minimum", 0.0, 100.0, 0.0, 0.5, key="score_min",
+                          help="Ne garder que les AO au-dessus de ce score.")
+    classement = st.selectbox("Classer par", ["Fraîcheur", "Score décroissant"],
+                              key="classement")
 
     departements_vus = sorted({str(a.get("departement") or "--") for a in aos.values()})
     departements = st.multiselect("Département", departements_vus, default=[], key="departements")
@@ -119,6 +136,10 @@ with st.sidebar:
     actifs = []
     if priorites:
         actifs.append("priorité " + ", ".join(priorites))
+    if score_min > 0:
+        actifs.append(f"score ≥ {score_min:.1f}")
+    if classement != "Fraîcheur":
+        actifs.append("classé par score")
     if departements:
         actifs.append("dépt " + ", ".join(departements))
     if periode != "Tout":
@@ -181,6 +202,8 @@ def _garde(entree: dict) -> bool:
         return False
     if non_lus_seuls and entree.get("lu"):
         return False
+    if score_de(entree) < score_min:
+        return False
     if publie_apres is not None:
         publie = str(entree.get("date_publication") or "")
         # Date manquante : on garde. Comme pour le tri, le doute profite a l'AO —
@@ -203,7 +226,12 @@ def _fraicheur(entree: dict) -> tuple[str, str]:
 
 
 retenus = [(i, e) for i, e in aos.items() if _garde(e)]
-retenus.sort(key=lambda couple: _fraicheur(couple[1]), reverse=True)
+if classement == "Score décroissant":
+    # A score egal on retombe sur la fraicheur : deux marches equivalents se
+    # departagent par la date, jamais par l'ordre d'arrivee dans le fichier.
+    retenus.sort(key=lambda couple: (score_de(couple[1]), _fraicheur(couple[1])), reverse=True)
+else:
+    retenus.sort(key=lambda couple: _fraicheur(couple[1]), reverse=True)
 
 
 # --- Fil des AO -------------------------------------------------------------
@@ -235,7 +263,9 @@ for id_ao, entree in retenus:
         publie = entree.get("date_publication") or "date inconnue"
         prio = str(entree.get("priorite") or "")
         c_prio = COULEUR_PRIORITE.get(prio.upper(), "gray")
-        prio_txt = f":{c_prio}[{prio} {entree.get('score', '')}]".strip() if prio else ""
+        # Score a la decimale : c'est elle qui departage deux AO de meme priorite.
+        score_txt = f" {score_de(entree):.1f}" if entree.get("score") not in (None, "") else ""
+        prio_txt = f":{c_prio}[{prio}{score_txt}]".strip() if prio else ""
         ligne = (f"{entree.get('acheteur', '')} — {entree.get('ville', '')} "
                  f"({entree.get('departement') or '--'}) · publié le {publie} · limite "
                  f"{entree.get('date_limite') or 'non précisée'} · {prio_txt}")
@@ -248,6 +278,13 @@ for id_ao, entree in retenus:
 
         if entree.get("url"):
             st.markdown(f"[Ouvrir la consultation]({entree['url']})")
+
+        # Passerelle vers la redaction : on juge un marche ici, on l'ecrit
+        # ailleurs. Sans ce bouton il faut aller le retrouver a la main dans la
+        # liste de la page Messages.
+        if st.button("Rédiger un message", key=f"redaction_{id_ao}"):
+            st.session_state["ao_a_rediger"] = id_ao
+            st.switch_page("app_messages.py")
 
         colonnes = st.columns([1, 1, 1, 2])
         with colonnes[0]:

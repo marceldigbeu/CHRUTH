@@ -14,6 +14,15 @@ toutes les mêmes réglages, via `reglages.py`.
 **Gelé** veut dire : fonctionnel, maintenu, mais sans nouveauté. Toute fonction
 nouvelle arrive dans la plateforme Streamlit.
 
+## Prospection : passage aux « Acheteurs de la semaine » (2026-07-27)
+
+Depuis T9, la prospection passe par le cycle **« Acheteurs de la semaine »** dérivé
+des appels d'offres (AOs), avec mise à jour hebdomadaire chaque lundi 08:45.
+L'ancienne collecte « toutes entreprises IDF » reste dormante : sa carte 132k est
+conservée mais n'est plus régénérée. La tâche programmée `CHRUTH Prospects - hebdo
+(carte)` a été désactivée (non supprimée) et remplacée par `CHRUTH Acheteurs - hebdo`
+(voir `outils/installer_tache_acheteurs.ps1`).
+
 Un réglage changé dans n'importe laquelle est vu par toutes les autres : elles
 partagent `etat/veille.json` sur la branche `ao-state`, avec un cache local qui
 prend le relais si GitHub est injoignable.

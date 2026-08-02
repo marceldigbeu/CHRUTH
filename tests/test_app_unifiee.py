@@ -24,9 +24,21 @@ def etat_local(tmp_path, monkeypatch):
     return chemin
 
 
-def test_l_entree_unique_demarre_sur_la_veille(etat_local):
+def test_l_entree_unique_demarre_sur_l_accueil(etat_local, tmp_path, monkeypatch):
+    """L'app ouvrait sur la veille, qui est vide entre deux passages du veilleur.
+    L'accueil lit la base et a toujours de quoi s'afficher."""
+    monkeypatch.setenv("CHRUTH_AO_DB", str(tmp_path / "ao.sqlite"))
     at = AppTest.from_file(ENTREE, default_timeout=90)
     at.run()
+    assert not at.exception
+    assert "CHRUTH — veille marchés publics" in [t.value for t in at.title]
+
+
+def test_la_veille_reste_atteignable(etat_local, tmp_path, monkeypatch):
+    monkeypatch.setenv("CHRUTH_AO_DB", str(tmp_path / "ao.sqlite"))
+    at = AppTest.from_file(ENTREE, default_timeout=90)
+    at.run()
+    at.switch_page("app_veille.py").run()
     assert not at.exception
     assert "Veille appels d'offres" in [t.value for t in at.title]
 
@@ -42,7 +54,7 @@ def test_la_page_messages_est_atteignable(etat_local, tmp_path, monkeypatch):
 def test_toutes_les_pages_sont_declarees():
     """Une page oubliee ici devient une page inaccessible, sans erreur visible."""
     source = (RACINE / "CHRUTH_APP.py").read_text(encoding="utf-8")
-    for page in ("app_veille.py", "pages_collecte.py", "pages_donnees.py", "pages_carte.py", "app_messages.py",
+    for page in ("pages_accueil.py", "app_veille.py", "pages_collecte.py", "pages_donnees.py", "pages_acheteurs.py", "pages_carte.py", "app_messages.py",
                  "pages_pilotage.py", "pages_reglages.py", "pages_developpeur.py"):
         assert page in source, f"page non declaree dans la navigation : {page}"
 
@@ -67,3 +79,11 @@ def test_chaque_page_reste_lancable_seule(etat_local):
 def test_un_seul_lanceur_pour_l_utilisateur():
     lanceurs = sorted(p.name for p in RACINE.glob("LANCER_APP_*.bat"))
     assert lanceurs == ["LANCER_APP_CHRUTH.bat"], f"lanceurs en trop : {lanceurs}"
+
+
+def test_l_accueil_est_la_page_par_defaut():
+    """Ouvrir sur la veille exposait un premier ecran vide entre deux passages :
+    l'accueil, lui, s'appuie sur la base et a toujours quelque chose a montrer."""
+    source = (RACINE / "CHRUTH_APP.py").read_text(encoding="utf-8")
+    ligne_defaut = next(l for l in source.splitlines() if "default=True" in l)
+    assert "pages_accueil.py" in ligne_defaut

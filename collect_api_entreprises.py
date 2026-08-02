@@ -45,6 +45,31 @@ def fetch_page(naf: str, departement: str, page: int) -> dict | None:
             time.sleep(wait)
 
 
+def fetch_by_siret(siret: str) -> dict | None:
+    """Fiche etablissement via l'API Recherche Entreprises (recherche q=<siret>).
+
+    None si le SIRET n'a pas 14 chiffres, si l'API ne renvoie rien, ou si le
+    reseau echoue : l'appelant traite l'enrichissement en best-effort.
+    """
+    s = "".join(c for c in str(siret or "") if c.isdigit())
+    if len(s) != 14:
+        return None
+    params = {"q": s, "per_page": 1, "etat_administratif": "A"}
+    try:
+        resp = SESSION.get(API_BASE_URL, params=params, timeout=30)
+        resp.raise_for_status()
+        data = resp.json()
+    except requests.exceptions.RequestException:
+        return None
+    results = data.get("results") or []
+    if not results:
+        return None
+    fiches = extract_etablissements(results[0], "", "")
+    if not fiches:
+        return None
+    return next((f for f in fiches if str(f.get("siret")) == s), fiches[0])
+
+
 def best_effectif(et: dict, entreprise: dict) -> str:
     """L'effectif au niveau etablissement vaut souvent 'NN' (non renseigne).
     La vraie valeur est au niveau entreprise (unite legale). On prend le code

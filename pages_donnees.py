@@ -7,6 +7,7 @@ import pandas as pd
 import streamlit as st
 from openpyxl import load_workbook
 
+import liens_source
 import livrables_chruth as livrables
 
 try:
@@ -115,7 +116,13 @@ with tab_ao:
         m1.metric("Lignes affichees", len(table))
         m2.metric("Colonnes", len(table.columns))
         m3.metric("Onglet", onglet)
-        st.dataframe(table, width="stretch", height=520, hide_index=True)
+        # Les colonnes d'adresse deviennent cliquables : sans cela, remonter a
+        # l'avis d'origine imposait de copier l'URL a la main hors de l'app.
+        config = {c: st.column_config.LinkColumn(liens_source.libelle(c),
+                                                 display_text="Ouvrir")
+                  for c in liens_source.colonnes_de_lien(table.columns)}
+        st.dataframe(table, width="stretch", height=520, hide_index=True,
+                     column_config=config)
         st.download_button("Exporter la vue en CSV", table.to_csv(index=False).encode("utf-8-sig"),
                            file_name=f"{onglet}.csv", mime="text/csv")
 

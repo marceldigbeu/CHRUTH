@@ -18,11 +18,32 @@ Pour une personne no-code, ouvrir l'application CHRUTH :
 LANCER_APP_CHRUTH.bat
 ```
 
-Une seule adresse, huit pages : veille appels d'offres, collecte, base de donnees,
-carte, messages et CRM, pilotage, reglages et mode developpeur lie a `AO_CHRUTH.xlsm`.
-La page **Collecte** lance les AO, les prospects ou les deux et affiche le journal en direct.
-C'est la surface principale, et la seule consultable en ligne depuis un
-telephone (voir `docs/DEPLOIEMENT_APP_VEILLE.md` et `docs/SURFACES_CHRUTH.md`).
+Une seule adresse, dix pages : accueil, veille appels d'offres, collecte, base de
+donnees, acheteurs de la semaine, carte, messages et CRM, pilotage, reglages et
+mode developpeur lie a `AO_CHRUTH.xlsm`.
+
+L'**Accueil** ouvre l'application : chiffres cles, echeances les plus proches avec
+code couleur d'urgence, et AO retenus par le tri, chacun avec un lien vers l'avis
+d'origine. La page **Collecte** lance les AO, les prospects ou les deux et affiche
+le journal en direct. C'est la surface principale, et la seule consultable en ligne
+depuis un telephone (voir `docs/DEPLOIEMENT_APP_VEILLE.md` et `docs/SURFACES_CHRUTH.md`).
+
+### Trier les appels d'offres
+
+Le score va a la decimale (71,4 et non 71) : le bareme compte en continu le budget,
+le delai restant, la densite de termes metier et la completude du dossier. Avant, il
+ne prenait que 17 valeurs, toutes multiples de 5, et des dizaines de marches se
+retrouvaient a egalite.
+
+La page **Veille** expose une jauge **Score minimum** au pas de 0,5 et un classement
+par score decroissant. Le bouton **Rediger un message** bascule sur la page Messages
+avec le marche deja selectionne.
+
+### Maitriser le cout des messages
+
+La page **Messages et CRM** plafonne la longueur des reponses (256 a 2048 tokens) et
+affiche, avant chaque redaction, les tokens envoyes et le total au pire. Sur une API
+facturee au token, rien d'autre n'arrete une reponse qui part en boucle.
 
 Pour lancer les traitements par lots :
 
@@ -79,20 +100,36 @@ docs/source/Fiche de poste CHRUTH.pdf
 
 ## Email et destinataires
 
-Les secrets Gmail restent locaux et ne doivent pas etre envoyes sur GitHub :
+Les secrets restent locaux et ne doivent pas etre envoyes sur GitHub :
 
 - `.env`
 - `alertes_secrets.json`
 - `destinataires.txt`
+- `.streamlit/secrets.toml`
 
-Depuis `output/AO_CHRUTH.xlsm`, onglet `Parametres`, saisir les destinataires en colonne B a partir de `B5`, puis cliquer sur `Enregistrer_Destinataires`.
+**Destinataires** — depuis `output/AO_CHRUTH.xlsm`, onglet `Parametres`, saisir les
+adresses en colonne B a partir de `B5`, puis cliquer sur `Enregistrer_Destinataires`.
+Le script met a jour `destinataires.txt` et le champ `destinataire` de
+`alertes_secrets.json`. Il ne modifie pas l'expediteur.
 
-Le script met a jour :
+**Adresse d'envoi et mot de passe d'application** — page **Reglages** de
+l'application, bloc *Expediteur*. Les deux se saisissent ensemble : ils forment une
+paire, et les changer separement casse tous les envois. Le mot de passe n'est jamais
+reaffiche, et un champ laisse vide conserve celui deja enregistre. Il est ecrit dans
+`alertes_secrets.json`, jamais dans les reglages partages — ceux-ci sont publies en
+ligne avec l'etat de la veille.
 
-- `destinataires.txt`
-- le champ `destinataire` de `alertes_secrets.json`
+## Acces a l'application
 
-Il ne modifie pas `smtp_user` ni `smtp_password`.
+Une page de connexion peut proteger l'application. Tant que rien n'est configure,
+elle demarre sans connexion : c'est le mode poste local.
+
+Aucun mot de passe n'est stocke ni envoye : l'identification est deleguee a Google.
+La liste des adresses autorisees vit dans `.streamlit/secrets.toml`, hors de
+l'application — un droit d'acces modifiable depuis l'application protegee ne
+protegerait rien.
+
+Mise en service : `docs/GUIDE_CONNEXION.md`.
 
 ## Fichiers gardes vs nettoyes
 
@@ -106,4 +143,7 @@ Supprimes car regenerables ou non utiles a l'entreprise : historique Git local, 
 - `README_LIVRAISON.md` : guide de livraison.
 - `output/LIRE_MOI_LIVRABLES.md` : correspondance missions -> livrables.
 - `docs/MISSION_CHRUTH.md` : couverture des missions de la fiche de poste.
+- `docs/GUIDE_CONNEXION.md` : activer la page de connexion.
+- `docs/GUIDE_PUBLICATION.md` : quoi publier, et ce qu'il faut vérifier avant.
+- `docs/GUIDE_CHANGER_LES_REGLAGES.md` : ou se changent les reglages.
 - `prompts/PROMPTS_CHRUTH.md` : prompts et logique IA.

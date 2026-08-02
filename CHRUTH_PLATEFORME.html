@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CHRUTH — Plateforme de veille (HTML)</title>
+<style>
+  :root {
+    --fond: #F5F8FA; --surface: #FFFFFF; --sidebar: #EDF4F3; --texte: #17212B;
+    --secondaire: #586674; --faible: #8a97a5; --bordure: #D6E1E5; --regle: #e6edf0;
+    --champ: #FFFFFF; --accent: #0F766E;
+    --rouge: #b23b2e; --orange: #a9700a; --vert: #2b7a56;
+    --public: #2f5c88; --prive: #855416;
+    --mono: ui-monospace, "SFMono-Regular", "Cascadia Mono", Consolas, "Liberation Mono", monospace;
+    font-synthesis: none;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fond: #08111F; --surface: #0d1826; --sidebar: #0C1727; --texte: #E7EEF7;
+      --secondaire: #A7B5C7; --faible: #6c7d92; --bordure: #293B52; --regle: #1a293c;
+      --champ: #15243A; --accent: #45D0BE;
+      --rouge: #ef7c72; --orange: #dda553; --vert: #4fbf8f; --public: #83b2e2; --prive: #dcb066;
+    }
+  }
+  :root[data-theme="light"] {
+    --fond: #F5F8FA; --surface: #FFFFFF; --sidebar: #EDF4F3; --texte: #17212B;
+    --secondaire: #586674; --faible: #8a97a5; --bordure: #D6E1E5; --regle: #e6edf0;
+    --champ: #FFFFFF; --accent: #0F766E;
+    --rouge: #b23b2e; --orange: #a9700a; --vert: #2b7a56; --public: #2f5c88; --prive: #855416;
+  }
+  :root[data-theme="dark"] {
+    --fond: #08111F; --surface: #0d1826; --sidebar: #0C1727; --texte: #E7EEF7;
+    --secondaire: #A7B5C7; --faible: #6c7d92; --bordure: #293B52; --regle: #1a293c;
+    --champ: #15243A; --accent: #45D0BE;
+    --rouge: #ef7c72; --orange: #dda553; --vert: #4fbf8f; --public: #83b2e2; --prive: #dcb066;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--fond); color: var(--texte);
+    font-family: "Segoe UI", -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+    font-size: 15px; line-height: 1.5; -webkit-font-smoothing: antialiased;
+  }
+  .shell { display: grid; grid-template-columns: 236px minmax(0, 1fr); min-height: 100vh; }
+
+  /* Rail */
+  .rail { background: var(--sidebar); border-right: 1px solid var(--bordure); padding: 24px 22px; }
+  .wm { font-size: 15px; font-weight: 700; letter-spacing: .14em; }
+  .wm i { color: var(--accent); font-style: normal; }
+  .rail-sub { color: var(--faible); font-size: 11.5px; letter-spacing: .04em; margin-top: 2px; text-transform: uppercase; }
+  .pages { list-style: none; margin: 26px 0 0; padding: 0; }
+  .pages button {
+    display: block; width: 100%; text-align: left; background: none; border: 0; cursor: pointer;
+    padding: 6px 0; color: var(--secondaire); font: inherit; font-size: 14px;
+  }
+  .pages button:hover { color: var(--texte); }
+  .pages button.actif { color: var(--texte); font-weight: 600; }
+  .pages button.actif::before { content: "— "; color: var(--accent); }
+  .pages button:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .rail-foot { margin-top: 28px; padding-top: 18px; border-top: 1px solid var(--bordure); }
+  .rail-foot h5 { margin: 0 0 8px; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--faible); font-weight: 700; }
+  .theme-line { display: flex; gap: 14px; font-size: 13.5px; }
+  .theme-line button { background: none; border: 0; padding: 0 0 3px; font: inherit; color: var(--secondaire); cursor: pointer; border-bottom: 1.5px solid transparent; }
+  .theme-line button[aria-pressed="true"] { color: var(--texte); border-bottom-color: var(--accent); }
+  .theme-line button:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+
+  /* Corps */
+  main { padding: 30px 40px 64px; max-width: 1000px; }
+  .page { display: none; }
+  .page.actif { display: block; }
+  .kicker { font-size: 12px; letter-spacing: .12em; text-transform: uppercase; color: var(--faible); margin: 0 0 6px; }
+  h1 { margin: 0 0 6px; font-size: 25px; font-weight: 650; letter-spacing: -.015em; }
+  .intro { margin: 0 0 24px; color: var(--secondaire); font-size: 14px; max-width: 64ch; }
+  .intro em { color: var(--accent); font-style: normal; }
+
+  .barre { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; padding-bottom: 12px; margin-bottom: 4px; border-bottom: 2px solid var(--texte); }
+  .tally { font-size: 13.5px; color: var(--secondaire); font-variant-numeric: tabular-nums; }
+  .tally b { color: var(--texte); font-weight: 650; }
+  .tally .pub { color: var(--public); } .tally .prv { color: var(--prive); }
+  .filtre { margin-left: auto; display: flex; gap: 16px; font-size: 13px; }
+  .filtre button, .lien-btn { background: none; border: 0; padding: 0 0 3px; font: inherit; cursor: pointer; color: var(--faible); border-bottom: 2px solid transparent; }
+  .filtre button[aria-pressed="true"] { color: var(--texte); border-bottom-color: var(--accent); font-weight: 600; }
+  .filtre button:focus-visible, .lien-btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .check { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: var(--secondaire); cursor: pointer; }
+
+  /* Registre */
+  .registre { display: flex; flex-direction: column; }
+  .rec { display: grid; grid-template-columns: 74px minmax(0, 1fr) 176px; gap: 20px; padding: 18px 0; border-bottom: 1px solid var(--regle); }
+  .rec:first-child { border-top: 1px solid var(--regle); }
+  .rec.rejete { opacity: .58; }
+  .prio { font-size: 12px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; padding-top: 2px; }
+  .prio .sc { display: block; font-family: var(--mono); font-weight: 500; font-size: 12px; color: var(--faible); letter-spacing: 0; margin-top: 3px; }
+  .prio.chaud { color: var(--rouge); } .prio.tiede { color: var(--orange); } .prio.froid { color: var(--faible); }
+  .rec h3 { margin: 0; font-size: 16.5px; font-weight: 600; line-height: 1.3; letter-spacing: -.005em; }
+  .rec h3 .neuf { color: var(--accent); font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; vertical-align: 2px; margin-right: 7px; }
+  .ach { color: var(--secondaire); font-size: 14px; margin: 4px 0 0; }
+  .ref { font-family: var(--mono); font-size: 12px; color: var(--faible); margin: 8px 0 0; letter-spacing: .01em; display: flex; flex-wrap: wrap; gap: 4px 14px; }
+  .ref .src-joue { color: var(--public); font-weight: 600; }
+  .verdict { font-size: 13px; color: var(--secondaire); margin: 9px 0 0; }
+  .verdict b.oui { color: var(--vert); } .verdict b.non { color: var(--rouge); }
+  .verdict .via { color: var(--faible); }
+  .actions { display: flex; flex-wrap: wrap; gap: 6px 8px; margin-top: 11px; align-items: center; }
+  .type { text-align: right; padding-top: 2px; }
+  .type .t { font-size: 13px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; }
+  .type.public .t { color: var(--public); } .type.prive .t { color: var(--prive); }
+  .type .sous { display: block; font-size: 12.5px; color: var(--secondaire); margin-top: 3px; }
+  .type .perso { display: inline-block; margin-top: 8px; font-size: 11px; letter-spacing: .05em; text-transform: uppercase; color: var(--faible); border: 1px solid var(--bordure); padding: 1px 7px; }
+
+  /* Boutons d'action */
+  .btn { font: inherit; font-size: 12.5px; padding: 4px 11px; border: 1px solid var(--bordure); background: var(--surface); color: var(--secondaire); cursor: pointer; border-radius: 2px; }
+  .btn:hover { border-color: var(--accent); color: var(--accent); }
+  .btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .btn.on-oui { border-color: var(--vert); color: var(--vert); }
+  .btn.on-non { border-color: var(--rouge); color: var(--rouge); }
+  .btn.primaire { background: var(--accent); border-color: var(--accent); color: #05231f; font-weight: 600; }
+  :root[data-theme="dark"] .btn.primaire { color: #05231f; }
+  select.mini, input.champ, textarea.champ, select.champ {
+    font: inherit; font-size: 13.5px; padding: 5px 8px; border: 1px solid var(--bordure);
+    background: var(--champ); color: var(--texte); border-radius: 2px;
+  }
+  select.mini { font-size: 12.5px; padding: 3px 6px; }
+  textarea.champ { width: 100%; resize: vertical; line-height: 1.5; }
+  input.champ, select.champ { width: 100%; }
+
+  /* Tables (Base, CRM) */
+  table.reg { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+  table.reg th, table.reg td { text-align: left; padding: 9px 10px; border-bottom: 1px solid var(--regle); vertical-align: top; }
+  table.reg th { font-size: 11.5px; text-transform: uppercase; letter-spacing: .05em; color: var(--faible); font-weight: 700; border-bottom: 2px solid var(--texte); }
+  table.reg td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; }
+  .tbtype-public { color: var(--public); font-weight: 600; }
+  .tbtype-prive { color: var(--prive); font-weight: 600; }
+  .tblwrap { overflow-x: auto; }
+
+  /* KPI en liste réglée (pas de tuiles) */
+  dl.kpis { display: grid; grid-template-columns: 1fr 1fr; gap: 0 40px; margin: 0; }
+  dl.kpis > div { display: flex; justify-content: space-between; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--regle); }
+  dl.kpis dt { color: var(--secondaire); font-size: 14px; }
+  dl.kpis dd { margin: 0; font-size: 20px; font-weight: 700; font-variant-numeric: tabular-nums; }
+
+  /* Formulaires */
+  .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 18px; margin-bottom: 14px; }
+  .fld { display: flex; flex-direction: column; gap: 5px; }
+  .fld label { font-size: 12.5px; color: var(--secondaire); }
+  .full { grid-column: 1 / -1; }
+  .section { margin-top: 34px; padding-top: 22px; border-top: 1px solid var(--bordure); }
+  .section:first-of-type { margin-top: 24px; border-top: 0; padding-top: 0; }
+  h2 { font-size: 17px; font-weight: 650; margin: 0 0 4px; }
+  .aide { color: var(--secondaire); font-size: 13px; margin: 0 0 14px; max-width: 62ch; }
+  .switch-row { display: flex; align-items: center; justify-content: space-between; padding: 11px 0; border-bottom: 1px solid var(--regle); }
+  .switch-row .lib { font-size: 14px; } .switch-row .lib small { display: block; color: var(--faible); font-size: 12.5px; }
+  .etat-oui { color: var(--vert); font-weight: 600; } .etat-non { color: var(--rouge); font-weight: 600; }
+  .toast { position: fixed; bottom: 22px; left: 50%; transform: translateX(-50%); background: var(--texte); color: var(--fond); font-size: 13.5px; padding: 9px 18px; border-radius: 3px; opacity: 0; transition: opacity .25s; pointer-events: none; z-index: 20; }
+  .toast.show { opacity: 1; }
+  .note-page { background: var(--surface); border: 1px solid var(--bordure); border-left: 3px solid var(--accent); padding: 16px 18px; font-size: 14px; color: var(--secondaire); }
+  .note-page b { color: var(--texte); }
+  .log { font-family: var(--mono); font-size: 12.5px; background: var(--sidebar); border: 1px solid var(--bordure); padding: 12px 14px; margin-top: 14px; white-space: pre-wrap; color: var(--secondaire); min-height: 80px; }
+  .vide { color: var(--secondaire); font-style: italic; padding: 30px 0; }
+
+  footer { margin-top: 40px; padding-top: 18px; border-top: 1px solid var(--bordure); color: var(--faible); font-size: 12.5px; line-height: 1.65; max-width: 76ch; }
+  footer b { color: var(--secondaire); } footer .j { color: var(--public); }
+
+  @media (max-width: 860px) {
+    .shell { grid-template-columns: 1fr; }
+    .rail { border-right: 0; border-bottom: 1px solid var(--bordure); }
+    .pages { display: grid; grid-template-columns: repeat(2, 1fr); gap: 0 20px; }
+    main { padding: 24px 20px 52px; }
+    .rec { grid-template-columns: 60px minmax(0, 1fr); }
+    .type { grid-column: 1 / -1; text-align: left; padding-left: 80px; margin-top: -4px; }
+    .form-grid, dl.kpis { grid-template-columns: 1fr; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+
+<div class="shell">
+  <aside class="rail">
+    <div class="wm">CHR<i>U</i>TH</div>
+    <div class="rail-sub">Veille &amp; prospection</div>
+    <ul class="pages" id="nav"></ul>
+    <div class="rail-foot">
+      <h5>Affichage</h5>
+      <div class="theme-line" role="group" aria-label="Thème">
+        <button id="th-jour" aria-pressed="true">Jour</button>
+        <button id="th-nuit" aria-pressed="false">Nuit</button>
+      </div>
+    </div>
+  </aside>
+  <main id="main"></main>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+(function () {
+  "use strict";
+  var root = document.documentElement;
+  var CLE = "chruth_html_v1";
+
+  // ---------- Donnees injectees par outils/generer_plateforme_html.py ----------
+  var AOS = [{"id": "26-75119", "objet": "Travaux neufs et d'entretien des bâtiments communaux, année 2026-2027 (1 an reconductible 1 fois) - Lot 2 : menuiseries aluminium, métallerie et serrurerie", "acheteur": "Mairie du Perreux sur Marne", "ville": "", "dept": "94", "source": "BOAMP", "ref": "26-75119", "procedure": "Procédure Ouverte", "publie": "29.07", "limite": "25.09.2026", "prio": "chaud", "score": 80.0, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-75119"}, {"id": "26-73275", "objet": "ENTRETIEN, REMISE EN ETAT ET AMENAGEMENT D'ESPACES VERTS POUR LA VILLE DE GENNEVILLIERS\nLOT N°1 : Entretien des secteurs d'habitation Nord et du cimetière, remise en état et aménag", "acheteur": "Ville de Gennevilliers", "ville": "", "dept": "92", "source": "BOAMP", "ref": "26-73275", "procedure": "Procédure Ouverte", "publie": "24.07", "limite": "27.08.2026", "prio": "chaud", "score": 79.8, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": true, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-73275"}, {"id": "26-74013", "objet": "Prestations de nettoyage des locaux de l'École nationale supérieure d’architecture de Paris-La Villette", "acheteur": "ENSA Paris-La Villette", "ville": "Paris", "dept": "75,92,93,91,95,77,94", "source": "BOAMP", "ref": "26-74013", "procedure": "Procédure Ouverte", "publie": "23.07", "limite": "28.09.2026", "prio": "chaud", "score": 75.5, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-74013"}, {"id": "26-74949", "objet": "Prestations D'Entretien Ménager Des Gymnases De La Ville De Roissy-En-Brie", "acheteur": "Mairie de Roissy-en-Brie", "ville": "ROISSY EN BRIE", "dept": "77", "source": "BOAMP", "ref": "26-74949", "procedure": "Procédure Ouverte", "publie": "27.07", "limite": "28.08.2026", "prio": "chaud", "score": 74.5, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-74949"}, {"id": "26-69079", "objet": "Nettoyage des bâtiments communaux.", "acheteur": "Mairie d'Asnières sur Seine", "ville": "", "dept": "92", "source": "BOAMP", "ref": "26-69079", "procedure": "Procédure Ouverte", "publie": "12.07", "limite": "28.09.2026", "prio": "chaud", "score": 74.0, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-69079"}, {"id": "MX-936168", "objet": "NETTOYAGE DES VITRERIES DANS LES BATIMENTS COMMUNAUX", "acheteur": "Ville de Stains", "ville": "Stains", "dept": "93", "source": "MAXIMILIEN", "ref": "MX-936168", "procedure": "MAPA", "publie": "14.04", "limite": "31.12.2026", "prio": "chaud", "score": 74.0, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : nettoyage", "etage": "tri automatique", "neuf": false, "url": "https://marches.maximilien.fr/entreprise/consultation/936168?orgAcronyme=b4l"}, {"id": "26-72283", "objet": "Prestation d'écrivains publics interprètes à Montreuil", "acheteur": "Mairie de Montreuil", "ville": "Montreuil", "dept": "93", "source": "BOAMP", "ref": "26-72283", "procedure": "Procédure Ouverte", "publie": "20.07", "limite": "11.09.2026", "prio": "chaud", "score": 71.9, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-72283"}, {"id": "26-67708", "objet": "Nettoyage des bâtiments communaux", "acheteur": "Commune de Magny-les-Hameaux", "ville": "Magny-les-hameaux cedex", "dept": "78", "source": "BOAMP", "ref": "26-67708", "procedure": "Procédure Ouverte", "publie": "07.07", "limite": "12.08.2026", "prio": "chaud", "score": 71.0, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : nettoyage", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-67708"}, {"id": "26-68918", "objet": "Missions d’animation d’ateliers d’écriture et d’accompagnement littéraire vers l’édition dans les départements d’Île-de-France", "acheteur": "Région Ile-de-France", "ville": "SAINT-OUEN-SUR-SEINE", "dept": "93", "source": "BOAMP", "ref": "26-68918", "procedure": "Procédure Adaptée", "publie": "09.07", "limite": "17.09.2026", "prio": "chaud", "score": 70.5, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-68918"}, {"id": "26-70858", "objet": "Nettoyage des locaux de l'EPAMSA", "acheteur": "EPAMSA", "ville": "MANTES-LA-JOLIE", "dept": "78", "source": "BOAMP", "ref": "26-70858", "procedure": "Procédure Ouverte", "publie": "16.07", "limite": "04.09.2026", "prio": "chaud", "score": 70.5, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-70858"}, {"id": "26-70565", "objet": "TRAVAUX D'AMÉNAGEMENT INTÉRIEUR DU R+1 ET COMBLE DE LA FERME DURPÉ", "acheteur": "COMMUNE DE MAGNY LE HONGRE", "ville": "MAGNY LE HONGRE", "dept": "77,75,78,91", "source": "BOAMP", "ref": "26-70565", "procedure": "Procédure Ouverte", "publie": "15.07", "limite": "10.09.2026", "prio": "chaud", "score": 70.0, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-70565"}, {"id": "26-70050", "objet": "TRAVAUX D'ENTRETIEN DES COUVERTURES ET TERRASSES DU PATRIMOINE BATI COMMUNAL", "acheteur": "Mairie de Chevilly-Larue", "ville": "Chevilly-Larue", "dept": "94,75,77,78", "source": "BOAMP", "ref": "26-70050", "procedure": "Procédure Ouverte", "publie": "13.07", "limite": "14.08.2026", "prio": "chaud", "score": 68.3, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-70050"}, {"id": "26-72708", "objet": "Entretien ménager des locaux des sites mégalithiques de Carnac et Locmariaquer", "acheteur": "Centre Monuments Nationaux", "ville": "", "dept": "75,56", "source": "BOAMP", "ref": "26-72708", "procedure": "Procédure Ouverte", "publie": "23.07", "limite": "11.09.2026", "prio": "chaud", "score": 66.5, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-72708"}, {"id": "26-71198", "objet": "CONCESSION DE SERVICE PUBLIC \nPORTANT SUR LA GESTION ET L'EXPLOITATION DES MARCHES FORAINS DE LA VILLE DE MONTROUGE", "acheteur": "Ville de Montrouge", "ville": "Montrouge cedex", "dept": "92,75", "source": "BOAMP", "ref": "26-71198", "procedure": "Procédure NC", "publie": "16.07", "limite": "30.09.2026", "prio": "chaud", "score": 66.0, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-71198"}, {"id": "26-68920", "objet": "curage et nettoyage du bassin d'anoxie de la STEP d'EXONA", "acheteur": "CONFLUENCE SEINE ESSONNE ENERGIE", "ville": "EVRY-COURCOURONNES", "dept": "91,75", "source": "BOAMP", "ref": "26-68920", "procedure": "Procédure Ouverte", "publie": "09.07", "limite": "15.09.2026", "prio": "chaud", "score": 65.5, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-68920"}, {"id": "26-63518", "objet": "NETTOYAGE DES BÂTIMENTS COMMUNAUX", "acheteur": "MAIRIE DE SAINT-CLAIR-SUR6epte", "ville": "", "dept": "95", "source": "BOAMP", "ref": "26-63518", "procedure": "Procédure Ouverte", "publie": "28.06", "limite": "11.09.2026", "prio": "chaud", "score": 65.5, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : nettoyage", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-63518"}, {"id": "26-75002", "objet": "ENTRETIEN MENAGER ET NETTOYAGE DES SURFACES VITREES", "acheteur": "Mairie de Boulogne-Billancpurt", "ville": "", "dept": "92", "source": "BOAMP", "ref": "26-75002", "procedure": "Procédure Ouverte", "publie": "29.07", "limite": "24.09.2026", "prio": "chaud", "score": 65.0, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-75002"}, {"id": "MX-942071", "objet": "NETTOYAGE DES BÂTIMENTS COMMUNAUX", "acheteur": "Commune de Saint-Clair-Sur-Epte", "ville": "Saint-Clair-Sur-Epte", "dept": "95", "source": "MAXIMILIEN", "ref": "MX-942071", "procedure": "AOO", "publie": "26.06", "limite": "11.09.2026", "prio": "tiede", "score": 64.0, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : nettoyage", "etage": "tri automatique", "neuf": false, "url": "https://marches.maximilien.fr/entreprise/consultation/942071?orgAcronyme=d8o"}, {"id": "MX-944299", "objet": "26026 ENTRETIEN MENAGER ET NETTOYAGE DES SURFACES VITREES", "acheteur": "Ville de Boulogne-Billancourt", "ville": "Boulogne-Billancourt", "dept": "92", "source": "MAXIMILIEN", "ref": "MX-944299", "procedure": "AOO", "publie": "27.07", "limite": "24.09.2026", "prio": "tiede", "score": 64.0, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://marches.maximilien.fr/entreprise/consultation/944299?orgAcronyme=p8x"}, {"id": "26-71675", "objet": "Décontamination, dépoussiérage et reconditionnement des réserves documentaires n°2 et 3 du Château de Sceaux", "acheteur": "Département des Hauts-de-Seine", "ville": "NANTERRE", "dept": "92", "source": "BOAMP", "ref": "26-71675", "procedure": "Procédure Ouverte", "publie": "17.07", "limite": "11.09.2026", "prio": "tiede", "score": 62.1, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-71675"}, {"id": "26-71545", "objet": "Exploitation, maintenance des dispositifs de collecte pneumatique fixes et mobiles des déchets ménagers et transport de ces déchets", "acheteur": "Grand Paris Seine Ouest", "ville": "", "dept": "92", "source": "BOAMP", "ref": "26-71545", "procedure": "Procédure Ouverte", "publie": "19.07", "limite": "10.09.2026", "prio": "tiede", "score": 60.0, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-71545"}, {"id": "26-72948", "objet": "26MF026 - Fourniture d'appareils ménagers et d'équipements professionnels", "acheteur": "Ville de Plaisir", "ville": "", "dept": "78", "source": "BOAMP", "ref": "26-72948", "procedure": "Procédure Ouverte", "publie": "23.07", "limite": "27.08.2026", "prio": "tiede", "score": 59.8, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-72948"}, {"id": "MX-941777", "objet": "Prestations de nettoyage et d’entretien ménager des bâtiments communaux de la ville de Domont", "acheteur": "Commune de Domont", "ville": "DOMONT", "dept": "95", "source": "MAXIMILIEN", "ref": "MX-941777", "procedure": "AOO", "publie": "10.07", "limite": "03.09.2026", "prio": "tiede", "score": 59.0, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : nettoyage", "etage": "tri automatique", "neuf": false, "url": "https://marches.maximilien.fr/entreprise/consultation/941777?orgAcronyme=a1e"}, {"id": "26-69403", "objet": "Maintenance des systèmes d'arrosage automatique, bassins et pièces de fontainerie (maintenance préventive et corrective) et fournitures associées", "acheteur": "Ville de Clamart", "ville": "", "dept": "92", "source": "BOAMP", "ref": "26-69403", "procedure": "Procédure Ouverte", "publie": "12.07", "limite": "10.08.2026", "prio": "tiede", "score": 55.8, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-69403"}, {"id": "26-72105", "objet": "PRESTATIONS DE SERVICES DE NETTOYAGE ET BIONETTOYAGE DES LOCAUX, DE LA VITRERIE ET SERVICES ASSOCIES POUR LE CHIMM", "acheteur": "Centre Hospitalier Poissy/Saint-Germain-En-Laye", "ville": "", "dept": "78", "source": "BOAMP", "ref": "26-72105", "procedure": "Procédure Ouverte", "publie": "21.07", "limite": "28.09.2026", "prio": "tiede", "score": 55.5, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-72105"}, {"id": "26-63717", "objet": "Nettoyage des locaux et des vitres des sites de la délégation Nouvelle Aquitaine du CNFPT", "acheteur": "CNFPT - Direction de l'achat public", "ville": "", "dept": "75", "source": "BOAMP", "ref": "26-63717", "procedure": "Procédure Ouverte", "publie": "28.06", "limite": "11.09.2026", "prio": "tiede", "score": 55.0, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : nettoyage", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-63717"}, {"id": "26-72955", "objet": "Prestations de nettoyage courant des locaux du CNRS et de vitreries incluant la fourniture des produits d’entretien et d’hygiène", "acheteur": "CNRS Délégation paris-Centre", "ville": "", "dept": "75,77,78,91,92,93,94,95", "source": "BOAMP", "ref": "26-72955", "procedure": "Procédure Ouverte", "publie": "22.07", "limite": "04.09.2026", "prio": "tiede", "score": 55.0, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-72955"}, {"id": "26-70503", "objet": "Prestations de nettoyage des locaux et de la vitrerie et prestations associées pour les sites du GHT Grand Paris Nord-Est", "acheteur": "GHT GPNE", "ville": "", "dept": "93", "source": "BOAMP", "ref": "26-70503", "procedure": "Procédure Ouverte", "publie": "17.07", "limite": "04.09.2026", "prio": "tiede", "score": 55.0, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-70503"}, {"id": "26-73898", "objet": "Fourniture de petits matériels et de consommables d'entretien et d'hygiène", "acheteur": "Département des Hauts-de-Seine", "ville": "", "dept": "92", "source": "BOAMP", "ref": "26-73898", "procedure": "Procédure Ouverte", "publie": "25.07", "limite": "15.09.2026", "prio": "tiede", "score": 55.0, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-73898"}, {"id": "26-71986", "objet": "Nettoyage des locaux communaux et des vitreries des bâtiments communaux", "acheteur": "Ville de Fontenay-aux-Roses", "ville": "", "dept": "92", "source": "BOAMP", "ref": "26-71986", "procedure": "Procédure Ouverte", "publie": "21.07", "limite": "06.08.2026", "prio": "tiede", "score": 54.7, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-71986"}, {"id": "MX-943757", "objet": "PRESTATIONS DE SERVICES DE NETTOYAGE ET BIONETTOYAGE DES LOCAUX, DE LA VITRERIE ET SERVICES ASSOCIES POUR LE CHIMM", "acheteur": "Centre Hospitalier Intercommunal de Poissy saint Germain", "ville": "poissy", "dept": "78", "source": "MAXIMILIEN", "ref": "MX-943757", "procedure": "AOO", "publie": "20.07", "limite": "28.09.2026", "prio": "tiede", "score": 54.5, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : nettoyage", "etage": "tri automatique", "neuf": false, "url": "https://marches.maximilien.fr/entreprise/consultation/943757?orgAcronyme=a2k"}, {"id": "26-70522", "objet": "PRESTATIONS DE COACHING ET D’ACCOMPAGNEMENT DES MEMBRES D’UN CODIR AU PROFIT DE L’EPIDE", "acheteur": "EPIDE", "ville": "", "dept": "92,67,68,24,33,40,47,64,3", "source": "BOAMP", "ref": "26-70522", "procedure": "Procédure Ouverte", "publie": "17.07", "limite": "25.08.2026", "prio": "tiede", "score": 54.2, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-70522"}, {"id": "MX-943277", "objet": "Prestations de nettoyage des locaux et de la vitrerie et prestations associées pour les sites du GHT Grand Paris Nord-Est", "acheteur": "GHT GPNE", "ville": "Montfermeil", "dept": "93", "source": "MAXIMILIEN", "ref": "MX-943277", "procedure": "AOO", "publie": "15.07", "limite": "04.09.2026", "prio": "tiede", "score": 54.0, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : nettoyage", "etage": "tri automatique", "neuf": false, "url": "https://marches.maximilien.fr/entreprise/consultation/943277?orgAcronyme=a1j"}, {"id": "MX-939426", "objet": "PRESTATIONS DE NETTOYAGE DES SITES DE L'ENFANCE", "acheteur": "CD94 - Conseil départemental du Val-de-Marne", "ville": "Créteil", "dept": "94", "source": "MAXIMILIEN", "ref": "MX-939426", "procedure": "AOO", "publie": "24.07", "limite": "24.09.2026", "prio": "tiede", "score": 54.0, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://marches.maximilien.fr/entreprise/consultation/939426?orgAcronyme=a8z"}, {"id": "26-66164", "objet": "PRESTATIONS DE NETTOYAGE CAF77", "acheteur": "CAF77", "ville": "", "dept": "75,77,91,94", "source": "BOAMP", "ref": "26-66164", "procedure": "Procédure Ouverte", "publie": "05.07", "limite": "21.08.2026", "prio": "tiede", "score": 54.0, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : nettoyage", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-66164"}, {"id": "26-69885", "objet": "Le marché a pour objet des prestations d’organisation et de gestion des trois marchés forains de la Ville du Raincy", "acheteur": "MAIRIE LE RAINCY", "ville": "LE RAINCY", "dept": "75,91,92,93,94", "source": "BOAMP", "ref": "26-69885", "procedure": "Procédure Ouverte", "publie": "13.07", "limite": "03.08.2026", "prio": "tiede", "score": 51.2, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-69885"}, {"id": "26-75139", "objet": "Prestations d'espaces verts, année 2026-2027 (1 an reconductible 1 fois) - Lot 2 : Élagage et abattage.", "acheteur": "Mairie du Perreux sur Marne", "ville": "", "dept": "94", "source": "BOAMP", "ref": "26-75139", "procedure": "Procédure Ouverte", "publie": "29.07", "limite": "28.09.2026", "prio": "tiede", "score": 51.2, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-75139"}, {"id": "26-66494", "objet": "ENTRETIEN DES LOCAUX POUR LES BESOINS DE L’EPMS DE LA FONDATION HARDY", "acheteur": "EPMS FONDATION HARDY", "ville": "", "dept": "77", "source": "BOAMP", "ref": "26-66494", "procedure": "Procédure Ouverte", "publie": "05.07", "limite": "07.08.2026", "prio": "tiede", "score": 50.5, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : entretien des locaux", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-66494"}, {"id": "26-64286", "objet": "Prestations de nettoyage des locaux", "acheteur": "Commune de Montfermeil", "ville": "", "dept": "93", "source": "BOAMP", "ref": "26-64286", "procedure": "Procédure Ouverte", "publie": "01.07", "limite": "03.08.2026", "prio": "tiede", "score": 49.3, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : nettoyage", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-64286"}, {"id": "MX-942550", "objet": "ENTRETIEN DES LOCAUX POUR LES BESOINS DE L’EPMS DE LA FONDATION HARDY", "acheteur": "Etablissement Public Médico Social Fondation Hardy", "ville": "Marles-en-Brie", "dept": "77", "source": "MAXIMILIEN", "ref": "MX-942550", "procedure": "AOO", "publie": "03.07", "limite": "07.08.2026", "prio": "tiede", "score": 49.0, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : entretien des locaux", "etage": "tri automatique", "neuf": false, "url": "https://marches.maximilien.fr/entreprise/consultation/942550?orgAcronyme=a1i"}, {"id": "MX-942574", "objet": "ENTRETIEN DES LOCAUX POUR LES BESOINS DE L’EPMS DE LA FONDATION HARDY", "acheteur": "Etablissement Public Médico Social Fondation Hardy", "ville": "Marles-en-Brie", "dept": "77", "source": "MAXIMILIEN", "ref": "MX-942574", "procedure": "AOO", "publie": "06.07", "limite": "07.08.2026", "prio": "tiede", "score": 49.0, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : entretien des locaux", "etage": "tri automatique", "neuf": false, "url": "https://marches.maximilien.fr/entreprise/consultation/942574?orgAcronyme=a1i"}, {"id": "26-68695", "objet": "Prestations de nettoyage et d’entretien ménager des bâtiments communaux de la ville de Domont", "acheteur": "Commune de Domont", "ville": "", "dept": "95", "source": "BOAMP", "ref": "26-68695", "procedure": "Procédure Ouverte", "publie": "10.07", "limite": "03.09.2026", "prio": "tiede", "score": 48.8, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-68695"}, {"id": "MX-933515", "objet": "Prestations de nettoyage des locaux", "acheteur": "Commune de Montfermeil", "ville": "Montfermeil", "dept": "93", "source": "MAXIMILIEN", "ref": "MX-933515", "procedure": "AOO", "publie": "30.06", "limite": "03.08.2026", "prio": "tiede", "score": 48.3, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : nettoyage", "etage": "tri automatique", "neuf": false, "url": "https://marches.maximilien.fr/entreprise/consultation/933515?orgAcronyme=y0w"}, {"id": "MX-944013", "objet": "ACCORD-CADRE DE MISSIONS DE GARDIENNAGE ET SECURISATION DES BATIMENTS COMMUNAUX ET DES MANIFESTATIONS PUBLIQUES", "acheteur": "Ville de La Courneuve", "ville": "La Courneuve", "dept": "93", "source": "MAXIMILIEN", "ref": "MX-944013", "procedure": "MAPA", "publie": "24.07", "limite": "15.09.2026", "prio": "tiede", "score": 45.5, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": true, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://marches.maximilien.fr/entreprise/consultation/944013?orgAcronyme=d5c"}, {"id": "26-72690", "objet": "Service de mise à disposition de personnel", "acheteur": "Mairie d&#039;ANTONY", "ville": "", "dept": "92", "source": "BOAMP", "ref": "26-72690", "procedure": "Procédure Ouverte", "publie": "22.07", "limite": "09.09.2026", "prio": "tiede", "score": 45.2, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": true, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-72690"}, {"id": "26-63220", "objet": "Prestations de propreté urbaine de la Ville de Choisy-le-Roi", "acheteur": "Mairie de Choisy-le-Roi", "ville": "", "dept": "94,91", "source": "BOAMP", "ref": "26-63220", "procedure": "Procédure Ouverte", "publie": "27.06", "limite": "03.08.2026", "prio": "tiede", "score": 44.8, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : proprete", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-63220"}, {"id": "26-75087", "objet": "Gestion des espaces verts et des équipements classés en intérêt communautaire de Saint-Quentin-en-Yvelines", "acheteur": "Saint-Quentin-en-Yvelines - Communauté d'agglomération", "ville": "", "dept": "78", "source": "BOAMP", "ref": "26-75087", "procedure": "Procédure Ouverte", "publie": "29.07", "limite": "30.09.2026", "prio": "tiede", "score": 42.5, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-75087"}, {"id": "26-63201", "objet": "PRESTATION DE NETTOYAGE ET D'ENTRETIEN DES LOCAUX COMMUNAUX", "acheteur": "Commune de Saulx Les Chartreux", "ville": "", "dept": "91,92,93,94", "source": "BOAMP", "ref": "26-63201", "procedure": "Procédure Ouverte", "publie": "27.06", "limite": "31.07.2026", "prio": "tiede", "score": 41.8, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : nettoyage", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-63201"}, {"id": "26-68435", "objet": "Accord-cadre relatif à la sécurisation aux abords des écoles élémentaires de la Ville de Mantes-la-Jolie", "acheteur": "Mairie de Mantes La Jolie", "ville": "Mantes la jolie", "dept": "78", "source": "BOAMP", "ref": "26-68435", "procedure": "Procédure Ouverte", "publie": "09.07", "limite": "24.09.2026", "prio": "tiede", "score": 41.4, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": true, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-68435"}, {"id": "26-70259", "objet": "Marché de prestations de gardiennage lors de manifestations sur sites\nLe titulaire du présent marché sera capable d'assurer sa mission de gardiennage dans le cadre d'interventions ", "acheteur": "Mairie de Sannois", "ville": "", "dept": "95", "source": "BOAMP", "ref": "26-70259", "procedure": "Procédure Ouverte", "publie": "16.07", "limite": "17.08.2026", "prio": "tiede", "score": 40.8, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": true, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-70259"}, {"id": "26-74504", "objet": "chalet DGAC pour le salon du Bourget", "acheteur": "SG / SDF2", "ville": "Paris Cedex 15", "dept": "75,93", "source": "BOAMP", "ref": "26-74504", "procedure": "Procédure Ouverte", "publie": "24.07", "limite": "14.09.2026", "prio": "tiede", "score": 40.4, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": true, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-74504"}, {"id": "MX-942278", "objet": "Entretien des locaux municipaux de Villenoy", "acheteur": "Commune de Villenoy", "ville": "Villenoy", "dept": "77", "source": "MAXIMILIEN", "ref": "MX-942278", "procedure": "AOO", "publie": "30.06", "limite": "31.07.2026", "prio": "tiede", "score": 40.3, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : entretien des locaux", "etage": "tri automatique", "neuf": false, "url": "https://marches.maximilien.fr/entreprise/consultation/942278?orgAcronyme=a4n"}, {"id": "26-60231", "objet": "Nettoyage des locaux communaux et des vitreries des bâtiments communaux", "acheteur": "Ville de Fontenay-aux-Roses", "ville": "", "dept": "92", "source": "BOAMP", "ref": "26-60231", "procedure": "Procédure Ouverte", "publie": "19.06", "limite": "29.07.2026", "prio": "tiede", "score": 40.0, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : nettoyage", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-60231"}, {"id": "26-67568", "objet": "Nettoyage des bâtiments communaux avec fourniture des consommables", "acheteur": "Mairie de Vaires sur Marne", "ville": "", "dept": "77", "source": "BOAMP", "ref": "26-67568", "procedure": "Procédure Ouverte", "publie": "08.07", "limite": "24.08.2026", "prio": "tiede", "score": 40.0, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : nettoyage", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-67568"}, {"id": "26-66211", "objet": "Accord-cadre de prestations de nettoyage des bâtiments du Département de la Seine-Saint-Denis", "acheteur": "Département de la Seine-Saint-Denis", "ville": "", "dept": "93", "source": "BOAMP", "ref": "26-66211", "procedure": "Procédure Ouverte", "publie": "05.07", "limite": "03.08.2026", "prio": "froid", "score": 39.8, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : nettoyage", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-66211"}, {"id": "26-75424", "objet": "Prestation de sécurité et de gardiennage évènementiel", "acheteur": "Commune de Brétigny sur Orge", "ville": "Brétigny-sur-orge", "dept": "91", "source": "BOAMP", "ref": "26-75424", "procedure": "Procédure Ouverte", "publie": "28.07", "limite": "15.09.2026", "prio": "froid", "score": 38.8, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": true, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-75424"}, {"id": "26-70805", "objet": "Prestation de paie externalisée", "acheteur": "Les Eaux de la Confluence", "ville": "Cergy-Pontoise", "dept": "95", "source": "BOAMP", "ref": "26-70805", "procedure": "Procédure Ouverte", "publie": "16.07", "limite": "06.08.2026", "prio": "froid", "score": 37.2, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-70805"}, {"id": "26-75050", "objet": "Prestation de gardiennage avec qualification SSIAP1 pour la Cité de la Musique Simone Veil à Meaux.", "acheteur": "COMMUNAUTE D&#039;AGGLOMERATION DU PAYS DE MEAUX", "ville": "", "dept": "77", "source": "BOAMP", "ref": "26-75050", "procedure": "Procédure Ouverte", "publie": "29.07", "limite": "03.09.2026", "prio": "froid", "score": 36.5, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": true, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-75050"}, {"id": "26-62559", "objet": "Achat et livraison de produits, matériels  et consommables d'entretien pour la ville  de Villeneuve Saint Georges", "acheteur": "MAIRIE DE VILLENEUVE-SAINT-GEORGES", "ville": "", "dept": "94,75,91", "source": "BOAMP", "ref": "26-62559", "procedure": "Procédure Ouverte", "publie": "25.06", "limite": "30.07.2026", "prio": "froid", "score": 35.0, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "PERTINENT", "via": "L'appel d'offres concerne l'achat et la livraison de produits, matériels et consommables d'entretien pour la ville.", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-62559"}, {"id": "26-73442", "objet": "Travaux de menuiseries extérieures et de vitrerie dans les bâtiments communaux", "acheteur": "Ville de Montrouge\nDirection des bâtiments, énergie et propreté \n43 avenue de la République\n92120 MONTROUGE", "ville": "", "dept": "92,75", "source": "BOAMP", "ref": "26-73442", "procedure": "Procédure Ouverte", "publie": "24.07", "limite": "28.09.2026", "prio": "froid", "score": 35.0, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-73442"}, {"id": "26-61419", "objet": "Prestations de mise en propreté et la gestion des déchets du réseau routier national et de ses dépendances gérés par les 4 arrondissements de la DiRIF", "acheteur": "Direction régionale et interdépartementale de l'Environnement, de l'Aménagement et des Transports d'Ile-de-France (DRIEAT-IF)", "ville": "", "dept": "75,77,78,91,92,93,94,95", "source": "BOAMP", "ref": "26-61419", "procedure": "Procédure Ouverte", "publie": "24.06", "limite": "03.08.2026", "prio": "froid", "score": 34.8, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : proprete", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-61419"}, {"id": "26-60020", "objet": "Entretien et nettoyage de l’ensemble des locaux du SIGIDURS", "acheteur": "SIGIDURS", "ville": "Sarcelles", "dept": "95", "source": "BOAMP", "ref": "26-60020", "procedure": "Procédure Ouverte", "publie": "17.06", "limite": "15.09.2026", "prio": "froid", "score": 34.7, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : nettoyage", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-60020"}, {"id": "26-64633", "objet": "Entretien des locaux municipaux de Villenoy", "acheteur": "Commune de Villenoy", "ville": "", "dept": "77", "source": "BOAMP", "ref": "26-64633", "procedure": "Procédure Ouverte", "publie": "01.07", "limite": "31.07.2026", "prio": "froid", "score": 33.6, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : entretien des locaux", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-64633"}, {"id": "26-74661", "objet": "Services de mise à disposition de personnels temporaires pour le Ccca-Btp", "acheteur": "Comité de concertation et de coordination de l'apprentissage du Btp", "ville": "Paris", "dept": "75", "source": "BOAMP", "ref": "26-74661", "procedure": "Procédure Ouverte", "publie": "24.07", "limite": "04.09.2026", "prio": "froid", "score": 32.0, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": true, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-74661"}, {"id": "26-73389", "objet": "PRESTATIONS DE SECURITE, GARDIENNAGE ET SURETE DES ARENES DE GRAND PARIS SUD", "acheteur": "CA GRAND PARIS SUD SEINE ESSONNE SENART", "ville": "", "dept": "91,77", "source": "BOAMP", "ref": "26-73389", "procedure": "Procédure Ouverte", "publie": "24.07", "limite": "28.09.2026", "prio": "froid", "score": 31.5, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": true, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-73389"}, {"id": "26-75019", "objet": "Prestations de gardiennage, de surveillance et de sécurité incendie pour les sites de la Commune de Villeneuve-La-Garenne (92390)", "acheteur": "Mairie de Villeneuve-la-Garenne", "ville": "", "dept": "92", "source": "BOAMP", "ref": "26-75019", "procedure": "Procédure Ouverte", "publie": "29.07", "limite": "10.09.2026", "prio": "froid", "score": 31.5, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": true, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-75019"}, {"id": "26-64372", "objet": "Marché public de prestations de services relatif au nettoyage des locaux administratifs du SIAH.", "acheteur": "SIAH (Syndicat Mixte d’Aménagement Hydraulique du Croult et du Petit Rosne)", "ville": "", "dept": "95", "source": "BOAMP", "ref": "26-64372", "procedure": "Procédure Ouverte", "publie": "01.07", "limite": "31.07.2026", "prio": "froid", "score": 31.3, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : nettoyage", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-64372"}, {"id": "MX-942763", "objet": "ENTRETIEN DES ESPACES EXTERIEURS DU PATRIMOINE DE LA VILLE DE BOURG-LA-REINE", "acheteur": "Mairie de Bourg-la-Reine", "ville": "Bourg-la-Reine", "dept": "92", "source": "MAXIMILIEN", "ref": "MX-942763", "procedure": "AOO", "publie": "12.07", "limite": "15.09.2026", "prio": "froid", "score": 30.5, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": false, "verdict": "PERTINENT", "via": "L'appel d'offres concerne l'entretien des espaces extérieurs, ce qui peut inclure la propreté et le nettoyage de ces zon", "etage": "tri automatique", "neuf": false, "url": "https://marches.maximilien.fr/entreprise/consultation/942763?orgAcronyme=x5h"}, {"id": "26-74239", "objet": "Prestations de nettoyage des loacux et de la vitrerie de la grande chancellerie de la Légion d'honneur et de la maison d'éducation de Saint-Denis", "acheteur": "GCLH.", "ville": "", "dept": "75,93,78", "source": "BOAMP", "ref": "26-74239", "procedure": "Procédure Ouverte", "publie": "26.07", "limite": "15.09.2026", "prio": "froid", "score": 25.5, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-74239"}, {"id": "26-73266", "objet": "PRESTATIONS DE NETTOYAGE DES SITES DE L'ENFANCE", "acheteur": "Département du Val-de-Marne", "ville": "", "dept": "94", "source": "BOAMP", "ref": "26-73266", "procedure": "Procédure Ouverte", "publie": "24.07", "limite": "24.09.2026", "prio": "froid", "score": 25.5, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-73266"}, {"id": "26-70752", "objet": "Nettoyage des locaux et de la vitrerie des bâtiments intercommunaux de l'agglomération Roissy Pays de France", "acheteur": "Agglomération Roissy Pays de France", "ville": "", "dept": "95", "source": "BOAMP", "ref": "26-70752", "procedure": "Procédure Ouverte", "publie": "17.07", "limite": "15.09.2026", "prio": "froid", "score": 25.0, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-70752"}, {"id": "26-69098", "objet": "Accord-cadre relatif à la mise à disposition de personnel intérimaire", "acheteur": "ANRU.", "ville": "", "dept": "93", "source": "BOAMP", "ref": "26-69098", "procedure": "Procédure Ouverte", "publie": "12.07", "limite": "07.09.2026", "prio": "froid", "score": 21.5, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": true, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-69098"}, {"id": "26-70040", "objet": "Prestations de gardiennage et sécurité incendie pour le campus HEC Paris", "acheteur": "HEC Paris", "ville": "", "dept": "78", "source": "BOAMP", "ref": "26-70040", "procedure": "Procédure Ouverte", "publie": "15.07", "limite": "17.09.2026", "prio": "froid", "score": 21.5, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": true, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-70040"}, {"id": "MX-943775", "objet": "Service de mise à disposition de personnel", "acheteur": "La Ville d'Antony", "ville": "Antony", "dept": "92", "source": "MAXIMILIEN", "ref": "MX-943775", "procedure": "AOO", "publie": "22.07", "limite": "09.09.2026", "prio": "froid", "score": 20.5, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": true, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : mise a disposition de personnel", "etage": "tri automatique", "neuf": false, "url": "https://marches.maximilien.fr/entreprise/consultation/943775?orgAcronyme=d5w"}, {"id": "26-70841", "objet": "Prestations d'hébergement de l'Espace d'exposition faisant partie du pavillon Occitanie pour le 56e Salon International de l'Aéronautique et de l'Espace Paris - Relance consultatio", "acheteur": "CCI OCCITANIE PYRENEES-MEDITERRANEE", "ville": "", "dept": "75", "source": "BOAMP", "ref": "26-70841", "procedure": "Procédure Ouverte", "publie": "17.07", "limite": "17.08.2026", "prio": "froid", "score": 18.8, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": true, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-70841"}, {"id": "26-74389", "objet": "Prestations de conseil et assistance en UX/UI, en développement, intégration et maintenance des projets numériques en 2 lots", "acheteur": "VILLE de PARIS - DFA - SDA", "ville": "", "dept": "75", "source": "BOAMP", "ref": "26-74389", "procedure": "Procédure Ouverte", "publie": "26.07", "limite": "22.09.2026", "prio": "froid", "score": 16.5, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": true, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-74389"}, {"id": "26-73883", "objet": "Marché n°26.AO.MG.050 - Renfort de personnel au sein du télé-accueil de l'EPT Est Ensemble", "acheteur": "Est Ensemble", "ville": "", "dept": "93,75", "source": "BOAMP", "ref": "26-73883", "procedure": "Procédure Ouverte", "publie": "25.07", "limite": "18.09.2026", "prio": "froid", "score": 16.5, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": true, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-73883"}, {"id": "26-53755", "objet": "Dépose, nettoyage et pose de stickers sur autobus", "acheteur": "Ratp Cap Ateliers Championnet", "ville": "", "dept": "75", "source": "BOAMP", "ref": "26-53755", "procedure": "Procédure Négociée", "publie": "03.06", "limite": "", "prio": "froid", "score": 16.2, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "PERTINENT", "via": "mot-cle coeur dans l'intitule : nettoyage", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-53755"}, {"id": "26-70598", "objet": "Location et entretien de linge de restauration et de maison pour le compte des Ministères sociaux", "acheteur": "Ministères sociaux, DFAS/SDADD", "ville": "", "dept": "75,77,78,91,92,93,94,95", "source": "BOAMP", "ref": "26-70598", "procedure": "Procédure Ouverte", "publie": "17.07", "limite": "07.08.2026", "prio": "froid", "score": 12.3, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": false, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-70598"}, {"id": "26-68439", "objet": "PRESTATIONS DE GARDIENNAGE ANNEE 2026-2027 (1 AN RECONDUCTIBLE 3 FOIS) 2 LOTS", "acheteur": "Mairie du Perreux sur Marne", "ville": "Le perreux sur marne", "dept": "94", "source": "BOAMP", "ref": "26-68439", "procedure": "Procédure Ouverte", "publie": "09.07", "limite": "07.08.2026", "prio": "froid", "score": 12.0, "buyer": "public", "sous": "Collectivité ou établissement public", "perso": true, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-68439"}, {"id": "26-72867", "objet": "La présente consultation a pour objet des prestations de sécurité incendie, de gardiennage des locaux et d’assistance aux personnels et usagers de l’arrondissement judiciaire de Pa", "acheteur": "Cour d'appel de Paris - SAR", "ville": "", "dept": "75,77,89,91,93,94,95", "source": "BOAMP", "ref": "26-72867", "procedure": "Procédure Restreinte", "publie": "23.07", "limite": "", "prio": "froid", "score": 11.5, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": true, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-72867"}, {"id": "26-70414", "objet": "prestations de gestion de l'entretien et des réparations des flottes de véhicules terrestres d’un PTAC ≤ 3,5 tonnes et des prestations d’assistance pour les véhicules en auto assur", "acheteur": "Direction des Achats de l'Etat (DAE)", "ville": "", "dept": "75", "source": "BOAMP", "ref": "26-70414", "procedure": "Procédure Ouverte", "publie": "17.07", "limite": "30.07.2026", "prio": "froid", "score": 0.0, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": true, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-70414"}, {"id": "26-70509", "objet": "GARDIENNAGE ET SURVEILLANCE DU CENTRE DE FORMATION DE GURCY-LE-CHATEL", "acheteur": "SDIS 77 de Seine-et-Marne", "ville": "", "dept": "77,91", "source": "BOAMP", "ref": "26-70509", "procedure": "Procédure Restreinte", "publie": "17.07", "limite": "", "prio": "froid", "score": 0.0, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": true, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-70509"}, {"id": "26-73122", "objet": "Mise à disposition de professionnels paramédicaux et éducatifs pour la Direction de la protection de l'enfance et de la jeunesse.", "acheteur": "Département du Val-de-Marne", "ville": "", "dept": "94", "source": "BOAMP", "ref": "26-73122", "procedure": "Procédure Ouverte", "publie": "23.07", "limite": "11.09.2026", "prio": "froid", "score": 0.0, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": true, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-73122"}, {"id": "26-68570", "objet": "PRESTATIONS DE GARDIENNAGE HUMAIN, CYNO-SURVEILLANCE ET CYNO-DETECTION D'EXPLOSIF", "acheteur": "ETBT du Château de Versailles", "ville": "Versailles cedex", "dept": "78,75", "source": "BOAMP", "ref": "26-68570", "procedure": "Procédure Ouverte", "publie": "09.07", "limite": "10.08.2026", "prio": "froid", "score": 0.0, "buyer": "prive", "sous": "Personne privée soumise à la commande publique", "perso": true, "verdict": "NON TRIE", "via": "", "etage": "tri automatique", "neuf": false, "url": "https://www.boamp.fr/pages/avis/?q=idweb:26-68570"}];
+
+  var LIB_SUIVI = { nouveau:"Nouveau", a_traiter:"À traiter", repondu:"Répondu", abandonne:"Abandonné" };
+
+  // ---------- État persistant ----------
+  var scoreMin = 0;
+
+  var defaut = {
+    theme: null, page: "accueil",
+    ov: {}, // id -> {correction, lu, suivi}
+    reglages: { notifications:true, collecte:true, rh:true,
+      destinataires:[],
+      fiche:"CHRUTH — nettoyage et propreté de locaux en Île-de-France. Entretien courant, vitrerie, bionettoyage, remise en état. Mise à disposition de personnel de service." },
+    crm: []
+  };
+  var S;
+  try { S = Object.assign({}, defaut, JSON.parse(localStorage.getItem(CLE) || "{}")); }
+  catch (e) { S = Object.assign({}, defaut); }
+  S.reglages = Object.assign({}, defaut.reglages, S.reglages || {});
+  function save() { try { localStorage.setItem(CLE, JSON.stringify(S)); } catch (e) {} }
+  function ov(id) { return S.ov[id] || (S.ov[id] = {}); }
+  function verdictEff(a) { var o = S.ov[a.id]; return (o && o.correction) ? o.correction : a.verdict; }
+
+  var toastT;
+  function toast(msg) {
+    var t = document.getElementById("toast");
+    t.textContent = msg; t.classList.add("show");
+    clearTimeout(toastT); toastT = setTimeout(function () { t.classList.remove("show"); }, 2200);
+  }
+
+  // ---------- Thème ----------
+  var bJour = document.getElementById("th-jour"), bNuit = document.getElementById("th-nuit");
+  function prefNuit() { return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches; }
+  function applTheme(n) {
+    root.setAttribute("data-theme", n ? "dark" : "light");
+    bNuit.setAttribute("aria-pressed", String(n)); bJour.setAttribute("aria-pressed", String(!n));
+    S.theme = n ? "dark" : "light"; save();
+  }
+  applTheme(S.theme ? S.theme === "dark" : prefNuit());
+  bJour.onclick = function () { applTheme(false); };
+  bNuit.onclick = function () { applTheme(true); };
+
+  // ---------- Navigation ----------
+  var GENERE_LE = "29/07/2026 à 17:55";
+
+  var PAGES = [
+    { id:"accueil", t:"Accueil" },
+    { id:"veille", t:"Veille appels d'offres" },
+    { id:"collecte", t:"Collecte" },
+    { id:"base", t:"Base de données" },
+    { id:"acheteurs", t:"Acheteurs de la semaine" },
+    { id:"carte", t:"Carte" },
+    { id:"messages", t:"Messages et CRM" },
+    { id:"pilotage", t:"Pilotage" },
+    { id:"dev", t:"Développeur" },
+    { id:"reglages", t:"Réglages" }
+  ];
+  var nav = document.getElementById("nav");
+  PAGES.forEach(function (p) {
+    var li = document.createElement("li");
+    var b = document.createElement("button");
+    b.textContent = p.t; b.dataset.p = p.id;
+    b.onclick = function () { aller(p.id); };
+    li.appendChild(b); nav.appendChild(li);
+  });
+  function aller(id) {
+    S.page = id; save();
+    Array.prototype.forEach.call(nav.querySelectorAll("button"), function (b) {
+      b.classList.toggle("actif", b.dataset.p === id);
+    });
+    render();
+  }
+
+  // ---------- Rendu ----------
+  var main = document.getElementById("main");
+  function esc(s) { return String(s).replace(/[&<>"]/g, function (c) { return ({ "&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;" })[c]; }); }
+
+  function render() {
+    var id = S.page;
+    if (id === "accueil") return renderAccueil();
+    if (id === "veille") return renderVeille();
+    if (id === "base") return renderBase();
+    if (id === "messages") return renderMessages();
+    if (id === "pilotage") return renderPilotage();
+    if (id === "reglages") return renderReglages();
+    if (id === "collecte") return renderCollecte();
+    if (id === "acheteurs") return renderAcheteurs();
+    if (id === "carte") return renderInfo("Carte", "La carte interactive des prospects (132 000 sociétés géolocalisées) est produite par le pipeline Python dans <b>output/Carte_Prospects_CHRUTH.html</b>. Elle ne peut pas être embarquée ici : ce fichier reste une interface, pas un moteur de données.");
+    if (id === "dev") return renderInfo("Développeur", "Le cockpit Excel <b>output/AO_CHRUTH.xlsm</b> et sa macro « Mettre à jour » vivent sur le poste. Cette page, côté Python, sert à l'inspecter et à relancer sa mise à jour après fermeture d'Excel.");
+  }
+
+  // Veille
+  var vFiltre = "tous", vRejetes = false;
+  function renderVeille() {
+    var vis = AOS.filter(function (a) {
+      var vd = verdictEff(a);
+      if (!vRejetes && vd === "REJETE") return false;
+      if (vFiltre !== "tous" && a.buyer !== vFiltre) return false;
+      if ((a.score || 0) < scoreMin) return false;
+      return true;
+    });
+    var pub = vis.filter(function (a) { return a.buyer === "public"; }).length;
+    var prv = vis.length - pub;
+    var chaud = vis.filter(function (a) { return a.prio === "chaud"; }).length;
+
+    var h = '<div class="page actif"><p class="kicker">Registre · veille en continu</p>' +
+      '<h1>Veille appels d\'offres</h1>' +
+      '<p class="intro">Les marchés de propreté d\'Île-de-France, triés par pertinence et classés par <em>type d\'acheteur</em>. Marque un avis pertinent ou non : ton jugement est mémorisé (localStorage) et l\'emporte sur le tri.</p>' +
+      '<div class="barre"><span class="tally"><b>' + vis.length + '</b> avis · <span class="pub"><b>' + pub + '</b> publics</span> · <span class="prv"><b>' + prv + '</b> privé-droit</span> · <b>' + chaud + '</b> chauds</span>' +
+      '<span class="filtre" role="group" aria-label="Type d\'acheteur">' +
+        fbtn("tous","Tous",vFiltre) + fbtn("public","Public",vFiltre) + fbtn("prive","Privé-droit",vFiltre) +
+        '<label class="check"><input type="checkbox" id="vr"' + (vRejetes ? " checked" : "") + '> rejetés</label>' +
+      '</span></div>' +
+      '<div class="barre"><label class="check" style="gap:10px">Score minimum ' +
+        '<input type="range" id="jauge" min="0" max="100" step="0.5" value="' + scoreMin + '" style="width:220px">' +
+        '<b id="jaugeVal">' + scoreMin.toFixed(1) + '</b></label>' +
+        '<span class="aide">Le score va à la décimale : au pas de 5, deux marchés voisins restaient à égalité.</span>' +
+      '</div><div class="registre">';
+
+    if (!vis.length) h += '<p class="vide">Aucun avis ne correspond au filtre.</p>';
+    vis.forEach(function (a) { h += recHTML(a); });
+    h += '</div>' + footVeille() + '</div>';
+    main.innerHTML = h;
+
+    document.getElementById("vr").onchange = function (e) { vRejetes = e.target.checked; renderVeille(); };
+    var jauge = document.getElementById("jauge");
+    // On redessine au relachement, pas a chaque pixel : re-rendre la liste
+    // entiere en continu saccade le defilement sur un telephone.
+    jauge.oninput = function () { document.getElementById("jaugeVal").textContent = (+jauge.value).toFixed(1); };
+    jauge.onchange = function () { scoreMin = +jauge.value; renderVeille(); };
+    Array.prototype.forEach.call(main.querySelectorAll(".filtre button"), function (b) {
+      b.onclick = function () { vFiltre = b.dataset.f; renderVeille(); };
+    });
+    bindRecActions();
+  }
+  function fbtn(f, lib, cur) { return '<button data-f="' + f + '" aria-pressed="' + (cur === f) + '">' + lib + '</button>'; }
+  function recHTML(a) {
+    var o = S.ov[a.id] || {}, vd = verdictEff(a);
+    var lu = !!o.lu, suivi = o.suivi || "nouveau";
+    var prioLib = a.prio === "chaud" ? "Chaud" : a.prio === "tiede" ? "Tiède" : "Froid";
+    var src = a.source === "JOUE" ? '<span class="src-joue">JOUE / TED</span>' : '<span>' + a.source + '</span>';
+    var oui = vd === "PERTINENT";
+    return '<article class="rec ' + (vd === "REJETE" ? "rejete" : "") + '" data-id="' + a.id + '">' +
+      '<div class="prio ' + a.prio + '">' + prioLib + (a.score ? '<span class="sc">' + a.score + '</span>' : '') + '</div>' +
+      '<div><h3>' + (a.neuf && !lu ? '<span class="neuf">Nouveau</span>' : '') + esc(a.objet) + '</h3>' +
+      '<p class="ach">' + esc(a.acheteur) + ' · ' + esc(a.ville) + ' (' + a.dept + ')</p>' +
+      '<p class="ref">' + src + '<span>réf. ' + a.ref + '</span><span>' + esc(a.procedure) + '</span><span>publié ' + a.publie + '</span><span>limite ' + a.limite + '</span></p>' +
+      '<p class="verdict"><b class="' + (oui ? "oui" : "non") + '">' + (oui ? "Pertinent" : "Rejeté") + '</b> — ' + esc(a.via) + ' <span class="via">· ' + (o.correction ? "corrigé à la main" : a.etage) + '</span></p>' +
+      '<div class="actions">' +
+        '<button class="btn' + (vd === "PERTINENT" && o.correction ? " on-oui" : "") + '" data-a="oui">Pertinent</button>' +
+        '<button class="btn' + (vd === "REJETE" && o.correction ? " on-non" : "") + '" data-a="non">Pas pertinent</button>' +
+        '<button class="btn" data-a="lu">' + (lu ? "Marquer non lu" : "Marquer lu") + '</button>' +
+        '<select class="mini" data-a="suivi" aria-label="Suivi">' +
+          Object.keys(LIB_SUIVI).map(function (k) { return '<option value="' + k + '"' + (k === suivi ? " selected" : "") + '>' + LIB_SUIVI[k] + '</option>'; }).join("") +
+        '</select></div></div>' +
+      '<div class="type ' + a.buyer + '"><span class="t">' + (a.buyer === "public" ? "Public" : "Privé-droit") + '</span>' +
+        '<span class="sous">' + esc(a.sous) + '</span>' + (a.perso ? '<span class="perso">Personnel</span>' : '') + '</div></article>';
+  }
+  function bindRecActions() {
+    Array.prototype.forEach.call(main.querySelectorAll(".rec"), function (rec) {
+      var id = rec.dataset.id;
+      rec.querySelector('[data-a="oui"]').onclick = function () { ov(id).correction = "PERTINENT"; save(); toast("Marqué pertinent"); renderVeille(); };
+      rec.querySelector('[data-a="non"]').onclick = function () { ov(id).correction = "REJETE"; save(); toast("Marqué non pertinent"); renderVeille(); };
+      rec.querySelector('[data-a="lu"]').onclick = function () { var o = ov(id); o.lu = !o.lu; save(); renderVeille(); };
+      rec.querySelector('[data-a="suivi"]').onchange = function (e) { ov(id).suivi = e.target.value; save(); toast("Suivi : " + LIB_SUIVI[e.target.value]); };
+    });
+  }
+  function footVeille() {
+    return '<footer><b>Interface HTML autonome.</b> La navigation, le filtrage, le marquage, les réglages et le CRM fonctionnent ici et sont mémorisés dans le navigateur. La collecte réelle (BOAMP, Maximilien, <span class="j">JOUE</span>), la génération par IA et la synchronisation GitHub restent assurées par l\'application Python.</footer>';
+  }
+
+  // Base de données
+  var qBase = "";
+  function renderBase() {
+    var q = qBase.trim().toLowerCase();
+    var rows = AOS.filter(function (a) {
+      return !q || (a.objet + " " + a.acheteur + " " + a.ville + " " + a.sous).toLowerCase().indexOf(q) >= 0;
+    });
+    var h = '<div class="page actif"><p class="kicker">Base · tous les avis collectés</p><h1>Base de données</h1>' +
+      '<p class="intro">Tous les avis en base, filtrés et rejetés compris, avec leur classification. Recherche plein texte sur l\'objet, l\'acheteur, la ville, le type.</p>' +
+      '<div class="fld" style="max-width:340px;margin-bottom:16px"><input class="champ" id="qb" placeholder="Rechercher…" value="' + esc(qBase) + '"></div>' +
+      '<div class="tblwrap"><table class="reg"><thead><tr><th>Objet</th><th>Acheteur</th><th>Type</th><th>Source</th><th>Prio</th><th>Verdict</th></tr></thead><tbody>';
+    if (!rows.length) h += '<tr><td colspan="6" class="vide">Aucun résultat.</td></tr>';
+    rows.forEach(function (a) {
+      var vd = verdictEff(a);
+      h += '<tr><td>' + esc(a.objet) + '</td><td>' + esc(a.acheteur) + ' <span style="color:var(--faible)">(' + a.dept + ')</span></td>' +
+        '<td class="tbtype-' + a.buyer + '">' + (a.buyer === "public" ? "Public" : "Privé-droit") + '<br><span style="color:var(--faible);font-weight:400">' + esc(a.sous) + '</span></td>' +
+        '<td>' + a.source + '</td><td class="num">' + (a.score || "—") + '</td>' +
+        '<td style="color:' + (vd === "PERTINENT" ? "var(--vert)" : "var(--rouge)") + ';font-weight:600">' + (vd === "PERTINENT" ? "Pertinent" : "Rejeté") + '</td></tr>';
+    });
+    h += '</tbody></table></div></div>';
+    main.innerHTML = h;
+    var qb = document.getElementById("qb");
+    qb.oninput = function (e) { qBase = e.target.value; var p = qb.selectionStart; renderBase(); var n = document.getElementById("qb"); n.focus(); n.setSelectionRange(p, p); };
+  }
+
+  // Messages et CRM
+  // Base vide : le miroir livre sans donnees est un modele, et il doit rester
+  // consultable. Lire AOS[0] sans garde faisait echouer tout le script, donc
+  // la page entiere, avant meme le premier affichage.
+  var msgSel = AOS.length ? AOS[0].id : "";
+  function renderMessages() {
+    var h = '<div class="page actif"><p class="kicker">Rédaction &amp; suivi commercial</p><h1>Messages et CRM</h1>' +
+      '<div class="section"><h2>Message pour un appel d\'offres</h2>' +
+      '<p class="aide">Choisis un avis : un brouillon d\'email et un script d\'appel sont composés à partir de gabarits (ici sans IA — l\'application Python appelle un vrai modèle). Édite librement, puis copie.</p>' +
+      '<div class="fld" style="max-width:520px;margin-bottom:12px"><label>Appel d\'offres</label><select class="champ" id="msgao">' +
+        AOS.filter(function (a) { return verdictEff(a) === "PERTINENT"; }).map(function (a) { return '<option value="' + a.id + '"' + (a.id === msgSel ? " selected" : "") + '>[' + a.prio.toUpperCase() + '] ' + esc(a.objet.slice(0, 60)) + ' — ' + esc(a.acheteur) + '</option>'; }).join("") +
+      '</select></div>' +
+      '<button class="btn primaire" id="gen">Composer le message</button>' +
+      '<div id="msgout"></div></div>' +
+      crmHTML() + '</div>';
+    main.innerHTML = h;
+    document.getElementById("msgao").onchange = function (e) { msgSel = e.target.value; };
+    document.getElementById("gen").onclick = function () { composer(); };
+    bindCRM();
+  }
+  function composer() {
+    var a = AOS.filter(function (x) { return x.id === msgSel; })[0]; if (!a) return;
+    var email = "Objet : Réponse à votre consultation — " + a.objet + "\n\n" +
+      "À l'attention de " + a.acheteur + ",\n\n" +
+      "Spécialisée dans le nettoyage et la propreté de locaux en Île-de-France, notre entreprise CHRUTH souhaite répondre à votre consultation « " + a.objet + " » (" + a.ville + ", " + a.dept + ").\n\n" +
+      "Nous assurons l'entretien courant, la vitrerie et la remise en état de locaux, avec une équipe formée et un suivi qualité régulier. Nous serions honorés de vous adresser une offre adaptée à votre cahier des charges.\n\n" +
+      "Dans l'attente de votre retour,\nL'équipe CHRUTH";
+    var script = "Bonjour, je me présente, [votre nom] de CHRUTH, spécialisée en propreté de locaux en Île-de-France. " +
+      "Nous avons vu votre consultation « " + a.objet + " » pour " + a.acheteur + ". " +
+      "Puis-je vous poser deux questions sur le périmètre et la date limite (" + a.limite + ") afin d'ajuster notre offre ?";
+    var out = document.getElementById("msgout");
+    out.innerHTML = '<p class="aide" style="margin-top:16px">Source : <b style="color:var(--secondaire)">gabarit</b> (déterministe, hors IA).</p>' +
+      '<div class="fld full" style="margin-bottom:12px"><label>Email (éditable)</label><textarea class="champ" rows="10">' + esc(email) + '</textarea></div>' +
+      '<div class="fld full"><label>Script d\'appel</label><textarea class="champ" rows="4">' + esc(script) + '</textarea></div>';
+  }
+  function crmHTML() {
+    var rows = S.crm.map(function (c, i) {
+      return '<tr><td>' + esc(c.societe) + '</td><td>' + esc(c.statut) + '</td><td class="num">' + (c.montant ? esc(c.montant) + " €" : "—") + '</td><td><button class="lien-btn" data-del="' + i + '" style="color:var(--rouge)">retirer</button></td></tr>';
+    }).join("");
+    var STAT = ["Prospect contacté","Devis envoyé","Gagné","Perdu","Client actif","Client perdu"];
+    return '<div class="section"><h2>CRM — suivi commercial</h2><p class="aide">Enregistre le suivi réel (contact, devis, contrat). Mémorisé dans le navigateur ; sur le poste, le pipeline alimente l\'analyse de rentabilité.</p>' +
+      '<div class="form-grid"><div class="fld"><label>Société</label><input class="champ" id="c-soc"></div>' +
+      '<div class="fld"><label>Statut</label><select class="champ" id="c-stat">' + STAT.map(function (s) { return '<option>' + s + '</option>'; }).join("") + '</select></div>' +
+      '<div class="fld"><label>Montant contrat (€/an)</label><input class="champ" id="c-mnt" inputmode="numeric"></div>' +
+      '<div class="fld" style="align-self:end"><button class="btn primaire" id="c-add">Enregistrer</button></div></div>' +
+      '<div class="tblwrap"><table class="reg"><thead><tr><th>Société</th><th>Statut</th><th>Montant</th><th></th></tr></thead><tbody id="crmbody">' +
+      (rows || '<tr><td colspan="4" class="vide">Aucune entrée pour le moment.</td></tr>') + '</tbody></table></div></div>';
+  }
+  function bindCRM() {
+    var add = document.getElementById("c-add"); if (!add) return;
+    add.onclick = function () {
+      var soc = document.getElementById("c-soc").value.trim();
+      if (!soc) { toast("Renseigne au moins la société."); return; }
+      S.crm.push({ societe: soc, statut: document.getElementById("c-stat").value, montant: document.getElementById("c-mnt").value.trim() });
+      save(); toast("Entrée enregistrée"); renderMessages();
+    };
+    Array.prototype.forEach.call(main.querySelectorAll("[data-del]"), function (b) {
+      b.onclick = function () { S.crm.splice(+b.dataset.del, 1); save(); renderMessages(); };
+    });
+  }
+
+  // Pilotage
+  function renderPilotage() {
+    var actifs = AOS.filter(function (a) { return verdictEff(a) === "PERTINENT"; });
+    var atrier = AOS.filter(function (a) { return a.verdict === "NON TRIE" && !(S.ov[a.id] || {}).correction; });
+    var restants = AOS.map(joursRestants).filter(function (j) { return j !== null && j >= 0; });
+    function sous(n) { return restants.filter(function (j) { return j <= n; }).length; }
+
+    // Repartition sur un axe, du plus fourni au moins fourni.
+    function repartition(cle, libelle) {
+      var comptes = {};
+      AOS.forEach(function (a) { var v = a[cle] || "—"; comptes[v] = (comptes[v] || 0) + 1; });
+      var lignes = Object.keys(comptes).map(function (k) { return [k, comptes[k]]; })
+        .sort(function (x, y) { return y[1] - x[1]; }).slice(0, 8);
+      return '<div class="section"><h2>' + libelle + '</h2><div class="tblwrap"><table>' +
+        '<thead><tr><th>' + libelle + '</th><th>Avis</th></tr></thead><tbody>' +
+        lignes.map(function (l) { return '<tr><td>' + esc(String(l[0])) + '</td><td>' + l[1] + '</td></tr>'; }).join("") +
+        '</tbody></table></div></div>';
+    }
+
+    var kpi = [["Echeance sous 7 j", sous(7)], ["Sous 15 j", sous(15)],
+               ["Sous 30 j", sous(30)], ["En attente de tri", atrier.length]];
+
+    var h = '<div class="page actif"><p class="kicker">Indicateurs</p><h1>Pilotage</h1>' +
+      '<p class="intro">Ce qui attend, et ou sont les marches. Donnees au <b>' + esc(GENERE_LE || "date inconnue") + '</b>, ' +
+      AOS.length + ' avis embarques dont ' + actifs.length + ' retenus par le tri.</p>' +
+      '<dl class="kpis">' + kpi.map(function (k) { return '<div><dt>' + k[0] + '</dt><dd>' + k[1] + '</dd></div>'; }).join("") + '</dl>' +
+      '<p class="aide">Les paliers sont cumulatifs : « sous 15 j » contient « sous 7 j ».</p>';
+
+    h += repartition("prio", "Par priorite") + repartition("dept", "Par departement") + repartition("source", "Par source");
+    h += '<p class="note-page">Ce miroir ne montre pas d\'entonnoir commercial : les colonnes de suivi sont vides tant que personne ne les remplit, et un bloc entierement a zero se lit comme une panne. Le detail de la collecte vit dans l\'application Python.</p></div>';
+    main.innerHTML = h;
+  }
+
+  // Jours restants avant la date limite, au format "28.09.2026" du miroir.
+  function joursRestants(a) {
+    var m = String(a.limite || "").match(/^(\d{2})\.(\d{2})\.(\d{4})$/);
+    if (!m) return null;
+    var lim = new Date(+m[3], +m[2] - 1, +m[1]);
+    var auj = new Date(); auj.setHours(0, 0, 0, 0);
+    return Math.round((lim - auj) / 86400000);
+  }
+
+  function couleurUrgence(j) { return j <= 7 ? "chaud" : (j <= 15 ? "tiede" : "froid"); }
+
+  // Accueil
+  function renderAccueil() {
+    var actifs = AOS.filter(function (a) { return verdictEff(a) === "PERTINENT"; });
+    var chauds = AOS.filter(function (a) { return a.prio === "chaud"; });
+    var urgents = AOS.map(function (a) { return { a: a, j: joursRestants(a) }; })
+      .filter(function (x) { return x.j !== null && x.j >= 0 && x.a.prio !== "froid"; })
+      .sort(function (x, y) { return x.j - y.j; }).slice(0, 5);
+
+    var kpi = [["Avis embarques", AOS.length], ["Retenus par le tri", actifs.length],
+               ["Chauds", chauds.length], ["Echeances a venir", urgents.length]];
+
+    var h = '<div class="page actif"><p class="kicker">Vue d\'ensemble</p><h1>CHRUTH — veille marches publics</h1>' +
+      '<p class="intro">Detecter les appels d\'offres de proprete en Ile-de-France, les trier, et preparer la prise de contact. Donnees au <b>' + esc(GENERE_LE || "date inconnue") + '</b>.</p>' +
+      '<dl class="kpis">' + kpi.map(function (k) { return '<div><dt>' + k[0] + '</dt><dd>' + k[1] + '</dd></div>'; }).join("") + '</dl>' +
+      '<div class="section"><h2>Echeances les plus proches</h2>';
+    if (!urgents.length) h += '<p class="vide">Aucun marche prioritaire avec une date limite a venir.</p>';
+    else h += '<div class="registre">' + urgents.map(function (x) {
+      return '<article class="rec"><div class="prio ' + couleurUrgence(x.j) + '">dans ' + x.j + ' j</div>' +
+        '<div><h3>' + esc(x.a.objet) + '</h3>' +
+        '<p class="ach">' + esc(x.a.acheteur) + ' · limite ' + esc(x.a.limite) + ' · score ' + x.a.score + '</p>' +
+        (x.a.url ? '<p class="ref"><a href="' + esc(x.a.url) + '" target="_blank" rel="noopener">Ouvrir l\'avis d\'origine</a></p>' : '') +
+        '</div></article>';
+    }).join("") + '</div>';
+    h += '</div><div class="section"><h2>Retenus par le tri</h2>';
+    if (!actifs.length) h += '<p class="vide">Aucun avis retenu pour le moment.</p>';
+    else h += '<div class="registre">' + actifs.slice(0, 5).map(function (a) {
+      return '<article class="rec"><div class="prio ' + a.prio + '">' + a.score + '</div>' +
+        '<div><h3>' + esc(a.objet) + '</h3>' +
+        '<p class="ach">' + esc(a.acheteur) + ' · publie le ' + esc(a.publie) + '</p>' +
+        (a.via ? '<p class="verdict"><b class="oui">Pertinent</b> — ' + esc(a.via) + '</p>' : '') +
+        '</div></article>';
+    }).join("") + '</div>';
+    h += '</div><p class="note-page">Les echeances viennent des marches collectes ; les retenus viennent du jugement du tri. Un marche peut etre retenu sans avoir d\'echeance proche.</p></div>';
+    main.innerHTML = h;
+  }
+
+  // Réglages
+  function renderReglages() {
+    var r = S.reglages;
+    function swrow(cle, lib, aide, onLib, offLib) {
+      var on = !!r[cle];
+      return '<div class="switch-row"><div class="lib">' + lib + '<small>' + aide + '</small></div>' +
+        '<div style="display:flex;align-items:center;gap:14px"><span class="' + (on ? "etat-oui" : "etat-non") + '">' + (on ? onLib : offLib) + '</span>' +
+        '<button class="btn" data-sw="' + cle + '">' + (on ? "Désactiver" : "Activer") + '</button></div></div>';
+    }
+    main.innerHTML = '<div class="page actif"><p class="kicker">Source unique · vue depuis la plateforme</p><h1>Réglages</h1>' +
+      '<p class="intro">Modifié ici, appliqué partout dans l\'application Python. Ici les changements sont mémorisés dans le navigateur.</p>' +
+      '<div class="section"><h2>Destinataires des alertes</h2><p class="aide">Une adresse par ligne. Les alertes email partent vers ces adresses.</p>' +
+      '<textarea class="champ" id="dest" rows="4">' + esc(r.destinataires.join("\n")) + '</textarea>' +
+      '<div style="margin-top:10px"><button class="btn primaire" id="dest-save">Enregistrer les destinataires</button></div></div>' +
+      '<div class="section"><h2>Interrupteurs</h2>' +
+      swrow("notifications", "Notifications", "Les emails d'alerte partent-ils ?", "actives", "suspendues") +
+      swrow("collecte", "Collecte", "Les sources sont-elles interrogées ?", "active", "suspendue") +
+      swrow("rh", "Marchés de personnel", "Prendre en compte les marchés de mise à disposition de personnel", "pris en compte", "ignorés") +
+      '</div>' +
+      '<div class="section"><h2>Fiche CHRUTH</h2><p class="aide">Alimente la rédaction des messages et le prompt de tri. Laisser vide plutôt qu\'approximer.</p>' +
+      '<textarea class="champ" id="fiche" rows="5">' + esc(r.fiche) + '</textarea>' +
+      '<div style="margin-top:10px"><button class="btn primaire" id="fiche-save">Enregistrer la fiche</button></div></div></div>';
+
+    document.getElementById("dest-save").onclick = function () {
+      r.destinataires = document.getElementById("dest").value.split("\n").map(function (s) { return s.trim(); }).filter(function (s) { return s && s.indexOf("@") >= 0; });
+      save(); toast(r.destinataires.length + " destinataire(s) enregistré(s)"); renderReglages();
+    };
+    document.getElementById("fiche-save").onclick = function () { r.fiche = document.getElementById("fiche").value; save(); toast("Fiche enregistrée"); };
+    Array.prototype.forEach.call(main.querySelectorAll("[data-sw]"), function (b) {
+      b.onclick = function () { r[b.dataset.sw] = !r[b.dataset.sw]; save(); renderReglages(); };
+    });
+  }
+
+  // Collecte (simulée, honnête)
+  function renderCollecte() {
+    main.innerHTML = '<div class="page actif"><p class="kicker">Lancer une mise à jour</p><h1>Collecte</h1>' +
+      '<p class="intro">Dans l\'application Python, ces boutons lancent la collecte réelle (BOAMP, Maximilien, <em>JOUE/TED</em>) et remplissent la base. Ici, la collecte est <b>simulée</b> — un fichier HTML seul n\'a pas accès aux sources.</p>' +
+      '<div class="actions"><button class="btn primaire" data-col="ao">Collecter les appels d\'offres</button>' +
+      '<button class="btn" data-col="prospects">Collecter les prospects</button>' +
+      '<button class="btn" data-col="tout">Les deux</button></div>' +
+      '<div class="log" id="log">Prêt. Sélectionne une collecte à simuler.</div></div>';
+    Array.prototype.forEach.call(main.querySelectorAll("[data-col]"), function (b) {
+      b.onclick = function () { simulerCollecte(b.dataset.col); };
+    });
+  }
+  function simulerCollecte(quoi) {
+    var log = document.getElementById("log");
+    var lignes = quoi === "prospects"
+      ? ["[simulation] Recherche Entreprises (data.gouv)…", "[simulation] 132 000 sociétés retraitées.", "[simulation] Carte régénérée."]
+      : quoi === "tout"
+      ? ["[simulation] BOAMP + Maximilien + JOUE…", "[simulation] 8 avis, 6 retenus, 2 rejetés.", "[simulation] Prospects retraités."]
+      : ["[simulation] BOAMP…", "[simulation] Maximilien…", "[simulation] JOUE / TED…", "[simulation] 8 avis collectés, 6 retenus."];
+    log.textContent = ""; var i = 0;
+    (function step() {
+      if (i >= lignes.length) { log.textContent += "\nTerminé (simulation). La collecte réelle se lance depuis l'application Python."; return; }
+      log.textContent += (i ? "\n" : "") + lignes[i++]; setTimeout(step, 420);
+    })();
+  }
+
+  // Acheteurs de la semaine
+  var ACH = [{"nom": "Mairie du Perreux sur Marne", "type": "public", "sous": "Collectivité ou établissement public", "cp": "94170", "ville": "LE PERREUX SUR MARNE", "dept": "94", "eff": "500 à 999 salariés", "nb": 2, "prio": "CHAUD", "aos": [{"o": "Travaux neufs et d'entretien des bâtiments communaux, année 2026-2027 (1 an reconductible 1 fois) - Lot 2 : menuiseries ", "d": "29.07", "p": "CHAUD"}, {"o": "Prestations d'espaces verts, année 2026-2027 (1 an reconductible 1 fois) - Lot 2 : Élagage et abattage.", "d": "29.07", "p": "TIEDE"}]}, {"nom": "Mairie de Boulogne-Billancpurt", "type": "public", "sous": "Collectivité ou établissement public", "cp": "92100", "ville": "BOULOGNE-BILLANCOURT", "dept": "92", "eff": "2000 à 4999 salariés", "nb": 1, "prio": "CHAUD", "aos": [{"o": "ENTRETIEN MENAGER ET NETTOYAGE DES SURFACES VITREES", "d": "29.07", "p": "CHAUD"}]}, {"nom": "Mairie de Roissy-en-Brie", "type": "public", "sous": "Collectivité ou établissement public", "cp": "77680", "ville": "ROISSY EN BRIE", "dept": "77", "eff": "500 à 999 salariés", "nb": 1, "prio": "CHAUD", "aos": [{"o": "Prestations D'Entretien Ménager Des Gymnases De La Ville De Roissy-En-Brie", "d": "27.07", "p": "CHAUD"}]}, {"nom": "Ville de Gennevilliers", "type": "public", "sous": "à confirmer", "cp": "", "ville": "", "dept": "92", "eff": "", "nb": 1, "prio": "CHAUD", "aos": [{"o": "ENTRETIEN, REMISE EN ETAT ET AMENAGEMENT D'ESPACES VERTS POUR LA VILLE DE GENNEVILLIERS\nLOT N°1 : Entretien des secteurs", "d": "24.07", "p": "CHAUD"}]}, {"nom": "ENSA Paris-La Villette", "type": "public", "sous": "Collectivité ou établissement public", "cp": "75019", "ville": "Paris", "dept": "75,92,93,91,95,77,94", "eff": "500 à 999 salariés", "nb": 1, "prio": "CHAUD", "aos": [{"o": "Prestations de nettoyage des locaux de l'École nationale supérieure d’architecture de Paris-La Villette", "d": "23.07", "p": "CHAUD"}]}, {"nom": "Centre Monuments Nationaux", "type": "public", "sous": "Collectivité ou établissement public", "cp": "75004", "ville": "PARIS", "dept": "75,56", "eff": "250 à 499 salariés", "nb": 1, "prio": "CHAUD", "aos": [{"o": "Entretien ménager des locaux des sites mégalithiques de Carnac et Locmariaquer", "d": "23.07", "p": "CHAUD"}]}, {"nom": "Ville de Boulogne-Billancourt", "type": "public", "sous": "à confirmer", "cp": "", "ville": "Boulogne-Billancourt", "dept": "92", "eff": "", "nb": 2, "prio": "TIEDE", "aos": [{"o": "26026 ENTRETIEN MENAGER ET NETTOYAGE DES SURFACES VITREES", "d": "27.07", "p": "TIEDE"}, {"o": "26026 ENTRETIEN MENAGER ET NETTOYAGE DES SURFACES VITREES", "d": "27.07", "p": "TIEDE"}]}, {"nom": "CD94 - Conseil départemental du Val-de-Marne", "type": "public", "sous": "à confirmer", "cp": "", "ville": "Créteil", "dept": "94", "eff": "", "nb": 2, "prio": "TIEDE", "aos": [{"o": "PRESTATIONS DE NETTOYAGE DES SITES DE L'ENFANCE", "d": "24.07", "p": "TIEDE"}, {"o": "PRESTATIONS DE NETTOYAGE DES SITES DE L'ENFANCE", "d": "24.07", "p": "TIEDE"}]}, {"nom": "Ville de La Courneuve", "type": "public", "sous": "à confirmer", "cp": "", "ville": "La Courneuve", "dept": "93", "eff": "", "nb": 2, "prio": "TIEDE", "aos": [{"o": "ACCORD-CADRE DE MISSIONS DE GARDIENNAGE ET SECURISATION DES BATIMENTS COMMUNAUX ET DES MANIFESTATIONS PUBLIQUES", "d": "24.07", "p": "TIEDE"}, {"o": "ACCORD-CADRE DE MISSIONS DE GARDIENNAGE ET SECURISATION DES BATIMENTS COMMUNAUX ET DES MANIFESTATIONS PUBLIQUES", "d": "24.07", "p": "TIEDE"}]}, {"nom": "Saint-Quentin-en-Yvelines - Communauté d'agglomération", "type": "public", "sous": "à confirmer", "cp": "", "ville": "", "dept": "78", "eff": "", "nb": 1, "prio": "TIEDE", "aos": [{"o": "Gestion des espaces verts et des équipements classés en intérêt communautaire de Saint-Quentin-en-Yvelines", "d": "29.07", "p": "TIEDE"}]}, {"nom": "Département des Hauts-de-Seine", "type": "public", "sous": "à confirmer", "cp": "", "ville": "", "dept": "92", "eff": "", "nb": 1, "prio": "TIEDE", "aos": [{"o": "Fourniture de petits matériels et de consommables d'entretien et d'hygiène", "d": "25.07", "p": "TIEDE"}]}, {"nom": "SG / SDF2", "type": "public", "sous": "Collectivité ou établissement public", "cp": "75015", "ville": "Paris Cedex 15", "dept": "75,93", "eff": "500 à 999 salariés", "nb": 1, "prio": "TIEDE", "aos": [{"o": "chalet DGAC pour le salon du Bourget", "d": "24.07", "p": "TIEDE"}]}, {"nom": "Ville de Plaisir", "type": "public", "sous": "Collectivité ou établissement public", "cp": "78370", "ville": "PLAISIR", "dept": "78", "eff": "500 à 999 salariés", "nb": 1, "prio": "TIEDE", "aos": [{"o": "26MF026 - Fourniture d'appareils ménagers et d'équipements professionnels", "d": "23.07", "p": "TIEDE"}]}, {"nom": "CNRS Délégation paris-Centre", "type": "public", "sous": "Collectivité ou établissement public", "cp": "75005", "ville": "PARIS", "dept": "75,77,78,91,92,93,94,95", "eff": "2000 à 4999 salariés", "nb": 1, "prio": "TIEDE", "aos": [{"o": "Prestations de nettoyage courant des locaux du CNRS et de vitreries incluant la fourniture des produits d’entretien et d", "d": "22.07", "p": "TIEDE"}]}, {"nom": "Mairie d'ANTONY", "type": "public", "sous": "Collectivité ou établissement public", "cp": "92160", "ville": "ANTONY", "dept": "92", "eff": "1000 à 1999 salariés", "nb": 1, "prio": "TIEDE", "aos": [{"o": "Service de mise à disposition de personnel", "d": "22.07", "p": "TIEDE"}]}, {"nom": "COMMUNE DE BOIS-COLOMBES", "type": "public", "sous": "à confirmer", "cp": "", "ville": "BOIS-COLOMBES", "dept": "92", "eff": "", "nb": 1, "prio": "TIEDE", "aos": [{"o": "GESTION DES APPELS ET SUIVI DES INTERVENTIONS, DIFFUSION AUTOMATIQUE DE MESSAGES ENREGISTRES, LOCATION, INSTALLATION ET ", "d": "27.07", "p": "TIEDE"}]}, {"nom": "Conseil Régional d'Ile-de-France", "type": "public", "sous": "à confirmer", "cp": "", "ville": "Saint-Ouen-sur-Seine", "dept": "93", "eff": "", "nb": 1, "prio": "FROID", "aos": [{"o": "Mission d’Assistance à Maîtrise d’Ouvrage Technique et Qualité Environnementale « AMO TQE » (Lot 1) et en matière d’écon", "d": "28.07", "p": "FROID"}]}, {"nom": "Les éparses", "type": "prive", "sous": "à confirmer", "cp": "", "ville": "CHAUX", "dept": "90", "eff": "", "nb": 1, "prio": "FROID", "aos": [{"o": "Prestation d'entretien du linge plat", "d": "24.07", "p": "FROID"}]}, {"nom": "La Ville d'Antony", "type": "prive", "sous": "à confirmer", "cp": "", "ville": "Antony", "dept": "92", "eff": "", "nb": 1, "prio": "FROID", "aos": [{"o": "Service de mise à disposition de personnel", "d": "22.07", "p": "FROID"}]}];
+  var achFiltre = "tous";
+  function renderAcheteurs() {
+    var vis = ACH.filter(function (a) { return achFiltre === "tous" || a.type === achFiltre; });
+    var pub = vis.filter(function (a) { return a.type === "public"; }).length;
+    var h = '<div class="page actif"><p class="kicker">Cibles chaudes · 7 derniers jours</p>' +
+      '<h1>Acheteurs de la semaine</h1>' +
+      '<p class="intro">Les organisations ayant publié un appel d\'offres de propreté pertinent dans les 7 derniers jours, classées <em>public / privé-droit</em> et enrichies (effectif, adresse). Remplace la prospection « toutes entreprises ».</p>' +
+      '<div class="barre"><span class="tally"><b>' + vis.length + '</b> acheteurs · <span class="pub"><b>' + pub + '</b> publics</span> · <span class="prv"><b>' + (vis.length - pub) + '</b> privé-droit</span></span>' +
+      '<span class="filtre" role="group" aria-label="Type">' +
+        fbtnA("tous", "Tous") + fbtnA("public", "Public") + fbtnA("prive", "Privé-droit") + '</span></div><div class="registre">';
+    vis.forEach(function (a) {
+      h += '<article class="rec" data-buyer="' + a.type + '"><div class="prio ' + (a.prio === "CHAUD" ? "chaud" : "tiede") + '">' + a.prio + '<span class="sc">' + a.nb + ' AO</span></div>' +
+        '<div><h3>' + a.nom + '</h3><p class="ach">' + a.cp + ' ' + a.ville + ' (' + a.dept + ') · effectif ' + a.eff + '</p>' +
+        '<p class="ref">' + a.aos.map(function (x) { return '<span>' + x.o + ' — ' + x.d + ' · ' + x.p + '</span>'; }).join("") + '</p></div>' +
+        '<div class="type ' + a.type + '"><span class="t">' + (a.type === "public" ? "Public" : "Privé-droit") + '</span><span class="sous">' + a.sous + '</span></div></article>';
+    });
+    h += '</div></div>';
+    main.innerHTML = h;
+    Array.prototype.forEach.call(main.querySelectorAll(".filtre button"), function (b) {
+      b.onclick = function () { achFiltre = b.dataset.f; renderAcheteurs(); };
+    });
+  }
+  function fbtnA(f, lib) { return '<button data-f="' + f + '" aria-pressed="' + (achFiltre === f) + '">' + lib + '</button>'; }
+
+  function renderInfo(titre, corps) {
+    main.innerHTML = '<div class="page actif"><p class="kicker">Information</p><h1>' + esc(titre) + '</h1>' +
+      '<div class="note-page">' + corps + '</div></div>';
+  }
+
+  // Démarrage
+  aller(S.page || "veille");
+})();
+</script>
+
+</html>

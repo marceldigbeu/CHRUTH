@@ -1,36 +1,43 @@
 import ao_alertes
-from ao_config import collecte_active, notifications_actives, set_collecte, set_notifications
+from ao_config import (_drapeau_collecte, _drapeau_notifications, set_collecte,
+                       set_notifications)
 from ao_export_excel import vba_module_text
+
+# Ces trois tests portent sur le drapeau local. Ils visent `_drapeau_notifications`
+# et non `notifications_actives` : depuis que les reglages partages font autorite,
+# la fonction publique ne consulte le drapeau que lorsqu'ils sont injoignables.
+# Le comportement de la fonction publique est couvert par
+# tests/test_notifications_source_unique.py.
 
 
 def test_defaut_actif_si_fichier_absent(tmp_path):
-    assert notifications_actives(tmp_path / "absent.flag") is True
+    assert _drapeau_notifications(tmp_path / "absent.flag") is True
 
 
 def test_set_off_puis_on(tmp_path):
     flag = tmp_path / "alertes_actives.flag"
     set_notifications(False, flag)
-    assert notifications_actives(flag) is False
+    assert _drapeau_notifications(flag) is False
     set_notifications(True, flag)
-    assert notifications_actives(flag) is True
+    assert _drapeau_notifications(flag) is True
 
 
 def test_off_insensible_casse_et_espaces(tmp_path):
     flag = tmp_path / "f.flag"
     flag.write_text("  off\n", encoding="utf-8")
-    assert notifications_actives(flag) is False
+    assert _drapeau_notifications(flag) is False
 
 
 def test_collecte_defaut_actif_si_fichier_absent(tmp_path):
-    assert collecte_active(tmp_path / "absent.flag") is True
+    assert _drapeau_collecte(tmp_path / "absent.flag") is True
 
 
 def test_collecte_set_off_puis_on(tmp_path):
     flag = tmp_path / "collecte_active.flag"
     set_collecte(False, flag)
-    assert collecte_active(flag) is False
+    assert _drapeau_collecte(flag) is False
     set_collecte(True, flag)
-    assert collecte_active(flag) is True
+    assert _drapeau_collecte(flag) is True
 
 
 def test_main_off_n_envoie_aucun_email(monkeypatch):

@@ -29,14 +29,73 @@ def _budget_value(row: dict[str, Any]) -> float | None:
     return None
 
 
-def _budget_score(budget: float | None) -> tuple[int, str]:
-    if budget is None:
-        return AO_BUDGET_SCORE_UNKNOWN, f"+{AO_BUDGET_SCORE_UNKNOWN} budget non affiche (a verifier)"
+def _interpoler(ancres: list[tuple[float, float]], x: float) -> float:
+    """Courbe affine par morceaux passant par `ancres`, plate au-dela des bornes.
+
+    Un bareme en paliers place tous les marches d'une meme tranche a la meme
+    valeur : 30 000 et 45 000 EUR recevaient 25 points chacun. En interpolant
+    entre les paliers, chaque euro compte un peu — c'est ce qui permet ensuite
+    de trier et de filtrer sur le score.
+    """
+    if x <= ancres[0][0]:
+        return ancres[0][1]
+    for (x0, y0), (x1, y1) in zip(ancres, ancres[1:]):
+        if x <= x1:
+            return y0 + (y1 - y0) * (x - x0) / (x1 - x0)
+    return ancres[-1][1]
+
+
+def _ancres_budget() -> list[tuple[float, float]]:
+    """Ancres deduites des tranches existantes : chaque tranche vaut ses points
+    en son milieu, et la courbe relie ces milieux.
+
+    On ne redefinit pas le bareme ici — il reste dans `ao_config`. Prendre le
+    milieu plutot que la borne evite qu'un marche juste sous un plafond touche
+    la note pleine de la tranche superieure.
+    """
+    ancres: list[tuple[float, float]] = []
+    bas = 0.0
     for plafond, points in AO_BUDGET_SCORE_BANDS:
-        if budget <= plafond:
-            signe = "+" if points >= 0 else ""
-            return points, f"{signe}{points} budget annualise <= {plafond:,} EUR".replace(",", " ")
-    return AO_BUDGET_SCORE_ABOVE, f"{AO_BUDGET_SCORE_ABOVE} gros budget (> {AO_BUDGET_SCORE_BANDS[-1][0]:,} EUR)".replace(",", " ")
+        ancres.append(((bas + plafond) / 2, float(points)))
+        bas = plafond
+    ancres.append((bas * 1.5, float(AO_BUDGET_SCORE_ABOVE)))
+    return ancres
+
+
+def _budget_score(budget: float | None) -> tuple[float, str]:
+    if budget is None:
+        return float(AO_BUDGET_SCORE_UNKNOWN), f"+{AO_BUDGET_SCORE_UNKNOWN} budget non affiche (a verifier)"
+    points = _interpoler(_ancres_budget(), float(budget))
+    signe = "+" if points >= 0 else ""
+    montant = f"{budget:,.0f}".replace(",", " ")
+    return points, f"{signe}{points:.1f} budget annualise {montant} EUR"
+
+
+# Delai : meme principe que le budget, en milieu de palier.
+# Paliers d'origine : < 5 j = -15 | 5 a 15 j = +5 | > 15 j = +10.
+ANCRES_DELAI: list[tuple[float, float]] = [(2.5, -15.0), (10.0, 5.0), (30.0, 10.0)]
+PENALITE_EXPIRE = -30.0
+
+# Completude du dossier : a criteres metier egaux, un AO joignable passe devant.
+CHAMPS_COMPLETUDE = ("email", "telephone", "nom_contact", "url_dce")
+POIDS_COMPLETUDE = 2.0
+
+
+def _delai_score(restant: int | None) -> tuple[float, str]:
+    if restant is None:
+        return 0.0, "0 date limite absente"
+    if restant < 0:
+        return PENALITE_EXPIRE, f"{PENALITE_EXPIRE:.0f} AO expire"
+    points = _interpoler(ANCRES_DELAI, float(restant))
+    signe = "+" if points >= 0 else ""
+    return points, f"{signe}{points:.1f} delai {restant} j"
+
+
+def _completude(row: dict[str, Any]) -> tuple[float, str]:
+    """Part des coordonnees presentes, sur `POIDS_COMPLETUDE` points."""
+    presents = sum(1 for c in CHAMPS_COMPLETUDE if str(row.get(c) or "").strip())
+    points = POIDS_COMPLETUDE * presents / len(CHAMPS_COMPLETUDE)
+    return points, f"+{points:.1f} dossier renseigne ({presents}/{len(CHAMPS_COMPLETUDE)})"
 
 
 def _is_mapa(row: dict[str, Any]) -> bool:
@@ -48,8 +107,35 @@ def _is_mapa(row: dict[str, Any]) -> bool:
     return bool(re.search(r"(?<![a-z])lots?(?![a-z])", text)) or "articler2123" in collapsed
 
 
-def compute_ao_score(row: dict[str, Any]) -> tuple[int, str, str]:
-    score = 0
+def _pertinence_metier(text: str, categorie: str) -> tuple[float, str]:
+    """Points metier, avec une part continue pour la densite de termes.
+
+    Un intitule qui empile « nettoyage », « proprete » et « entretien des
+    locaux » nous concerne plus surement qu'un intitule qui n'en porte qu'un.
+    La densite ne peut pas faire changer de palier : elle departage a
+    l'interieur du palier, elle ne le remplace pas.
+    """
+    core, secondaires = find_keywords(text)
+    if core and categorie not in ("", "Mixte/Autre"):
+        socle, plafond, trouves, libelle = 33.0, 35.0, core, "nettoyage + categorie claire"
+    elif core:
+        socle, plafond, trouves, libelle = 28.0, 30.0, core, "mots-cles nettoyage forts"
+    elif secondaires:
+        socle, plafond, trouves, libelle = 13.0, 15.0, secondaires, "mots-cles secondaires"
+    else:
+        return 0.0, "0 pertinence metier faible"
+    points = min(plafond, socle + 0.5 * len(trouves))
+    return points, f"+{points:.1f} {libelle} ({len(trouves)} termes)"
+
+
+def compute_ao_score(row: dict[str, Any]) -> tuple[float, str, str]:
+    """Score continu sur 100, arrondi a la decimale.
+
+    Continu et non plus par paliers : voir `_interpoler`. La decimale n'est pas
+    cosmetique, c'est elle qui departage les marches que l'ancien bareme laissait
+    a egalite — et donc ce qui rend le tri et le filtre par score utilisables.
+    """
+    score = 0.0
     reasons: list[str] = []
 
     text = " ".join(
@@ -57,22 +143,11 @@ def compute_ao_score(row: dict[str, Any]) -> tuple[int, str, str]:
         for key in ["objet", "acheteur", "procedure", "type_marche", "descripteur", "criteres", "texte_extraction"]
     )
 
-    core_keywords, secondary_keywords = find_keywords(text)
-    categorie = str(row.get("categorie") or "")
-    if core_keywords and categorie not in ("", "Mixte/Autre"):
-        score += 35
-        reasons.append("+35 nettoyage + categorie claire")
-    elif core_keywords:
-        score += 30
-        reasons.append("+30 mots-cles nettoyage forts")
-    elif secondary_keywords:
-        score += 15
-        reasons.append("+15 mots-cles secondaires")
-    else:
-        reasons.append("0 pertinence metier faible")
+    metier_points, metier_reason = _pertinence_metier(text, str(row.get("categorie") or ""))
+    score += metier_points
+    reasons.append(metier_reason)
 
-    budget = _budget_value(row)
-    budget_points, budget_reason = _budget_score(budget)
+    budget_points, budget_reason = _budget_score(_budget_value(row))
     score += budget_points
     reasons.append(budget_reason)
 
@@ -85,29 +160,21 @@ def compute_ao_score(row: dict[str, Any]) -> tuple[int, str, str]:
         score += 10
         reasons.append(f"+10 secteur cible {secteur}")
 
-    remaining = days_until(row.get("date_limite"))
-    if remaining is None:
-        reasons.append("0 date limite absente")
-    elif remaining < 0:
-        score -= 30
-        reasons.append("-30 AO expire")
-    elif remaining < 5:
-        score -= 15
-        reasons.append(f"-15 delai critique {remaining}j")
-    elif remaining <= 15:
-        score += 5
-        reasons.append(f"+5 delai court {remaining}j")
-    else:
-        score += 10
-        reasons.append(f"+10 delai confortable {remaining}j")
+    delai_points, delai_reason = _delai_score(days_until(row.get("date_limite")))
+    score += delai_points
+    reasons.append(delai_reason)
+
+    completude_points, completude_reason = _completude(row)
+    score += completude_points
+    reasons.append(completude_reason)
 
     confidence = int(row.get("niveau_confiance") or 0)
-    score = max(0, min(100, int(score)))
+    score = round(max(0.0, min(100.0, score)), 1)
     priority = priority_from_score(score, confidence, row)
     return score, priority, " | ".join(reasons)
 
 
-def priority_from_score(score: int, confidence: int, row: dict[str, Any]) -> str:
+def priority_from_score(score: float, confidence: int, row: dict[str, Any]) -> str:
     if row.get("statut_extraction") == "DCE_A_TELECHARGER":
         return "A_VERIFIER"
     if confidence < 45 and score >= AO_PRIORITY_LABELS["TIEDE"]:
