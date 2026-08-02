@@ -17,7 +17,9 @@ import requests
 DEFAULT_PROVIDER = "ollama"
 DEFAULT_MODELS = {
     "ollama": "llama3.1:8b",
-    "anthropic": "claude-haiku-4-5-20251001",
+    # Le modèle Anthropic est fourni par CHRUTH_LLM_MODEL afin de ne pas
+    # imposer de nom commercial dans les fichiers livrés.
+    "anthropic": "",
     "mistral": "mistral-small-latest",
     "groq": "llama-3.3-70b-versatile",
     "gemini": "gemini-2.5-flash",
