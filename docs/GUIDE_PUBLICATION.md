@@ -11,8 +11,9 @@ cela parte.
 
 ## 1. À qui appartient ce projet
 
-Le dépôt vit aujourd'hui sur un compte personnel. Le travail, lui, a été
-commandé par CHRUTH et porte sur son activité commerciale.
+Le dépôt est aujourd'hui `github.com/marceldigbeu/CHRUTH`, un compte personnel.
+Le travail, lui, a été commandé par CHRUTH et porte sur son activité
+commerciale.
 
 Ces deux faits ne se contredisent pas, mais ils ne donnent pas le même droit :
 
