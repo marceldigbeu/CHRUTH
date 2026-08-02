@@ -27,23 +27,18 @@ LIBELLES_SCOPES = {
 }
 
 st.title("Collecte des données")
-st.caption("Lance les collectes Internet et régénère automatiquement les livrables concernés.")
+st.caption("Choisissez les données à actualiser. La progression s'affiche automatiquement.")
 
 racine = livrables.racine_livraison()
 output = livrables.dossier_output()
 script = racine / "CHRUTH_PIPELINE_UNIQUE.py"
 
-c1, c2 = st.columns(2)
-c1.metric("Livraison active", racine.name)
-c2.metric("Dossier de sortie", output.name)
-st.caption(f"Pipeline utilisé : `{script}`")
-
 if not script.is_file():
-    st.error(f"Pipeline introuvable : {script}")
+    st.error("Le module de collecte est indisponible. Contactez l'administrateur de la plateforme.")
     st.stop()
 
 with st.container(border=True):
-    st.subheader("Que faut-il collecter ?")
+    st.subheader("Que faut-il actualiser ?")
     libelle_mode = st.radio(
         "Type de collecte",
         list(LIBELLES_MODES),
@@ -53,11 +48,11 @@ with st.container(border=True):
     mode = LIBELLES_MODES[libelle_mode]
 
     if mode == "ao":
-        st.info("Collecte BOAMP/DCE, puis régénération de AO_CHRUTH.xlsm. Durée habituelle : quelques minutes.")
+        st.info("Recherche les nouveaux appels d'offres et met à jour la veille. Durée habituelle : 2 à 5 minutes.")
     elif mode == "prospects":
-        st.info("Collecte API Entreprises, puis régénération de la base, de la carte, du CRM et des KPI.")
+        st.info("Actualise la base prospects, la carte et le suivi commercial.")
     else:
-        st.info("Enchaîne la collecte des appels d'offres et des prospects, puis régénère leurs livrables.")
+        st.info("Actualise successivement les appels d'offres et les prospects.")
 
     contient_prospects = mode in {"prospects", "complete"}
     scope = "region"
@@ -75,7 +70,7 @@ with st.container(border=True):
         regions = st.text_input(
             "Région(s)",
             value="Île-de-France",
-            help="Séparer plusieurs régions par des virgules. Laisser vide pour la configuration AO actuelle.",
+            help="Séparer plusieurs régions par des virgules.",
             key="collecte_regions",
         )
     if contient_prospects and scope == "departements":
@@ -90,12 +85,12 @@ with st.container(border=True):
 
 verrouilles = collecte.classeurs_verrouilles(output, mode)
 if verrouilles:
-    st.error("Ferme dans Excel avant de continuer : " + ", ".join(p.name for p in verrouilles))
+    st.error("Fermez dans Excel avant de continuer : " + ", ".join(p.name for p in verrouilles))
 
 processus = st.session_state.get("collecte_processus")
 en_cours = processus is not None and processus.poll() is None
 if en_cours:
-    st.warning("Une collecte est déjà en cours. Un second lancement est bloqué.")
+    st.info("Une collecte est déjà en cours. Son avancement est affiché ci-dessous.")
 
 confirme = st.checkbox(
     "Je confirme avoir fermé les classeurs concernés et autorise la collecte Internet.",
@@ -109,8 +104,6 @@ commande = collecte.construire_commande(
     regions=regions,
     departements=departements,
 )
-with st.expander("Commande qui sera exécutée"):
-    st.code(" ".join(commande), language=None)
 
 if st.button(
     "Lancer la collecte",
@@ -123,10 +116,11 @@ if st.button(
         st.session_state["collecte_processus"] = processus
         st.session_state["collecte_journal"] = str(journal)
         st.session_state["collecte_libelle"] = libelle_mode
+        st.session_state["collecte_mode_code"] = mode
         st.session_state.pop("collecte_cache_actualise", None)
         st.rerun()
-    except Exception as exc:  # noqa: BLE001
-        st.error(f"Lancement impossible : {exc}")
+    except Exception:  # noqa: BLE001
+        st.error("La collecte n'a pas pu démarrer. Réessayez dans quelques instants.")
 
 
 @st.fragment(run_every=3)
@@ -137,24 +131,30 @@ def afficher_suivi() -> None:
         return
 
     code = processus_suivi.poll()
-    libelle = st.session_state.get("collecte_libelle", "Collecte")
+    mode_suivi = st.session_state.get("collecte_mode_code", "ao")
+    journal_brut = st.session_state.get("collecte_journal", "")
+    journal = Path(journal_brut) if journal_brut else None
+    progression = collecte.progression_journal(journal, mode_suivi, code)
+
+    st.progress(
+        progression.pourcentage,
+        text=f"{progression.pourcentage}% — {progression.etape}",
+    )
     if code is None:
-        st.info(f"{libelle} en cours — processus {processus_suivi.pid}. Cette zone s'actualise automatiquement.")
+        st.caption("La page se met à jour automatiquement. Vous pouvez continuer à utiliser les autres pages.")
+        if progression.details:
+            st.write(progression.details)
     elif code == 0:
-        st.success(f"{libelle} terminée. Les pages Base de données et Carte utilisent maintenant les nouveaux fichiers.")
+        st.success("Les données sont à jour et disponibles dans la veille.")
+        if progression.details:
+            st.write(progression.details)
         if st.session_state.get("collecte_cache_actualise") != processus_suivi.pid:
             st.cache_data.clear()
             st.session_state["collecte_cache_actualise"] = processus_suivi.pid
     else:
-        st.error(f"La collecte s'est arrêtée avec le code {code}. Consulte le journal ci-dessous.")
-
-    journal_brut = st.session_state.get("collecte_journal", "")
-    journal = Path(journal_brut) if journal_brut else None
-    if journal:
-        st.caption(f"Journal : `{journal}`")
-        st.code(collecte.fin_journal(journal), language=None)
+        st.error("La collecte a été interrompue. Réessayez ; si le problème persiste, contactez l'administrateur.")
 
 
-st.subheader("Suivi")
+st.subheader("Avancement")
 afficher_suivi()
-st.caption("Fermer cette page n'arrête pas une collecte déjà lancée.")
+st.caption("La collecte continue même si vous quittez cette page.")
