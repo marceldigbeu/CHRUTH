@@ -40,6 +40,7 @@ def construire_commande(
     else:
         commande.append("--skip-prospects")
     commande.append("--skip-finance")
+    commande.append("--leave-collecte-on")
 
     regions = regions.strip()
     departements = departements.strip()
