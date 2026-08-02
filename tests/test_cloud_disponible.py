@@ -7,6 +7,7 @@ def _clean(monkeypatch):
     for k in _CLES:
         monkeypatch.delenv(k, raising=False)
     monkeypatch.delenv("CHRUTH_LLM_PROVIDER", raising=False)
+    monkeypatch.delenv("CHRUTH_LLM_MODEL", raising=False)
 
 
 def test_cloud_provider_none_sans_cle(monkeypatch):
@@ -26,6 +27,7 @@ def test_cloud_provider_ordre_priorite(monkeypatch):
     _clean(monkeypatch)
     monkeypatch.setenv("GROQ_API_KEY", "x")
     monkeypatch.setenv("ANTHROPIC_API_KEY", "y")
+    monkeypatch.setenv("CHRUTH_LLM_MODEL", "modele-test")
     assert llm_client.cloud_provider() == "anthropic"
 
 
@@ -44,4 +46,5 @@ def test_moteur_auto_cloud_sinon_ollama_sinon_none(monkeypatch):
     monkeypatch.setattr(llm_client, "llm_disponible", lambda p=None: False)
     assert llm_client.moteur_auto() is None            # rien
     monkeypatch.setenv("ANTHROPIC_API_KEY", "z")
+    monkeypatch.setenv("CHRUTH_LLM_MODEL", "modele-test")
     assert llm_client.moteur_auto() == "anthropic"     # cloud prioritaire

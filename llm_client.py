@@ -79,6 +79,11 @@ def _model(provider: str) -> str:
     return os.environ.get("CHRUTH_LLM_MODEL") or DEFAULT_MODELS.get(provider, "")
 
 
+def _cloud_configure(provider: str) -> bool:
+    """Vrai si le fournisseur possède une clé et un modèle utilisable."""
+    return bool(os.environ.get(_CLES.get(provider, ""))) and bool(_model(provider))
+
+
 def _ollama_host() -> str:
     return os.environ.get("OLLAMA_HOST", "http://localhost:11434").rstrip("/")
 
@@ -90,7 +95,7 @@ def llm_disponible(provider: str | None = None) -> bool:
             return requests.get(_ollama_host() + "/api/tags", timeout=3).status_code == 200
         except Exception:
             return False
-    return bool(os.environ.get(_CLES.get(provider, "")))
+    return _cloud_configure(provider)
 
 
 _CLOUD_ORDRE = ("anthropic", "mistral", "groq", "gemini")
@@ -104,10 +109,10 @@ def cloud_provider() -> str | None:
     3) sinon None.
     """
     prov = _provider()
-    if prov in _CLOUD_ORDRE and os.environ.get(_CLES[prov]):
+    if prov in _CLOUD_ORDRE and _cloud_configure(prov):
         return prov
     for p in _CLOUD_ORDRE:
-        if os.environ.get(_CLES[p]):
+        if _cloud_configure(p):
             return p
     return None
 
@@ -138,6 +143,8 @@ def generer(prompt: str, system: str = "", provider: str | None = None,
     """
     provider = provider or _provider()
     model = model or _model(provider)
+    if not model:
+        raise ValueError("Définir CHRUTH_LLM_MODEL pour ce fournisseur.")
     prompt = tronquer(prompt, max_tokens_entree)
     if provider == "ollama":
         return _gen_ollama(prompt, system, model, timeout, temperature, max_tokens)
