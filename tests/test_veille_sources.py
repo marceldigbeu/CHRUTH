@@ -16,6 +16,7 @@ def _ligne(**modifications):
         "score_chruth": "72.5",
         "priorite": "CHAUD",
         "url_avis": "https://exemple.fr/avis",
+        "source": "BOAMP",
     }
     ligne.update(modifications)
     return ligne
@@ -29,6 +30,7 @@ def test_la_base_boamp_alimente_un_etat_vide():
     assert ajoutes == 1
     assert etat["aos"]["BOAMP-1"]["objet"] == "Nettoyage de locaux"
     assert etat["aos"]["BOAMP-1"]["tri"]["verdict"] == "PERTINENT"
+    assert etat["aos"]["BOAMP-1"]["source_decouverte"] == "BOAMP"
 
 
 def test_un_ao_partage_existant_n_est_jamais_ecrase():
@@ -50,6 +52,21 @@ def test_les_valeurs_vides_et_les_urls_de_repli_sont_nettoyees():
     _, entree = convertie
     assert entree["objet"] == ""
     assert entree["url"] == "https://exemple.fr/dce"
+
+
+def test_la_plateforme_du_dossier_ne_se_confond_pas_avec_boamp():
+    convertie = veille_sources.entree_boamp(_ligne(
+        url_dce="https://www.marches-publics.gouv.fr/dce/42",
+        url_profil_acheteur="https://www.marches-publics.gouv.fr/entreprise",
+    ))
+
+    assert convertie is not None
+    _, entree = convertie
+    assert entree["source_decouverte"] == "BOAMP"
+    assert entree["plateforme_publication"] == "PLACE"
+    assert entree["url"].startswith("https://www.marches-publics.gouv.fr")
+
+
 
 
 def test_une_base_vide_ne_modifie_pas_l_etat():

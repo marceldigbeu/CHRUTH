@@ -16,7 +16,9 @@ MEMOIRE_MAX = 50
 PURGE_JOURS = 90
 
 CHAMPS_AO = ("objet", "acheteur", "ville", "departement", "date_publication",
-             "date_limite", "procedure", "url", "score", "priorite")
+             "date_limite", "procedure", "url", "url_avis", "url_dce",
+             "url_profil_acheteur", "source", "source_decouverte",
+             "plateforme_publication", "score", "priorite")
 
 # Statuts de suivi, alignes sur le CRM deja present dans app_messages.
 TRAITEMENTS = ("nouveau", "a_traiter", "repondu", "abandonne")

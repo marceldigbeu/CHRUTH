@@ -9,6 +9,7 @@ from openpyxl import load_workbook
 
 import liens_source
 import livrables_chruth as livrables
+import provenance_ao
 
 try:
     st.set_page_config(page_title="Base de donnees CHRUTH", layout="wide")
@@ -112,6 +113,14 @@ with tab_ao:
         with st.spinner("Lecture du classeur Excel..."):
             table = lire_onglet(str(classeur), modifie, onglet)
         table = filtrer_table(table, recherche_ao)
+        if not table.empty and ("source" in table.columns or "url_avis" in table.columns):
+            provenances = table.apply(
+                lambda ligne: provenance_ao.detecter(ligne.to_dict()), axis=1)
+            table = table.copy()
+            table["Découvert via"] = [p[0] for p in provenances]
+            table["Plateforme du dossier"] = [p[1] for p in provenances]
+            ordre = ["Découvert via", "Plateforme du dossier"]
+            table = table[ordre + [c for c in table.columns if c not in ordre]]
         m1, m2, m3 = st.columns(3)
         m1.metric("Lignes affichees", len(table))
         m2.metric("Colonnes", len(table.columns))

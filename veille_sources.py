@@ -6,6 +6,8 @@ from typing import Any
 
 import pandas as pd
 
+import provenance_ao
+
 
 def _texte(valeur: Any) -> str:
     if valeur is None:
@@ -37,6 +39,19 @@ def entree_boamp(ligne: dict[str, Any]) -> tuple[str, dict[str, Any]] | None:
         # La base ne contient que les avis déjà retenus par la collecte.
         verdict = "PERTINENT"
 
+    url_avis = _texte(ligne.get("url_avis"))
+    url_dce = _texte(ligne.get("url_dce"))
+    url_profil = _texte(ligne.get("url_profil_acheteur"))
+    source = _texte(ligne.get("source")) or "BOAMP"
+    provenance = {
+        "source": source,
+        "url_avis": url_avis,
+        "url_dce": url_dce,
+        "url_profil_acheteur": url_profil,
+    }
+    decouverte, publication = provenance_ao.detecter(provenance)
+
+
     entree = {
         "objet": _texte(ligne.get("objet")),
         "acheteur": _texte(ligne.get("acheteur")),
@@ -45,15 +60,18 @@ def entree_boamp(ligne: dict[str, Any]) -> tuple[str, dict[str, Any]] | None:
         "date_publication": _texte(ligne.get("date_publication")),
         "date_limite": _texte(ligne.get("date_limite")),
         "procedure": _texte(ligne.get("procedure")),
-        "url": _premier(ligne, "url_avis", "url_dce", "url_profil_acheteur"),
+        "url": url_profil or url_dce or url_avis,
+        **provenance,
+        "source_decouverte": decouverte,
+        "plateforme_publication": publication,
         "score": _texte(ligne.get("score_chruth")),
         "priorite": _texte(ligne.get("priorite")),
         "vu_le": _premier(ligne, "first_seen", "last_seen", "date_publication"),
         "tri": {
             "verdict": verdict,
-            "etage": "collecte_boamp",
+            "etage": "collecte",
             "motif": _premier(ligne, "motif_tri", "raisons_scoring")
-            or "Retenu par la collecte BOAMP",
+            or "Retenu après analyse de l'avis",
             "terme": _texte(ligne.get("mots_cles_detectes")),
         },
         "correction_humaine": None,
