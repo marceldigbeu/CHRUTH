@@ -2523,5 +2523,8 @@
   "corrections_memoire": [],
   "guide_messages": "",
   "maj_le": "2026-07-31T20:15:02.960884+00:00",
+  "reglages": {
+    "collecte": true
+  },
   "version": 1
 }
