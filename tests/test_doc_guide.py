@@ -12,6 +12,8 @@ from pathlib import Path
 
 import pytest
 
+from outils.preparer_depot_public import noms_des_auteurs
+
 RACINE = Path(__file__).resolve().parent.parent
 GUIDE_HTML = RACINE / "GUIDE_UTILISATION_CHRUTH.html"
 GUIDE_PDF = RACINE / "GUIDE_UTILISATION_CHRUTH.pdf"
@@ -132,5 +134,7 @@ def test_aucun_pdf_ne_porte_de_nom_propre(pdf):
     with fitz.open(RACINE / pdf) as doc:
         texte = "\n".join(p.get_text() for p in doc).lower()
 
-    for interdit in ("marceldigbeu", "digbeu", "huit pages"):
+    interdits = {"huit pages"}
+    interdits.update(nom.casefold() for nom in noms_des_auteurs())
+    for interdit in sorted(interdits):
         assert interdit not in texte, f"{pdf} contient encore « {interdit} »"

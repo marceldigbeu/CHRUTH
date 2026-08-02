@@ -50,8 +50,8 @@ SUFFIXES_EXCLUS = (".bak", ".backup", ".old", ".sqlite", ".csv")
 # l'historique. Les inscrire en dur ferait de ce fichier meme le dernier
 # endroit ou le nom subsiste — et la verification echouerait sur elle-meme.
 #
-# « anthropic » et « claude-... » ne sont pas des noms d'auteur mais le
-# fournisseur d'IA et un identifiant de modele : les retirer casserait le moteur.
+# Les identifiants techniques des fournisseurs d'IA ne sont pas des noms
+# d'auteur et ne sont donc pas inclus dans cette vérification.
 # Le nom du dossier personnel : il apparait dans tout chemin absolu recopie
 # dans une documentation. Deduit du systeme, jamais ecrit en dur.
 
