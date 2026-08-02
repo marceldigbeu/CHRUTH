@@ -56,6 +56,15 @@ def test_le_fil_affiche_un_bloc_par_ao(etat_local):
     assert "Nettoyage des ecoles" in textes
 
 
+
+
+def test_la_provenance_est_visible_dans_chaque_fiche(etat_local):
+    etat_local(_etat({"MX-1": _ao()}))
+    at = _lancer()
+    legendes = " ".join(c.value for c in at.caption)
+    assert "Découvert via : Maximilien" in legendes
+    assert "Dossier publié sur : Maximilien" in legendes
+
 def test_les_ao_rejetes_sont_masques_puis_affichables(etat_local):
     """Rejete ne veut pas dire invisible : c'est la que se corrige le tri."""
     etat_local(_etat({"MX-1": _ao(), "MX-2": _ao("Elagage des arbres", verdict="REJETE")}))

@@ -17,6 +17,7 @@ import streamlit as st
 
 import ao_db
 import ao_maximilien_veille
+import provenance_ao
 import veille_depot
 import veille_etat
 import veille_sources
@@ -175,10 +176,10 @@ with st.sidebar:
         st.rerun()
 
     st.divider()
-    sources = [veille_depot.source()]
+    sources = ["état partagé" if veille_depot.source() == "github" else "état local"]
     if ao_boamp_ajoutes:
-        sources.append(f"base BOAMP ({ao_boamp_ajoutes} ajoutés)")
-    st.caption("Sources : " + " + ".join(sources))
+        sources.append(f"base des appels d'offres ({ao_boamp_ajoutes} ajoutés)")
+    st.caption("Données : " + " + ".join(sources))
     if etat.get("maj_le"):
         st.caption(f"État mis à jour : {etat['maj_le'][:16].replace('T', ' ')}")
     st.caption(f"{len(aos)} AO dans l'état")
@@ -282,13 +283,21 @@ for id_ao, entree in retenus:
                  f"{entree.get('date_limite') or 'non précisée'} · {prio_txt}")
         st.markdown(ligne)
 
+        decouverte, plateforme = provenance_ao.detecter(entree)
+        st.caption(
+            f"Découvert via : {decouverte} · Dossier publié sur : {plateforme}"
+        )
+
         origine = "corrigé à la main" if corrige else f"tri {tri.get('etage', '')}"
         c_verdict = COULEUR_VERDICT.get(verdict, "gray")
         st.markdown(f"Verdict : :{c_verdict}[**{verdict}**] — {tri.get('motif', '')} "
                     f"_({origine})_")
 
         if entree.get("url"):
-            st.markdown(f"[Ouvrir la consultation]({entree['url']})")
+            libelle_lien = (f"Ouvrir sur {plateforme}"
+                            if not plateforme.startswith(("Plateforme", "Site externe"))
+                            else "Ouvrir la consultation")
+            st.markdown(f"[{libelle_lien}]({entree['url']})")
 
         # Passerelle vers la redaction : on juge un marche ici, on l'ecrit
         # ailleurs. Sans ce bouton il faut aller le retrouver a la main dans la
