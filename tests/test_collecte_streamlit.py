@@ -50,3 +50,42 @@ def test_le_lanceur_ecrit_un_journal_sans_bloquer_streamlit(tmp_path):
     contenu = journal.read_text(encoding="utf-8")
     assert "Collecte lancée depuis Streamlit" in contenu
     assert "ok" in contenu
+
+
+def test_progression_ao_traduit_les_etapes_techniques():
+    texte = """
+Collecte lancée depuis Streamlit
+[collecte] ON
+=== 1. Collecte BOAMP ===
+Collecte BOAMP CHRUTH terminee
+fetched: 1554
+kept: 37
+"""
+    progression = collecte.progression_depuis_texte(texte, "ao")
+    assert progression.pourcentage == 55
+    assert progression.etape == "Sélection des appels d'offres"
+    assert progression.details == "37 appels d'offres retenus sur 1554 avis analysés."
+
+
+def test_un_succes_force_cent_pour_cent():
+    progression = collecte.progression_depuis_texte("[collecte] ON", "ao", code_retour=0)
+    assert progression.pourcentage == 100
+    assert progression.etape == "Collecte terminée"
+
+
+def test_un_echec_ne_se_presente_jamais_comme_termine():
+    progression = collecte.progression_depuis_texte(
+        "Collecte BOAMP CHRUTH terminee", "ao", code_retour=1
+    )
+    assert progression.pourcentage < 100
+    assert progression.etape == "Collecte interrompue"
+
+
+def test_la_page_normale_ne_montre_ni_terminal_ni_commande():
+    source = (Path(__file__).resolve().parent.parent / "pages_collecte.py").read_text(
+        encoding="utf-8"
+    )
+    assert "st.code" not in source
+    assert "Commande qui sera exécutée" not in source
+    assert "Journal :" not in source
+    assert "processus {processus_suivi.pid}" not in source
