@@ -18,10 +18,10 @@ except st.errors.StreamlitAPIException:
     pass
 
 DESTINATIONS = [
-    ("app_veille.py", "📡 Veille appels d'offres", "Le fil des marchés détectés, à trier."),
-    ("pages_donnees.py", "🗃️ Base de données", "Tous les AO collectés, filtrables et exportables."),
-    ("app_messages.py", "✉️ Messages et CRM", "Les brouillons d'email et le suivi commercial."),
-    ("pages_acheteurs.py", "🏛️ Acheteurs de la semaine", "Qui a publié ces 7 derniers jours."),
+    ("app_veille.py", "Veille appels d'offres", "Le fil des marchés détectés, à trier."),
+    ("pages_donnees.py", "Base de données", "Tous les AO collectés, filtrables et exportables."),
+    ("app_messages.py", "Messages et CRM", "Les brouillons d'email et le suivi commercial."),
+    ("pages_acheteurs.py", "Acheteurs de la semaine", "Qui a publié ces 7 derniers jours."),
 ]
 
 st.markdown('<div class="chruth-kicker">Cockpit opérationnel</div>', unsafe_allow_html=True)
@@ -69,7 +69,7 @@ else:
                 f"{ligne.get('priorite', '')} · score {ligne.get('score_chruth', '')}")
             source = str(ligne.get("url_avis") or ligne.get("url_dce") or "")
             if source:
-                st.link_button("Ouvrir l'avis d'origine ↗", source)
+                st.link_button("Ouvrir l'avis d'origine", source)
 
 # --- Retenus par le tri -----------------------------------------------------
 st.subheader("Retenus par le tri")
@@ -93,7 +93,7 @@ else:
             if motif:
                 st.caption(motif)
             if entree.get("url"):
-                st.link_button("Ouvrir l'avis d'origine ↗", entree["url"])
+                st.link_button("Ouvrir l'avis d'origine", entree["url"])
 
 # --- État du système --------------------------------------------------------
 st.subheader("État du système")
@@ -105,9 +105,9 @@ maj_lisible = maj[:16].replace("T", " ") if maj else "Jamais"
 st.markdown(
     '<div class="chruth-status-grid">'
     f'<div class="chruth-status"><span>Collecte automatisée</span><strong class="{"on" if collecte_active else "off"}">'
-    f'{"● Active" if collecte_active else "○ En pause"}</strong></div>'
+    f'{"Active" if collecte_active else "En pause"}</strong></div>'
     f'<div class="chruth-status"><span>Notifications email</span><strong class="{"on" if notifications_actives else "off"}">'
-    f'{"● Actives" if notifications_actives else "○ Suspendues"}</strong></div>'
+    f'{"Actives" if notifications_actives else "Suspendues"}</strong></div>'
     f'<div class="chruth-status"><span>Dernière veille</span><strong>{html.escape(maj_lisible)}</strong></div>'
     '</div>',
     unsafe_allow_html=True,
