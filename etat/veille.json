@@ -2518,11 +2518,40 @@
       "url": "https://marches.maximilien.fr/entreprise/consultation/944490?orgAcronyme=a1b",
       "ville": "CHATOU",
       "vu_le": "2026-07-31T15:35:35.464578+00:00"
+    },
+    "MX-944586": {
+      "acheteur": "VILLE DE MONTIGNY LE BRETONNEUX",
+      "correction_humaine": null,
+      "date_limite": "2026-09-14",
+      "date_publication": "2026-08-03",
+      "departement": "78",
+      "lu": false,
+      "notifie_le": "2026-08-03T12:41:34.187758+00:00",
+      "objet": "Production et livraison de repas en liaison froide et fabrication ou fourniture de prestations annexes   (scolaire, centres de loisirs et",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 30.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944586?orgAcronyme=d8t",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/944586?orgAcronyme=d8t",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/944586?orgAcronyme=d8t",
+      "url_profil_acheteur": "",
+      "ville": "Montigny-Le-Bretonneux",
+      "vu_le": "2026-08-03T12:41:31.468508+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-03T09:22:07.119801+00:00",
+  "maj_le": "2026-08-03T12:41:34.187950+00:00",
   "reglages": {
     "collecte": true
   },
