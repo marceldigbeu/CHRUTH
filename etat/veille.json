@@ -2582,11 +2582,40 @@
       "url_profil_acheteur": "",
       "ville": "ORLY AÉROGARE CEDEX",
       "vu_le": "2026-08-04T13:14:11.183922+00:00"
+    },
+    "MX-944818": {
+      "acheteur": "CD77 - Conseil départemental de Seine-et-Marne",
+      "correction_humaine": null,
+      "date_limite": "2026-09-15",
+      "date_publication": "2026-08-04",
+      "departement": "77",
+      "lu": false,
+      "notifie_le": "2026-08-04T19:07:47.494414+00:00",
+      "objet": "Fourniture d'articles de presse dématérialisés pour le Département de Seine-et-Marne",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 20.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944818?orgAcronyme=g3h",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/944818?orgAcronyme=g3h",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/944818?orgAcronyme=g3h",
+      "url_profil_acheteur": "",
+      "ville": "Melun",
+      "vu_le": "2026-08-04T19:07:45.711000+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-04T17:29:27.368489+00:00",
+  "maj_le": "2026-08-04T19:07:47.494607+00:00",
   "reglages": {
     "collecte": true
   },
