@@ -398,29 +398,6 @@
       "ville": "Viry-Chatillon",
       "vu_le": "2026-07-23T15:02:18.483180+00:00"
     },
-    "MX-939925": {
-      "acheteur": "RESAH",
-      "correction_humaine": null,
-      "date_limite": "2026-08-03",
-      "date_publication": "2026-06-10",
-      "departement": "75",
-      "lu": false,
-      "notifie_le": null,
-      "objet": "Prestations 4D :  Dératisation, Désinsectisation, Désinfection, Dépigeonnisation et services associés",
-      "priorite": "FROID",
-      "procedure": "AOO",
-      "score": 30,
-      "traitement": "nouveau",
-      "tri": {
-        "etage": "listes",
-        "motif": "exclusion metier : deratisation",
-        "terme": "deratisation",
-        "verdict": "REJETE"
-      },
-      "url": "https://marches.maximilien.fr/entreprise/consultation/939925?orgAcronyme=a0z",
-      "ville": "Paris",
-      "vu_le": "2026-07-28T10:56:38.896616+00:00"
-    },
     "MX-939956": {
       "acheteur": "Ville de Rueil-Malmaison",
       "correction_humaine": null,
@@ -2551,7 +2528,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-03T20:42:18.111490+00:00",
+  "maj_le": "2026-08-04T08:19:30.912609+00:00",
   "reglages": {
     "collecte": true
   },
