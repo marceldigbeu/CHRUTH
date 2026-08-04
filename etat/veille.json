@@ -2524,11 +2524,40 @@
       "url_profil_acheteur": "",
       "ville": "Montigny-Le-Bretonneux",
       "vu_le": "2026-08-03T12:41:31.468508+00:00"
+    },
+    "MX-944668": {
+      "acheteur": "Etablissement Public Territorial Grand-Orly Seine Bièvre",
+      "correction_humaine": null,
+      "date_limite": "2026-09-28",
+      "date_publication": "2026-08-04",
+      "departement": "94",
+      "lu": false,
+      "notifie_le": "2026-08-04T13:14:14.661736+00:00",
+      "objet": "Accord-cadre relatif à une mission d’assistance à maitrise d’ouvrage pour la mise à jour et l’évolution du Plan local",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 20.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944668?orgAcronyme=l8b",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/944668?orgAcronyme=l8b",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/944668?orgAcronyme=l8b",
+      "url_profil_acheteur": "",
+      "ville": "ORLY AÉROGARE CEDEX",
+      "vu_le": "2026-08-04T13:14:11.183922+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-04T11:01:34.739756+00:00",
+  "maj_le": "2026-08-04T13:14:14.661961+00:00",
   "reglages": {
     "collecte": true
   },
