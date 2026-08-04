@@ -794,6 +794,35 @@
       "ville": "Saint-Ouen-sur-Seine",
       "vu_le": "2026-07-23T15:02:18.459324+00:00"
     },
+    "MX-941684": {
+      "acheteur": "Conseil Régional d'Ile-de-France",
+      "correction_humaine": null,
+      "date_limite": "2026-09-15",
+      "date_publication": "2026-08-04",
+      "departement": "93",
+      "lu": false,
+      "notifie_le": "2026-08-04T15:43:15.154626+00:00",
+      "objet": "Mise à disposition d'une plateforme d'organisation de rendez-vous",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "MAPA",
+      "score": 35.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/941684?orgAcronyme=t5y",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/941684?orgAcronyme=t5y",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/941684?orgAcronyme=t5y",
+      "url_profil_acheteur": "",
+      "ville": "Saint-Ouen-sur-Seine",
+      "vu_le": "2026-08-04T15:43:13.647003+00:00"
+    },
     "MX-941777": {
       "acheteur": "Commune de Domont",
       "correction_humaine": null,
@@ -2557,7 +2586,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-04T13:14:14.661961+00:00",
+  "maj_le": "2026-08-04T15:43:15.154908+00:00",
   "reglages": {
     "collecte": true
   },
