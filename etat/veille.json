@@ -2756,11 +2756,40 @@
       "url_profil_acheteur": "",
       "ville": "Saint-Denis",
       "vu_le": "2026-08-05T10:58:01.412943+00:00"
+    },
+    "MX-944913": {
+      "acheteur": "Paray-Vieille-Poste",
+      "correction_humaine": null,
+      "date_limite": "2026-09-16",
+      "date_publication": "2026-08-05",
+      "departement": "91",
+      "lu": false,
+      "notifie_le": "2026-08-05T16:58:47.199393+00:00",
+      "objet": "Prestation de balayage et nettoyage du domaine public et privé de la collectivité",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "AOO",
+      "score": 49.0,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "mot-cle coeur dans l'intitule : nettoyage",
+        "terme": "nettoyage",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944913?orgAcronyme=n1k",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/944913?orgAcronyme=n1k",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/944913?orgAcronyme=n1k",
+      "url_profil_acheteur": "",
+      "ville": "Paray-Vieille-Poste",
+      "vu_le": "2026-08-05T16:58:45.407696+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-05T15:08:17.061419+00:00",
+  "maj_le": "2026-08-05T16:58:47.199622+00:00",
   "reglages": {
     "collecte": true
   },
