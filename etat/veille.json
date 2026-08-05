@@ -2583,6 +2583,35 @@
       "ville": "ORLY AÉROGARE CEDEX",
       "vu_le": "2026-08-04T13:14:11.183922+00:00"
     },
+    "MX-944770": {
+      "acheteur": "Ville d'Aubervilliers",
+      "correction_humaine": null,
+      "date_limite": "2026-09-28",
+      "date_publication": "2026-08-05",
+      "departement": "93",
+      "lu": false,
+      "notifie_le": "2026-08-05T08:16:30.522701+00:00",
+      "objet": "MARCHE DE SERVICES D'ASSURANCE",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "MAPA",
+      "score": 35.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944770?orgAcronyme=j4k",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/944770?orgAcronyme=j4k",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/944770?orgAcronyme=j4k",
+      "url_profil_acheteur": "",
+      "ville": "Aubervilliers",
+      "vu_le": "2026-08-05T08:16:28.624455+00:00"
+    },
     "MX-944818": {
       "acheteur": "CD77 - Conseil départemental de Seine-et-Marne",
       "correction_humaine": null,
@@ -2615,7 +2644,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-04T20:49:02.875970+00:00",
+  "maj_le": "2026-08-05T08:16:30.522887+00:00",
   "reglages": {
     "collecte": true
   },
