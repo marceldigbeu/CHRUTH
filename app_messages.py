@@ -9,13 +9,19 @@ Lancer :  double-clic LANCER_APP_CHRUTH.bat, page « Messages et CRM »
 """
 from __future__ import annotations
 
+import os
+
+try:  # charge .env si python-dotenv est installe (cles API)
+    from dotenv import load_dotenv
+    load_dotenv()
+except Exception:
+    pass
+
 import pandas as pd
 import streamlit as st
 
 import ao_messages
-import comptes
 import crm
-import espace
 import liens_source
 import llm_client
 import prospect_messages as pm
@@ -36,7 +42,7 @@ st.caption("Générer les messages (appels d'offres et prospects) et suivre le c
 with st.sidebar:
     st.header("Moteur IA")
     provider = st.selectbox(
-        "Fournisseur", list(llm_client.FOURNISSEURS),
+        "Fournisseur", ["ollama", "anthropic", "mistral", "groq"],
         help="ollama = local/gratuit ; les autres = cle API dans .env (rapide, non bride).",
     )
     modele = st.text_input("Modèle", value=llm_client.DEFAULT_MODELS.get(provider, ""))
@@ -51,9 +57,9 @@ with st.sidebar:
     st.caption(f"Soit environ {max_tokens * llm_client.CARACTERES_PAR_TOKEN:,} caractères"
                .replace(",", " "))
 
-    # Le modele suit le fournisseur choisi : laisser en place celui du precedent
-    # enverrait « mistral-small-latest » a Anthropic — cle valable, appel refuse.
-    llm_client.appliquer_choix(provider, modele)
+    os.environ["CHRUTH_LLM_PROVIDER"] = provider
+    if modele.strip():
+        os.environ["CHRUTH_LLM_MODEL"] = modele.strip()
     dispo = llm_client.llm_disponible(provider)
     if dispo:
         st.success("Fournisseur disponible")
@@ -101,7 +107,7 @@ def _memoriser(msg: dict, cle: str) -> None:
     st.session_state[f"msg_{cle}"] = msg
 
 
-def _zone_resultat(cle: str, objet: str = "") -> None:
+def _zone_resultat(cle: str) -> None:
     msg = st.session_state.get(f"msg_{cle}")
     if not msg:
         return
@@ -114,17 +120,6 @@ def _zone_resultat(cle: str, objet: str = "") -> None:
         st.text_area("Email (éditable)", value=msg.get("email", ""), height=260)
         st.text_area("Script d'appel", value=msg.get("script", ""), height=160)
         st.caption("Sélectionner le texte puis Ctrl+C pour copier.")
-        if st.button("Conserver dans mon espace", key=f"conserver_{cle}"):
-            email = comptes.utilisateur_courant(st)
-            if not espace.existe(email):
-                espace.creer(email)
-            espace.ajouter_message(email, {
-                "objet": objet, "email": msg.get("email", ""),
-                "script": msg.get("script", ""), "source": msg.get("source", ""),
-                "le": "",
-            })
-            espace.noter(email, f"Message conservé : {objet}")
-            st.success("Message conservé dans ton espace (page « Mes messages »).")
 
 
 tab_ao, tab_prospects, tab_crm = st.tabs(
@@ -206,7 +201,7 @@ with tab_ao:
                 _memoriser({"email": existant,
                             "script": str(ao.get("script_appel") or ""),
                             "source": "base"}, cle)
-        _zone_resultat(cle, objet=str(ao.get("objet") or "")[:90])
+        _zone_resultat(cle)
 
 # --- Onglet Prospects -------------------------------------------------------
 with tab_prospects:
@@ -230,7 +225,7 @@ with tab_prospects:
                    "script": pm.rendre(tpl["script"], ligne),
                    "source": tpl["source"]}
             _memoriser(msg, "prospect")
-        _zone_resultat("prospect", objet=f"Prospects {categorie} {priorite}")
+        _zone_resultat("prospect")
 
 # --- Onglet CRM / Suivi -----------------------------------------------------
 with tab_crm:

@@ -17,8 +17,6 @@ import streamlit as st
 
 import ao_db
 import ao_maximilien_veille
-import comptes
-import espace
 import provenance_ao
 import veille_depot
 import veille_etat
@@ -37,8 +35,6 @@ LIBELLE_TRAITEMENT = {
 COULEUR_PRIORITE = {"CHAUD": "red", "CHAUDE": "red", "TIEDE": "orange",
                     "TIÈDE": "orange", "FROID": "gray", "FROIDE": "gray"}
 COULEUR_VERDICT = {"PERTINENT": "green", "REJETE": "red"}
-SUIVI_STATUTS = {"": "—", "a_voir": "À voir", "favori": "Favori",
-                 "mis_de_cote": "Mis de côté"}
 FICHE_AMORCE = Path(__file__).resolve().parent / "config_chruth" / "fiche_chruth.md"
 
 # Fenetres de fraicheur proposees, en jours. None = pas de borne.
@@ -116,27 +112,10 @@ def score_de(entree: dict) -> float:
         return 0.0
 
 
-def preferences_defaut() -> dict:
-    """Preferences du membre, en tant que valeurs de depart des filtres.
-
-    Elles ne s'appliquent qu'a la premiere ouverture de la session : une fois
-    le widget affiche, le choix manuel de l'utilisateur fait foi. En ligne sans
-    cle de dechiffrement, on retombe sur les valeurs par defaut de la page.
-    """
-    try:
-        email = comptes.utilisateur_courant(st)
-        return espace.preferences(email) if email else {}
-    except Exception:  # noqa: BLE001
-        return {}
-
-
 with st.sidebar:
     st.header("Filtres")
     priorites_vues = sorted({str(a.get("priorite") or "?") for a in aos.values()})
-    _prefs = preferences_defaut()
-    _defaut_priorites = [p for p in (_prefs.get("priorites") or []) if p in priorites_vues]
-    priorites = st.multiselect("Priorité", priorites_vues, default=_defaut_priorites,
-                               key="priorites")
+    priorites = st.multiselect("Priorité", priorites_vues, default=[], key="priorites")
 
     # La jauge : le score etant continu a la decimale, le pas de 0,5 separe
     # reellement les AO — avec l'ancien bareme en paliers de 5, la deplacer
@@ -147,16 +126,9 @@ with st.sidebar:
                               key="classement")
 
     departements_vus = sorted({str(a.get("departement") or "--") for a in aos.values()})
-    _defaut_departements = [d for d in (_prefs.get("departements") or [])
-                            if d in departements_vus]
-    departements = st.multiselect("Département", departements_vus,
-                                  default=_defaut_departements, key="departements")
+    departements = st.multiselect("Département", departements_vus, default=[], key="departements")
 
-    _periode_defaut = _prefs.get("periode", "Tout")
-    if _periode_defaut not in PERIODES:
-        _periode_defaut = "Tout"
-    periode = st.selectbox("Publié depuis", list(PERIODES), key="publie_depuis",
-                           index=list(PERIODES).index(_periode_defaut))
+    periode = st.selectbox("Publié depuis", list(PERIODES), key="publie_depuis")
     choix = PERIODES[periode]
     if choix == "libre":
         publie_apres = st.date_input("À partir du", value=date.today() - timedelta(days=30),
@@ -362,29 +334,6 @@ for id_ao, entree in retenus:
             if choisi != courant:
                 veille_etat.definir_traitement(etat, id_ao, choisi)
                 enregistrer(etat, sha, f"suivi {id_ao} -> {choisi}")
-                st.rerun()
-
-        # Suivi personnel : a cote du traitement commun, ce que CE membre pense
-        # du marche et sa note privee. Tout vit dans son espace chiffre, jamais
-        # dans l'etat partage de la veille.
-        with st.expander("Mon suivi personnel", key=f"perso_{id_ao}"):
-            email = comptes.utilisateur_courant(st)
-            if not espace.existe(email):
-                espace.creer(email)
-            statut = espace.statut_ao(email, id_ao)
-            note = espace.note_ao(email, id_ao)
-            c_statut, c_note = st.columns([1, 2])
-            choisi = c_statut.selectbox(
-                "Statut", list(SUIVI_STATUTS),
-                index=list(SUIVI_STATUTS).index(statut) if statut in SUIVI_STATUTS else 0,
-                format_func=lambda s: SUIVI_STATUTS[s], key=f"perso_statut_{id_ao}")
-            nouvelle_note = c_note.text_area("Note privée", value=note, height=80,
-                                             key=f"perso_note_{id_ao}")
-            if st.button("Enregistrer mon suivi", key=f"perso_ok_{id_ao}"):
-                espace.definir_statut_ao(email, id_ao, choisi)
-                if nouvelle_note != note:
-                    espace.sauver_note_ao(email, id_ao, nouvelle_note)
-                st.success("Suivi personnel enregistré.")
                 st.rerun()
 
 

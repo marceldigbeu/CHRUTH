@@ -9,9 +9,8 @@ L'administrateur est le seul a pouvoir repondre, parce que la liste vit dans
 `.streamlit/secrets.toml`, hors de l'application : un droit d'acces modifiable
 depuis l'application protegee ne protege rien.
 
-La connexion est exigee dans tous les modes. Sans fournisseur configure, ce
-sont les comptes locaux (voir comptes.py) qui protegent l'entree : chacun se
-connecte avec son adresse et son mot de passe, haché dans son espace membre.
+Si aucune authentification n'est configuree, la plateforme reste ouverte — c'est
+le mode poste local, ou la garde serait un obstacle sans objet.
 """
 from __future__ import annotations
 

@@ -1,19 +1,15 @@
-# Connexion avant accès
+# Activer la page de connexion
 
-La plateforme exige une connexion avant d'afficher quoi que ce soit. Deux portes :
+La plateforme peut demander une connexion avant d'afficher quoi que ce soit.
+Tant que rien n'est configure, elle demarre sans connexion : c'est le mode poste
+local, et c'est normal.
 
-- **Google** : si la section `[auth]` est configurée, un bouton « Se connecter
-  avec Google » apparaît.
-- **Compte CHRUTH** : toujours disponible. Sans Google configuré, c'est la seule
-  porte — chaque membre crée son compte (adresse + mot de passe) depuis l'écran
-  de connexion, puis se connecte. Le mot de passe n'est jamais stocké en clair :
-  seul son hachage vit dans l'espace chiffré du membre.
-
-Dans les deux cas, l'application ne répond qu'à une question : **cette adresse
-a-t-elle le droit d'entrer ?** La réponse vit dans `.streamlit/secrets.toml`, un
-fichier que seul l'administrateur peut modifier — un droit d'accès modifiable
-depuis l'application protégée ne protégerait rien. Sans `[acces]` (poste local),
-tout compte authentifié entre.
+Aucun mot de passe n'est stocke ni envoye par l'application. L'identification est
+deleguee a Google, qui gere deja les mots de passe et la double authentification.
+L'application ne repond qu'a une question : **cette adresse a-t-elle le droit
+d'entrer ?** La reponse vit dans `.streamlit/secrets.toml`, un fichier que seul
+l'administrateur peut modifier — un droit d'acces modifiable depuis l'application
+protegee ne protegerait rien.
 
 ## 1. Creer l'identifiant Google (une seule fois, ~10 minutes)
 
@@ -60,8 +56,8 @@ affiche l'adresse connectee et un bouton **Se decconnecter**.
 |---|---|
 | Ouvrir l'acces a quelqu'un | Ajouter son adresse dans `emails`, relancer l'app |
 | Retirer un acces | Retirer son adresse de `emails`, relancer l'app |
-| Ouvrir a tout compte | Laisser `emails = []` (tout compte authentifie entre) |
-| Retirer le bouton Google | Commenter toute la section `[auth]` (la connexion reste requise via les comptes locaux) |
+| Ouvrir a tout compte Google | Laisser `emails = []` |
+| Desactiver la connexion | Commenter toute la section `[auth]` |
 
 Une adresse refusee voit un message qui nomme les administrateurs a contacter :
 un refus sans recours transforme un reglage a corriger en impasse.
