@@ -823,6 +823,64 @@
       "ville": "Saint-Ouen-sur-Seine",
       "vu_le": "2026-08-04T15:43:13.647003+00:00"
     },
+    "MX-941687": {
+      "acheteur": "Etablissement public d'aménagement de Sénart",
+      "correction_humaine": null,
+      "date_limite": "2026-09-18",
+      "date_publication": "2026-08-06",
+      "departement": "77",
+      "lu": false,
+      "notifie_le": "2026-08-06T15:07:22.806223+00:00",
+      "objet": "26SJM004 RETRAITE SUPPLEMENTAIRE",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 20.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/941687?orgAcronyme=o3z",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/941687?orgAcronyme=o3z",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/941687?orgAcronyme=o3z",
+      "url_profil_acheteur": "",
+      "ville": "Lieusaint",
+      "vu_le": "2026-08-06T15:07:21.544569+00:00"
+    },
+    "MX-941690": {
+      "acheteur": "Etablissement public d'aménagement de Sénart",
+      "correction_humaine": null,
+      "date_limite": "2026-09-18",
+      "date_publication": "2026-08-06",
+      "departement": "77",
+      "lu": false,
+      "notifie_le": "2026-08-06T15:07:24.072041+00:00",
+      "objet": "26SJM005 MUTUELLE",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 20.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/941690?orgAcronyme=o3z",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/941690?orgAcronyme=o3z",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/941690?orgAcronyme=o3z",
+      "url_profil_acheteur": "",
+      "ville": "Lieusaint",
+      "vu_le": "2026-08-06T15:07:21.546024+00:00"
+    },
     "MX-941777": {
       "acheteur": "Commune de Domont",
       "correction_humaine": null,
@@ -2818,7 +2876,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-06T12:55:34.225988+00:00",
+  "maj_le": "2026-08-06T15:07:24.072406+00:00",
   "reglages": {
     "collecte": true
   },
