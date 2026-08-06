@@ -2757,6 +2757,35 @@
       "ville": "Saint-Denis",
       "vu_le": "2026-08-05T10:58:01.412943+00:00"
     },
+    "MX-944896": {
+      "acheteur": "Ville d'Aubervilliers",
+      "correction_humaine": null,
+      "date_limite": "2026-09-14",
+      "date_publication": "2026-08-06",
+      "departement": "93",
+      "lu": false,
+      "notifie_le": "2026-08-06T12:55:34.225774+00:00",
+      "objet": "MISE EN PLACE D’UN DISPOSITIF HYBRIDE DE FORMATION",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "MAPA",
+      "score": 35.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944896?orgAcronyme=j4k",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/944896?orgAcronyme=j4k",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/944896?orgAcronyme=j4k",
+      "url_profil_acheteur": "",
+      "ville": "Aubervilliers",
+      "vu_le": "2026-08-06T12:55:32.677220+00:00"
+    },
     "MX-944913": {
       "acheteur": "Paray-Vieille-Poste",
       "correction_humaine": null,
@@ -2789,7 +2818,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-06T10:59:18.914666+00:00",
+  "maj_le": "2026-08-06T12:55:34.225988+00:00",
   "reglages": {
     "collecte": true
   },
