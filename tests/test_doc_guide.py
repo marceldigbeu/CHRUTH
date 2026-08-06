@@ -7,6 +7,7 @@ rendent bruyantes.
 """
 from __future__ import annotations
 
+import ast
 import re
 from pathlib import Path
 
@@ -18,12 +19,23 @@ RACINE = Path(__file__).resolve().parent.parent
 GUIDE_HTML = RACINE / "GUIDE_UTILISATION_CHRUTH.html"
 GUIDE_PDF = RACINE / "GUIDE_UTILISATION_CHRUTH.pdf"
 
-NOMBRES = {8: "huit", 9: "neuf", 10: "dix", 11: "onze", 12: "douze"}
+NOMBRES = {8: "huit", 9: "neuf", 10: "dix", 11: "onze", 12: "douze",
+           13: "treize", 14: "quatorze"}
 
 
 def _pages_de_la_navigation() -> list[str]:
-    source = (RACINE / "CHRUTH_APP.py").read_text(encoding="utf-8")
-    return re.findall(r'st\.Page\("[^"]+",\s*title="([^"]+)"', source)
+    """Les titres des pages declarees dans CHRUTH_APP.py.
+
+    La navigation est une boucle sur la liste PAGES_DEF : on evalue la liste
+    declaree plutot que de scanner des appels st.Page ecrits a la main.
+    """
+    module = ast.parse((RACINE / "CHRUTH_APP.py").read_text(encoding="utf-8"))
+    for noeud in module.body:
+        if isinstance(noeud, ast.Assign) and any(
+                isinstance(t, ast.Name) and t.id == "PAGES_DEF"
+                for t in noeud.targets):
+            return [titre for _, titre in ast.literal_eval(noeud.value)]
+    raise AssertionError("PAGES_DEF introuvable dans CHRUTH_APP.py")
 
 
 def _texte_pdf() -> str:
