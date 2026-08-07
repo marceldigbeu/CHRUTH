@@ -70,10 +70,22 @@ def notifications_ouvertes() -> bool:
 
 
 def charger_config_smtp() -> dict[str, Any]:
-    """Identifiants SMTP (env > secrets) + liste de destinataires. Leve si incomplet."""
+    """Identifiants SMTP (env > secrets) + liste de destinataires. Leve si incomplet.
+
+    Les valeurs sont nettoyees ici, au moment de s'en servir, et pas seulement a
+    l'enregistrement : Google presente ses mots de passe d'application par
+    groupes de quatre (« abcd efgh ijkl mnop »), et une valeur collee ainsi —
+    dans le fichier avant que l'application ne sache la nettoyer, ou dans une
+    variable d'environnement que l'application ne controle pas — est refusee par
+    le serveur. La page Reglages afficherait alors une cle « enregistree » et
+    aucun email ne partirait.
+    """
+    from identifiants_smtp import normaliser_mot_de_passe
+
     secrets = _lire_secrets()
-    user = os.environ.get("CHRUTH_SMTP_USER") or secrets.get("smtp_user")
-    password = os.environ.get("CHRUTH_SMTP_PASSWORD") or secrets.get("smtp_password")
+    user = str(os.environ.get("CHRUTH_SMTP_USER") or secrets.get("smtp_user") or "").strip()
+    password = normaliser_mot_de_passe(
+        os.environ.get("CHRUTH_SMTP_PASSWORD") or secrets.get("smtp_password") or "")
     destinataires = charger_destinataires(secrets)
     if not (user and password):
         raise ValueError(

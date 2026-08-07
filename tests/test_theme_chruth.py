@@ -33,6 +33,7 @@ def test_le_selecteur_active_le_mode_nuit_et_survit_a_la_navigation(
         etat_local, tmp_path, monkeypatch):
     monkeypatch.setenv("CHRUTH_AO_DB", str(tmp_path / "ao.sqlite"))
     at = AppTest.from_file(ENTREE, default_timeout=90)
+    at.session_state["comptes.utilisateur"] = "bob@chruth.fr"
     at.run()
 
     selecteur = next(t for t in at.toggle if t.label == "Mode nuit")

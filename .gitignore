@@ -24,9 +24,10 @@ alertes_secrets.json
 destinataires.txt
 # Etat ON/OFF des notifications (runtime, pilote par le bouton du cockpit)
 alertes_actives.flag
+# Etat ON/OFF de la collecte (runtime)
+collecte_active.flag
 
 # Cles API (app Streamlit) - ne JAMAIS committer
-.env
 
 # Donnees CRM (suivi commercial / clients) - ne pas committer
 crm/
@@ -46,8 +47,19 @@ _scratch/
 # Etat local de la veille : sa source de verite est la branche ao-state.
 etat/
 
+# Espace membres : fichiers chiffres, cle locale et cache (donnees personnelles).
+espace/
+
 # Cache local des reglages : la source de verite est la branche ao-state.
 reglages_cache.json
 
 # Secrets Streamlit : identifiants OAuth et liste des acces (jamais commiter)
 .streamlit/secrets.toml
+
+.projects/cache
+.projects/vault
+.projects/state.test.json
+.projects/state.local.test.json
+.env
+.env.*
+!.env.example

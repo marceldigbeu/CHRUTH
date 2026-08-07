@@ -54,12 +54,20 @@ def _declares(fichier: str) -> set[str]:
 def _pages_declarees() -> list[str]:
     """Les pages listees dans CHRUTH_APP.py, lues a la source.
 
-    Ecrire la liste en dur ici la laisserait vieillir : les pages Pilotage et
-    Reglages sont restees hors de cette garde le temps d'une refonte, alors que
-    la dependance manquante est la panne de deploiement la plus courante.
+    La navigation est une boucle sur la liste PAGES_DEF : on evalue la liste
+    declaree plutot que de la recopier ici, pour que cette garde ne vieillisse
+    pas. Les pages Pilotage et Reglages sont restees hors de cette garde le
+    temps d'une refonte, alors que la dependance manquante est la panne de
+    deploiement la plus courante.
     """
-    source = (RACINE / "CHRUTH_APP.py").read_text(encoding="utf-8")
-    return sorted({m.removesuffix(".py") for m in re.findall(r'st\.Page\("([^"]+\.py)"', source)})
+    module = ast.parse((RACINE / "CHRUTH_APP.py").read_text(encoding="utf-8"))
+    for noeud in module.body:
+        if isinstance(noeud, ast.Assign) and any(
+                isinstance(t, ast.Name) and t.id == "PAGES_DEF"
+                for t in noeud.targets):
+            return sorted(fichier.removesuffix(".py")
+                          for fichier, _ in ast.literal_eval(noeud.value))
+    raise AssertionError("PAGES_DEF introuvable dans CHRUTH_APP.py")
 
 
 def test_requirements_couvre_toute_l_application():
@@ -71,7 +79,8 @@ def test_requirements_couvre_toute_l_application():
 def test_la_garde_couvre_bien_chaque_page_de_la_navigation():
     """Sans ceci, ajouter une page la sortirait silencieusement du controle."""
     assert _pages_declarees() == [
-        "app_messages", "app_veille", "pages_accueil", "pages_acheteurs", "pages_carte",
+        "administration", "app_messages", "app_veille", "mes_ao", "mes_messages",
+        "mon_espace", "pages_accueil", "pages_acheteurs", "pages_carte",
         "pages_collecte", "pages_developpeur", "pages_donnees", "pages_pilotage",
         "pages_reglages",
     ]

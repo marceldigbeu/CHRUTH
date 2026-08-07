@@ -1,15 +1,19 @@
-# Activer la page de connexion
+# Connexion avant accès
 
-La plateforme peut demander une connexion avant d'afficher quoi que ce soit.
-Tant que rien n'est configure, elle demarre sans connexion : c'est le mode poste
-local, et c'est normal.
+La plateforme exige une connexion avant d'afficher quoi que ce soit. Deux portes :
 
-Aucun mot de passe n'est stocke ni envoye par l'application. L'identification est
-deleguee a Google, qui gere deja les mots de passe et la double authentification.
-L'application ne repond qu'a une question : **cette adresse a-t-elle le droit
-d'entrer ?** La reponse vit dans `.streamlit/secrets.toml`, un fichier que seul
-l'administrateur peut modifier — un droit d'acces modifiable depuis l'application
-protegee ne protegerait rien.
+- **Google** : si la section `[auth]` est configurée, un bouton « Se connecter
+  avec Google » apparaît.
+- **Compte CHRUTH** : toujours disponible. Sans Google configuré, c'est la seule
+  porte — chaque membre crée son compte (adresse + mot de passe) depuis l'écran
+  de connexion, puis se connecte. Le mot de passe n'est jamais stocké en clair :
+  seul son hachage vit dans l'espace chiffré du membre.
+
+Dans les deux cas, l'application ne répond qu'à une question : **cette adresse
+a-t-elle le droit d'entrer ?** La réponse vit dans `.streamlit/secrets.toml`, un
+fichier que seul l'administrateur peut modifier — un droit d'accès modifiable
+depuis l'application protégée ne protégerait rien. Sans `[acces]` (poste local),
+tout compte authentifié entre.
 
 ## 1. Creer l'identifiant Google (une seule fois, ~10 minutes)
 
@@ -57,9 +61,12 @@ L'application deployee sur Streamlit Community Cloud ne lit pas
 memes valeurs se saisissent dans le tableau de bord, ou seul le proprietaire du
 compte entre.
 
-Tant que rien n'y est saisi, **l'application en ligne demarre sans connexion** :
-le mode poste local devient alors une porte ouverte sur Internet. C'est la seule
-etape qui separe les deux situations.
+L'ecran de connexion, lui, s'affiche de toute facon : il ne depend d'aucun
+reglage. Ce que les secrets decident, c'est **qui franchit cet ecran**. Sans
+section `[acces]`, la liste des autorises est vide, et une liste vide laisse
+entrer tout compte authentifie — or n'importe quel visiteur peut se creer un
+compte CHRUTH depuis l'ecran lui-meme. En ligne, l'ecran seul ne protege donc
+rien : c'est `emails` qui ferme la porte.
 
 1. Google Cloud → **Identifiants** → l'ID client de l'etape 1 → **URI de
    redirection autorises** → ajouter l'adresse en ligne suivie de
@@ -100,8 +107,8 @@ l'une ou de l'autre n'entre pas.
 |---|---|
 | Ouvrir l'acces a quelqu'un | Ajouter son adresse dans `emails`, relancer l'app |
 | Retirer un acces | Retirer son adresse de `emails`, relancer l'app |
-| Ouvrir a tout compte Google | Laisser `emails = []` (poste local seulement) |
-| Desactiver la connexion | Commenter toute la section `[auth]` |
+| Ouvrir a tout compte | Laisser `emails = []` — a reserver au poste local |
+| Retirer le bouton Google | Commenter toute la section `[auth]` (la connexion reste requise via les comptes locaux) |
 
 En ligne, ces gestes se font dans **Settings → Secrets** ; l'application
 redemarre seule apres l'enregistrement, sans relance manuelle.
@@ -114,8 +121,9 @@ un refus sans recours transforme un reglage a corriger en impasse.
 - `.streamlit/secrets.toml` est ignore par git. Ne jamais le commiter, ne jamais
   le joindre a une livraison — il ouvre l'acces a l'application.
 - Une liste `emails` vide est un raccourci commode sur un poste local. Sur une
-  adresse publique, c'est une porte ouverte : n'importe quel compte Google entre,
-  et la base de donnees comme le CRM sont derriere. En ligne, la liste se remplit.
+  adresse publique, c'est une porte ouverte : la creation de compte est offerte
+  a qui arrive sur l'ecran, et un compte cree entre. La base de donnees comme le
+  CRM sont derriere. En ligne, la liste se remplit — c'est la seule barriere.
 - Le `client_secret` se colle dans le tableau de bord Streamlit et nulle part
   ailleurs : ni dans le depot, ni dans un message, ni dans un fichier livre.
 - Changer `cookie_secret` deconnecte tout le monde. C'est le geste a faire si on

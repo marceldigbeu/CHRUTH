@@ -11,15 +11,18 @@ Données prospects = locales par défaut (Ollama). Aucun SDK : appels HTTP direc
 from __future__ import annotations
 
 import os
+from pathlib import Path
 
 import requests
 
 DEFAULT_PROVIDER = "ollama"
 DEFAULT_MODELS = {
     "ollama": "llama3.1:8b",
-    # Le modèle Anthropic est fourni par CHRUTH_LLM_MODEL afin de ne pas
-    # imposer de nom commercial dans les fichiers livrés.
-    "anthropic": "",
+    # Chaque fournisseur porte un modele par defaut, sans quoi sa cle est
+    # inutilisable : un appel sans nom de modele n'a nulle part ou aller, et le
+    # fournisseur est alors declare « cle absente » puis ignore en silence.
+    # CHRUTH_LLM_MODEL reste la pour en imposer un autre.
+    "anthropic": "claude-haiku-4-5-20251001",
     "mistral": "mistral-small-latest",
     "groq": "llama-3.3-70b-versatile",
     "gemini": "gemini-2.5-flash",
@@ -30,6 +33,46 @@ _CLES = {
     "groq": "GROQ_API_KEY",
     "gemini": "GEMINI_API_KEY",
 }
+
+
+# --- Ou vivent les cles -----------------------------------------------------
+# Le `.env` est cherche a cote de ce fichier, jamais dans le dossier courant :
+# l'app peut etre lancee depuis n'importe ou, et le pipeline tourne dans un
+# sous-processus dont le dossier de travail n'est pas celui du produit.
+CHEMIN_ENV = Path(__file__).resolve().parent / ".env"
+
+
+def charger_env(chemin: str | Path | None = None) -> None:
+    """Pose dans l'environnement les cles ecrites dans un `.env`.
+
+    Charge ici, et pas dans une page : une cle qui n'est lue que par la page
+    Messages ne marche que si l'utilisateur ouvre cette page en premier — la
+    veille et le pipeline, eux, la croient absente et retombent en brouillon
+    deterministe. Le fichier ne recouvre jamais une variable deja posee : sur le
+    veilleur GitHub, c'est le secret du depot qui doit gagner.
+
+    L'absence de fichier est le cas normal du poste sans cle cloud : elle ne
+    doit rien casser.
+    """
+    fichier = Path(chemin) if chemin is not None else CHEMIN_ENV
+    try:
+        if not fichier.is_file():
+            return
+        lignes = fichier.read_text(encoding="utf-8").splitlines()
+    except OSError:
+        return
+    for ligne in lignes:
+        ligne = ligne.strip()
+        if not ligne or ligne.startswith("#") or "=" not in ligne:
+            continue
+        nom, _, valeur = ligne.partition("=")
+        nom = nom.removeprefix("export ").strip()
+        valeur = valeur.strip().strip('"').strip("'")
+        if nom and valeur and not os.environ.get(nom):
+            os.environ[nom] = valeur
+
+
+charger_env()
 
 
 # --- Budget de tokens -------------------------------------------------------
@@ -99,6 +142,26 @@ def llm_disponible(provider: str | None = None) -> bool:
 
 
 _CLOUD_ORDRE = ("anthropic", "mistral", "groq", "gemini")
+# Liste offerte a l'utilisateur : le local d'abord, puis tout fournisseur dont
+# une cle peut exister. En omettre un rend sa cle inutilisable a la main, alors
+# meme que le moteur automatique sait s'en servir.
+FOURNISSEURS = ("ollama",) + _CLOUD_ORDRE
+
+
+def appliquer_choix(provider: str, modele: str = "") -> None:
+    """Enregistre le fournisseur choisi, et le modele seulement s'il est donne.
+
+    Le modele vit dans une variable commune a tous les fournisseurs : la laisser
+    en place en changeant de fournisseur enverrait le modele du precedent au
+    suivant — une cle valable, un appel refuse, et un utilisateur convaincu que
+    sa cle est morte. Un champ vide vaut donc effacement, pas conservation.
+    """
+    os.environ["CHRUTH_LLM_PROVIDER"] = str(provider or "").strip().lower()
+    modele = str(modele or "").strip()
+    if modele:
+        os.environ["CHRUTH_LLM_MODEL"] = modele
+    else:
+        os.environ.pop("CHRUTH_LLM_MODEL", None)
 
 
 def cloud_provider() -> str | None:

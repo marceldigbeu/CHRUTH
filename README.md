@@ -1,6 +1,6 @@
 # CHRUTH - Outils data, IA et prospection
 
-Projet data pour réaliser les missions de la fiche de poste CHRUTH :
+Projet no-code/data pour realiser les missions de la fiche de poste CHRUTH :
 
 1. Construire une base de donnees prospects B2B.
 2. Segmenter et scorer les prospects.
