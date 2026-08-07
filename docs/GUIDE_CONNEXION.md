@@ -62,11 +62,21 @@ memes valeurs se saisissent dans le tableau de bord, ou seul le proprietaire du
 compte entre.
 
 L'ecran de connexion, lui, s'affiche de toute facon : il ne depend d'aucun
-reglage. Ce que les secrets decident, c'est **qui franchit cet ecran**. Sans
-section `[acces]`, la liste des autorises est vide, et une liste vide laisse
-entrer tout compte authentifie — or n'importe quel visiteur peut se creer un
-compte CHRUTH depuis l'ecran lui-meme. En ligne, l'ecran seul ne protege donc
-rien : c'est `emails` qui ferme la porte.
+reglage. Ce que les secrets decident, c'est **qui franchit cet ecran, et avec
+quels droits**.
+
+**Un piege a connaitre avant d'ecrire quoi que ce soit.** Supprimer la section
+`[acces]` n'ouvre pas seulement l'acces : sans liste `admins`, et sans
+fournisseur Google configure, **tout compte connecte devient administrateur** —
+donc voit la base, le CRM et les reglages. La section doit donc toujours exister
+et toujours nommer ses administrateurs, meme quand l'inscription est ouverte a
+tous :
+
+```toml
+[acces]
+emails = []                               # vide = inscription ouverte a tous
+admins = ["ton.adresse@exemple.fr"]       # jamais vide
+```
 
 1. Google Cloud → **Identifiants** → l'ID client de l'etape 1 → **URI de
    redirection autorises** → ajouter l'adresse en ligne suivie de
@@ -107,7 +117,8 @@ l'une ou de l'autre n'entre pas.
 |---|---|
 | Ouvrir l'acces a quelqu'un | Ajouter son adresse dans `emails`, relancer l'app |
 | Retirer un acces | Retirer son adresse de `emails`, relancer l'app |
-| Ouvrir a tout compte | Laisser `emails = []` — a reserver au poste local |
+| Ouvrir l'inscription a tous | Laisser `emails = []`, en gardant `admins` rempli |
+| Donner les droits d'administration | Ajouter l'adresse dans `admins` |
 | Retirer le bouton Google | Commenter toute la section `[auth]` (la connexion reste requise via les comptes locaux) |
 
 En ligne, ces gestes se font dans **Settings → Secrets** ; l'application
@@ -120,10 +131,14 @@ un refus sans recours transforme un reglage a corriger en impasse.
 
 - `.streamlit/secrets.toml` est ignore par git. Ne jamais le commiter, ne jamais
   le joindre a une livraison — il ouvre l'acces a l'application.
-- Une liste `emails` vide est un raccourci commode sur un poste local. Sur une
-  adresse publique, c'est une porte ouverte : la creation de compte est offerte
-  a qui arrive sur l'ecran, et un compte cree entre. La base de donnees comme le
-  CRM sont derriere. En ligne, la liste se remplit — c'est la seule barriere.
+- Une liste `emails` vide ouvre l'inscription a tous. Ce n'est plus un risque
+  depuis que la navigation est cloisonnee : un compte ordinaire ne voit que
+  l'accueil, la veille et son propre espace. La base, le CRM, les reglages et
+  l'administration restent aux seules adresses de `admins`.
+- La frontiere est ecrite dans `navigation_acces.py`, et elle est fermee par
+  defaut : une page ajoutee a la navigation sans decision explicite reste
+  reservee aux administrateurs. Pour l'ouvrir aux membres, il faut inscrire son
+  titre dans `PAGES_MEMBRE` — un geste conscient, pas un oubli.
 - Le `client_secret` se colle dans le tableau de bord Streamlit et nulle part
   ailleurs : ni dans le depot, ni dans un message, ni dans un fichier livre.
 - Changer `cookie_secret` deconnecte tout le monde. C'est le geste a faire si on

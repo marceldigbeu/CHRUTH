@@ -6,6 +6,7 @@ import streamlit as st
 import comptes
 import connexion
 import espace
+import navigation_acces
 import theme_chruth
 
 st.set_page_config(
@@ -142,9 +143,17 @@ def page_accueil_preferee() -> str:
 
 
 def _construire_pages() -> list:
-    pref = page_accueil_preferee()
+    """La navigation du compte connecté, réduite à ce qu'il a le droit de voir.
+
+    L'inscription étant ouverte, la barre latérale est le seul endroit où se
+    joue la frontière entre l'espace du membre et le fonds de l'entreprise :
+    une page non déclarée ici n'est pas atteignable.
+    """
+    visibles = navigation_acces.pages_visibles(
+        PAGES_DEF, admin=comptes.est_admin_courant(st))
+    pref = navigation_acces.page_par_defaut(visibles, page_accueil_preferee())
     return [st.Page(chemin, title=titre, default=(titre == pref))
-            for chemin, titre in PAGES_DEF]
+            for chemin, titre in visibles]
 
 
 st.navigation(_construire_pages()).run()
