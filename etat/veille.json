@@ -2901,11 +2901,40 @@
       "url_profil_acheteur": "",
       "ville": "Paray-Vieille-Poste",
       "vu_le": "2026-08-05T16:58:45.407696+00:00"
+    },
+    "MX-944934": {
+      "acheteur": "Commune de Fontenay sous Bois",
+      "correction_humaine": null,
+      "date_limite": "2026-09-18",
+      "date_publication": "2026-08-07",
+      "departement": "94",
+      "lu": false,
+      "notifie_le": null,
+      "objet": "ENTRETIEN DES ESPACES VERTS",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 30.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "exclusion metier : espaces verts",
+        "terme": "espaces verts",
+        "verdict": "REJETE"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944934?orgAcronyme=a1h",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/944934?orgAcronyme=a1h",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/944934?orgAcronyme=a1h",
+      "url_profil_acheteur": "",
+      "ville": "FONTENAY-SOUS-BOIS CEDEX",
+      "vu_le": "2026-08-07T07:00:17.080207+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-07T00:36:57.832033+00:00",
+  "maj_le": "2026-08-07T07:00:17.080413+00:00",
   "reglages": {
     "collecte": true
   },
