@@ -26,12 +26,40 @@ def _deconnecter() -> None:
         pass
 
 
-def _creer_compte_local(email: str, nom: str, mdp: str) -> None:
+CLE_MESSAGE_CREATION = "creation_compte.message"
+
+
+def _creer_compte_local() -> None:
+    """Crée le compte à partir des champs, puis dépose le résultat en session.
+
+    Les valeurs sont lues dans `session_state` et non reçues en paramètres :
+    les `args` d'un `on_click` sont figés au rendu précédent, donc antérieurs
+    à la saisie. La création recevait trois chaînes vides et refusait toujours
+    l'adresse — quoi que le visiteur ait tapé.
+
+    Le résultat transite par la session plutôt que par un `st.success` écrit
+    ici : ce qu'un callback affiche est produit avant le rendu, donc perdu.
+    C'est le corps de la page qui l'affiche.
+    """
     try:
-        comptes.creer_compte_local(email, nom, mdp)
-        st.success("Compte créé. Renseigne la même adresse ci-dessus pour te connecter.")
+        comptes.creer_compte_local(
+            st.session_state.get("creer_email", ""),
+            st.session_state.get("creer_nom", ""),
+            st.session_state.get("creer_mdp", ""),
+        )
+        st.session_state[CLE_MESSAGE_CREATION] = (
+            "succes", "Compte créé. Renseigne la même adresse ci-dessus pour te connecter.")
     except ValueError as exc:
-        st.error(str(exc))
+        st.session_state[CLE_MESSAGE_CREATION] = ("erreur", str(exc))
+
+
+def _afficher_message_creation() -> None:
+    """Rend le résultat de la dernière tentative de création, s'il y en a une."""
+    niveau, message = st.session_state.get(CLE_MESSAGE_CREATION, ("", ""))
+    if niveau == "succes":
+        st.success(message)
+    elif niveau == "erreur":
+        st.error(message)
 
 
 def page_de_connexion() -> None:
@@ -68,12 +96,12 @@ def page_de_connexion() -> None:
     with st.expander("Créer un compte local"):
         st.caption("Aucun compte encore ? Crée le tien : adresse, nom affiché "
                    "et mot de passe.")
-        c_email = st.text_input("Adresse email", key="creer_email")
-        c_nom = st.text_input("Nom affiché", key="creer_nom")
-        c_mdp = st.text_input("Mot de passe (8 caractères minimum)",
-                              type="password", key="creer_mdp")
-        st.button("Créer le compte", on_click=_creer_compte_local,
-                  args=(c_email, c_nom, c_mdp))
+        st.text_input("Adresse email", key="creer_email")
+        st.text_input("Nom affiché", key="creer_nom")
+        st.text_input("Mot de passe (8 caractères minimum)",
+                      type="password", key="creer_mdp")
+        st.button("Créer le compte", on_click=_creer_compte_local)
+        _afficher_message_creation()
 
 
 def garde() -> bool:
