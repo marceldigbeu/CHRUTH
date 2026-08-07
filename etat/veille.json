@@ -2930,11 +2930,40 @@
       "url_profil_acheteur": "",
       "ville": "FONTENAY-SOUS-BOIS CEDEX",
       "vu_le": "2026-08-07T07:00:17.080207+00:00"
+    },
+    "MX-944959": {
+      "acheteur": "Mairie de Grigny",
+      "correction_humaine": null,
+      "date_limite": "2026-09-21",
+      "date_publication": "2026-08-07",
+      "departement": "91",
+      "lu": false,
+      "notifie_le": "2026-08-07T08:15:32.250653+00:00",
+      "objet": "Fourniture et gestion des abonnements pour les journaux, revues et périodiques d’information générale et d’information spécialisée",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 30.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944959?orgAcronyme=h7q",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/944959?orgAcronyme=h7q",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/944959?orgAcronyme=h7q",
+      "url_profil_acheteur": "",
+      "ville": "Grigny",
+      "vu_le": "2026-08-07T08:15:31.256190+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-07T07:00:17.080413+00:00",
+  "maj_le": "2026-08-07T08:15:32.250879+00:00",
   "reglages": {
     "collecte": true
   },
