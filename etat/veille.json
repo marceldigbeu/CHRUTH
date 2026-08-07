@@ -881,6 +881,35 @@
       "ville": "Lieusaint",
       "vu_le": "2026-08-06T15:07:21.546024+00:00"
     },
+    "MX-941693": {
+      "acheteur": "Etablissement public d'aménagement de Sénart",
+      "correction_humaine": null,
+      "date_limite": "2026-09-18",
+      "date_publication": "2026-08-06",
+      "departement": "77",
+      "lu": false,
+      "notifie_le": "2026-08-07T00:36:57.831810+00:00",
+      "objet": "26SJM006 - PREVOYANCE",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 20.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/941693?orgAcronyme=o3z",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/941693?orgAcronyme=o3z",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/941693?orgAcronyme=o3z",
+      "url_profil_acheteur": "",
+      "ville": "Lieusaint",
+      "vu_le": "2026-08-07T00:36:56.125867+00:00"
+    },
     "MX-941777": {
       "acheteur": "Commune de Domont",
       "correction_humaine": null,
@@ -2876,7 +2905,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-06T15:07:24.072406+00:00",
+  "maj_le": "2026-08-07T00:36:57.832033+00:00",
   "reglages": {
     "collecte": true
   },
