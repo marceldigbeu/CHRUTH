@@ -2988,11 +2988,40 @@
       "url_profil_acheteur": "",
       "ville": "Grigny",
       "vu_le": "2026-08-07T08:15:31.256190+00:00"
+    },
+    "MX-945076": {
+      "acheteur": "Commune de Chevry-Cossigny",
+      "correction_humaine": null,
+      "date_limite": "2026-09-28",
+      "date_publication": "2026-08-10",
+      "departement": "77",
+      "lu": false,
+      "notifie_le": null,
+      "objet": "Concession du service public de l'assainissement collectif et non collectif",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "MAPA",
+      "score": 45.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "exclusion metier : assainissement",
+        "terme": "assainissement",
+        "verdict": "REJETE"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945076?orgAcronyme=o3f",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945076?orgAcronyme=o3f",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945076?orgAcronyme=o3f",
+      "url_profil_acheteur": "",
+      "ville": "Chevry-Cossigny",
+      "vu_le": "2026-08-10T18:42:16.095963+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-10T17:43:51.028117+00:00",
+  "maj_le": "2026-08-10T18:42:16.096337+00:00",
   "reglages": {
     "collecte": true
   },
