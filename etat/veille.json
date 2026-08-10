@@ -2572,6 +2572,35 @@
       "ville": "Saint-Denis",
       "vu_le": "2026-07-29T11:00:50.471332+00:00"
     },
+    "MX-944361": {
+      "acheteur": "Conseil Régional d'Ile-de-France",
+      "correction_humaine": null,
+      "date_limite": "2026-09-25",
+      "date_publication": "2026-08-10",
+      "departement": "93",
+      "lu": false,
+      "notifie_le": "2026-08-10T13:52:17.655986+00:00",
+      "objet": "MISE EN OEUVRE DE L'INSTRUCTION DE DEMANDES D'AIDES FINANCIERES A DESTINATION DE PARTICULIERS, D'ENTREPRISES OU D'ASSOCIATIONS POUR LE",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 20.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944361?orgAcronyme=t5y",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/944361?orgAcronyme=t5y",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/944361?orgAcronyme=t5y",
+      "url_profil_acheteur": "",
+      "ville": "Saint-Ouen-sur-Seine",
+      "vu_le": "2026-08-10T13:52:16.443812+00:00"
+    },
     "MX-944391": {
       "acheteur": "Mairie d'Arcueil",
       "correction_humaine": null,
@@ -2963,7 +2992,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-10T12:08:43.340438+00:00",
+  "maj_le": "2026-08-10T13:52:17.656208+00:00",
   "reglages": {
     "collecte": true
   },
