@@ -1438,28 +1438,6 @@
       "ville": "Cergy Pontoise Cedex",
       "vu_le": "2026-07-23T15:02:18.406832+00:00"
     },
-    "MX-942632": {
-      "acheteur": "Centre d’Action Sociale de la Ville de Paris",
-      "correction_humaine": null,
-      "date_limite": "2026-08-10",
-      "date_publication": "2026-07-10",
-      "departement": "75",
-      "lu": false,
-      "notifie_le": null,
-      "objet": "Prestations de lutte contre les punaises de lit, et de dératisation, désourisation, désinsectisation, dépigeonnisation, désinfection",
-      "priorite": "TIEDE",
-      "procedure": "AOO",
-      "score": 45,
-      "traitement": "nouveau",
-      "tri": {
-        "etage": "listes",
-        "motif": "exclusion metier : deratisation",
-        "verdict": "REJETE"
-      },
-      "url": "https://marches.maximilien.fr/entreprise/consultation/942632?orgAcronyme=d5b",
-      "ville": "Paris",
-      "vu_le": "2026-07-23T07:18:46.722077+00:00"
-    },
     "MX-942640": {
       "acheteur": "Ville de Rueil-Malmaison",
       "correction_humaine": null,
@@ -3021,7 +2999,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-10T19:48:06.685020+00:00",
+  "maj_le": "2026-08-11T06:47:01.583459+00:00",
   "reglages": {
     "collecte": true
   },
