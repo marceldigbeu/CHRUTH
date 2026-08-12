@@ -3053,11 +3053,40 @@
       "url_profil_acheteur": "",
       "ville": "Arcueil",
       "vu_le": "2026-08-12T10:51:34.045364+00:00"
+    },
+    "MX-945265": {
+      "acheteur": "Centre Hospitalier Intercommunal de Poissy saint Germain",
+      "correction_humaine": null,
+      "date_limite": "2026-09-14",
+      "date_publication": "2026-08-12",
+      "departement": "78",
+      "lu": false,
+      "notifie_le": "2026-08-12T12:43:54.167428+00:00",
+      "objet": "Prestations de services d'assurance pour groupement le groupement hospitalier de territoire Yvelines Nord",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "PAN",
+      "score": 20.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945265?orgAcronyme=a2k",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945265?orgAcronyme=a2k",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945265?orgAcronyme=a2k",
+      "url_profil_acheteur": "",
+      "ville": "poissy",
+      "vu_le": "2026-08-12T12:43:52.541916+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-12T11:39:15.831168+00:00",
+  "maj_le": "2026-08-12T12:43:54.167641+00:00",
   "reglages": {
     "collecte": true
   },
