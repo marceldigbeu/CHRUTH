@@ -3024,11 +3024,40 @@
       "url_profil_acheteur": "",
       "ville": "Chevry-Cossigny",
       "vu_le": "2026-08-10T18:42:16.095963+00:00"
+    },
+    "MX-945171": {
+      "acheteur": "Mairie d'Arcueil",
+      "correction_humaine": null,
+      "date_limite": "2026-09-30",
+      "date_publication": "2026-08-12",
+      "departement": "94",
+      "lu": false,
+      "notifie_le": "2026-08-12T10:51:35.121835+00:00",
+      "objet": "Groupement de commande pour la production et la livraison des repas en liaison froide sur les sites",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "MAPA",
+      "score": 45.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945171?orgAcronyme=d5k",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945171?orgAcronyme=d5k",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945171?orgAcronyme=d5k",
+      "url_profil_acheteur": "",
+      "ville": "Arcueil",
+      "vu_le": "2026-08-12T10:51:34.045364+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-12T09:53:55.073043+00:00",
+  "maj_le": "2026-08-12T10:51:35.122054+00:00",
   "reglages": {
     "collecte": true
   },
