@@ -2579,6 +2579,35 @@
       "ville": "Saint-Ouen-sur-Seine",
       "vu_le": "2026-08-10T13:52:16.443812+00:00"
     },
+    "MX-944370": {
+      "acheteur": "Ville de Cergy",
+      "correction_humaine": null,
+      "date_limite": "2026-09-14",
+      "date_publication": "2026-08-12",
+      "departement": "95",
+      "lu": false,
+      "notifie_le": "2026-08-12T07:08:15.442589+00:00",
+      "objet": "Accord-cadre mono-attributaire relatif à la prestation de transports en autocars pour enfants et adultes dans le cadre des activités",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 30.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944370?orgAcronyme=d7n",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/944370?orgAcronyme=d7n",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/944370?orgAcronyme=d7n",
+      "url_profil_acheteur": "",
+      "ville": "Cergy",
+      "vu_le": "2026-08-12T07:08:13.356971+00:00"
+    },
     "MX-944391": {
       "acheteur": "Mairie d'Arcueil",
       "correction_humaine": null,
@@ -2999,7 +3028,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-11T19:55:16.517092+00:00",
+  "maj_le": "2026-08-12T07:08:15.442785+00:00",
   "reglages": {
     "collecte": true
   },
