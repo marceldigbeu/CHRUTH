@@ -3082,11 +3082,40 @@
       "url_profil_acheteur": "",
       "ville": "poissy",
       "vu_le": "2026-08-12T12:43:52.541916+00:00"
+    },
+    "MX-945303": {
+      "acheteur": "Mairie d'Issy les Moulineaux",
+      "correction_humaine": null,
+      "date_limite": "2026-09-30",
+      "date_publication": "2026-08-13",
+      "departement": "92",
+      "lu": false,
+      "notifie_le": "2026-08-13T10:52:56.684430+00:00",
+      "objet": "Prestations de décoration et de mise en place technique pour les vœux de la municipalité 2027 d'Issy-Les-Moulineaux",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "MAPA",
+      "score": 45.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945303?orgAcronyme=o3m",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945303?orgAcronyme=o3m",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945303?orgAcronyme=o3m",
+      "url_profil_acheteur": "",
+      "ville": "Issy les Moulineaux",
+      "vu_le": "2026-08-13T10:52:55.317840+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-13T09:53:58.578559+00:00",
+  "maj_le": "2026-08-13T10:52:56.684622+00:00",
   "reglages": {
     "collecte": true
   },
