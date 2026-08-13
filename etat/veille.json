@@ -3025,6 +3025,35 @@
       "ville": "Chevry-Cossigny",
       "vu_le": "2026-08-10T18:42:16.095963+00:00"
     },
+    "MX-945112": {
+      "acheteur": "Ville de Clichy",
+      "correction_humaine": null,
+      "date_limite": "2026-09-15",
+      "date_publication": "2026-08-13",
+      "departement": "92",
+      "lu": false,
+      "notifie_le": "2026-08-13T16:25:07.679956+00:00",
+      "objet": "Fourniture et installation d’une patinoire et la mise en lumière du parc Roger Selengro dans le cadre des festivités de noël",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "MAPA",
+      "score": 45.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945112?orgAcronyme=d7m",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945112?orgAcronyme=d7m",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945112?orgAcronyme=d7m",
+      "url_profil_acheteur": "",
+      "ville": "Clichy",
+      "vu_le": "2026-08-13T16:25:06.404192+00:00"
+    },
     "MX-945171": {
       "acheteur": "Mairie d'Arcueil",
       "correction_humaine": null,
@@ -3115,7 +3144,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-13T15:28:59.689601+00:00",
+  "maj_le": "2026-08-13T16:25:07.680205+00:00",
   "reglages": {
     "collecte": true
   },
