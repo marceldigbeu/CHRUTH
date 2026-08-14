@@ -3025,6 +3025,35 @@
       "ville": "Grigny",
       "vu_le": "2026-08-07T08:15:31.256190+00:00"
     },
+    "MX-945004": {
+      "acheteur": "SEINE SPORT ET CULTURE",
+      "correction_humaine": null,
+      "date_limite": "2026-09-30",
+      "date_publication": "2026-08-14",
+      "departement": "92",
+      "lu": false,
+      "notifie_le": "2026-08-14T19:26:05.328563+00:00",
+      "objet": "Prestations de nettoyage des locaux et des vitreries du Complexe Sportif et Culturel Camille Muffat.",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "AOO",
+      "score": 64.0,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "mot-cle coeur dans l'intitule : nettoyage",
+        "terme": "nettoyage",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945004?orgAcronyme=a7k",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945004?orgAcronyme=a7k",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945004?orgAcronyme=a7k",
+      "url_profil_acheteur": "",
+      "ville": "CLICHY",
+      "vu_le": "2026-08-14T19:26:03.441917+00:00"
+    },
     "MX-945076": {
       "acheteur": "Commune de Chevry-Cossigny",
       "correction_humaine": null,
@@ -3231,7 +3260,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-14T18:13:22.262749+00:00",
+  "maj_le": "2026-08-14T19:26:05.328783+00:00",
   "reglages": {
     "collecte": true
   },
