@@ -2822,6 +2822,35 @@
       "ville": "Aubervilliers",
       "vu_le": "2026-08-05T08:16:28.624455+00:00"
     },
+    "MX-944797": {
+      "acheteur": "VILLE DE MELUN",
+      "correction_humaine": null,
+      "date_limite": "2026-09-29",
+      "date_publication": "2026-08-14",
+      "departement": "77",
+      "lu": false,
+      "notifie_le": "2026-08-14T15:13:22.039570+00:00",
+      "objet": "PRESTATION DE NETTOYAGE, D'ENTRETIEN COURANT ET DE BLANCHISSERIE : STRUCTURES PETITE ENFANCE - MAISON DE L'ENFANCE « NICOLE CHAPEL »,",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "AOO",
+      "score": 59.0,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "mot-cle coeur dans l'intitule : nettoyage",
+        "terme": "nettoyage",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944797?orgAcronyme=p1v",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/944797?orgAcronyme=p1v",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/944797?orgAcronyme=p1v",
+      "url_profil_acheteur": "",
+      "ville": "MELUN",
+      "vu_le": "2026-08-14T15:13:20.689497+00:00"
+    },
     "MX-944818": {
       "acheteur": "CD77 - Conseil départemental de Seine-et-Marne",
       "correction_humaine": null,
@@ -3169,11 +3198,40 @@
       "url_profil_acheteur": "",
       "ville": "Issy les Moulineaux",
       "vu_le": "2026-08-13T10:52:55.317840+00:00"
+    },
+    "MX-945349": {
+      "acheteur": "Commune Nouvelle de Saint-Denis",
+      "correction_humaine": null,
+      "date_limite": "2026-09-18",
+      "date_publication": "2026-08-14",
+      "departement": "93",
+      "lu": false,
+      "notifie_le": "2026-08-14T15:13:23.424392+00:00",
+      "objet": "Prestations de sécurité et de gardiennage pour les besoins de la commune nouvelle de Saint-Denis (4 lots)",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "MAPA",
+      "score": 35.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "mot-cle coeur dans l'intitule : gardiennage",
+        "terme": "gardiennage",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945349?orgAcronyme=a6q",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945349?orgAcronyme=a6q",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945349?orgAcronyme=a6q",
+      "url_profil_acheteur": "",
+      "ville": "Saint-Denis",
+      "vu_le": "2026-08-14T15:13:20.690716+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-14T14:08:38.958458+00:00",
+  "maj_le": "2026-08-14T15:13:23.424663+00:00",
   "reglages": {
     "collecte": true
   },
