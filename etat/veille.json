@@ -3083,6 +3083,35 @@
       "ville": "Arcueil",
       "vu_le": "2026-08-12T10:51:34.045364+00:00"
     },
+    "MX-945213": {
+      "acheteur": "Nanterre Coop Habitat",
+      "correction_humaine": null,
+      "date_limite": "2026-09-30",
+      "date_publication": "2026-08-14",
+      "departement": "92",
+      "lu": false,
+      "notifie_le": null,
+      "objet": "Prestation de service de sécurité incendie sur une tour IGH de type a - mission de mandataire sécurité et mission ponctuelle pour",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 20.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "exclusion metier : securite incendie",
+        "terme": "securite incendie",
+        "verdict": "REJETE"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945213?orgAcronyme=a3v",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945213?orgAcronyme=a3v",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945213?orgAcronyme=a3v",
+      "url_profil_acheteur": "",
+      "ville": "NANTERRE",
+      "vu_le": "2026-08-14T14:08:38.958247+00:00"
+    },
     "MX-945265": {
       "acheteur": "Centre Hospitalier Intercommunal de Poissy saint Germain",
       "correction_humaine": null,
@@ -3144,7 +3173,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-14T12:40:34.124721+00:00",
+  "maj_le": "2026-08-14T14:08:38.958458+00:00",
   "reglages": {
     "collecte": true
   },
