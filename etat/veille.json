@@ -1812,6 +1812,35 @@
       "ville": "CHATOU",
       "vu_le": "2026-07-23T15:02:18.390940+00:00"
     },
+    "MX-943223": {
+      "acheteur": "CD77 - Conseil départemental de Seine-et-Marne",
+      "correction_humaine": null,
+      "date_limite": "2026-09-21",
+      "date_publication": "2026-08-17",
+      "departement": "77",
+      "lu": false,
+      "notifie_le": "2026-08-17T13:14:00.729511+00:00",
+      "objet": "Création artistique et diffusion d’un spectacle estival nocturne au Château de Blandy",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "MAPA",
+      "score": 35.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/943223?orgAcronyme=g3h",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/943223?orgAcronyme=g3h",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/943223?orgAcronyme=g3h",
+      "url_profil_acheteur": "",
+      "ville": "Melun",
+      "vu_le": "2026-08-17T13:13:59.662649+00:00"
+    },
     "MX-943277": {
       "acheteur": "GHT GPNE",
       "correction_humaine": null,
@@ -3260,7 +3289,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-17T12:22:03.954713+00:00",
+  "maj_le": "2026-08-17T13:14:00.729747+00:00",
   "reglages": {
     "collecte": true
   },
