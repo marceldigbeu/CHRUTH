@@ -3314,11 +3314,40 @@
       "url_profil_acheteur": "",
       "ville": "Saint-Denis",
       "vu_le": "2026-08-14T15:13:20.690716+00:00"
+    },
+    "MX-945478": {
+      "acheteur": "Ville de Stains",
+      "correction_humaine": null,
+      "date_limite": "2026-09-30",
+      "date_publication": "2026-08-18",
+      "departement": "93",
+      "lu": false,
+      "notifie_le": "2026-08-18T15:00:09.512032+00:00",
+      "objet": "LOCATION ET ENTRETIEN DE VETEMENTS PROFESSIONNELS POUR LES PERSONNELS DE LA VILLE DE STAINS ET DU CCAS",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 30.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945478?orgAcronyme=b4l",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945478?orgAcronyme=b4l",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945478?orgAcronyme=b4l",
+      "url_profil_acheteur": "",
+      "ville": "Stains",
+      "vu_le": "2026-08-18T15:00:07.484571+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-18T14:03:49.413501+00:00",
+  "maj_le": "2026-08-18T15:00:09.512396+00:00",
   "reglages": {
     "collecte": true
   },
