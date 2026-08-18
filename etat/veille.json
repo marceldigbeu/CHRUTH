@@ -2822,6 +2822,35 @@
       "ville": "Saint-Denis",
       "vu_le": "2026-08-05T10:58:01.414321+00:00"
     },
+    "MX-944737": {
+      "acheteur": "CD77 - Conseil départemental de Seine-et-Marne",
+      "correction_humaine": null,
+      "date_limite": "2026-09-24",
+      "date_publication": "2026-08-18",
+      "departement": "77",
+      "lu": false,
+      "notifie_le": "2026-08-18T09:55:49.313041+00:00",
+      "objet": "TRAVAUX D'IMPRESSION ET DE REPROGRAPHIE",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 20.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944737?orgAcronyme=g3h",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/944737?orgAcronyme=g3h",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/944737?orgAcronyme=g3h",
+      "url_profil_acheteur": "",
+      "ville": "Melun",
+      "vu_le": "2026-08-18T09:55:47.749468+00:00"
+    },
     "MX-944770": {
       "acheteur": "Ville d'Aubervilliers",
       "correction_humaine": null,
@@ -3289,7 +3318,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-18T09:22:31.774655+00:00",
+  "maj_le": "2026-08-18T09:55:49.313268+00:00",
   "reglages": {
     "collecte": true
   },
