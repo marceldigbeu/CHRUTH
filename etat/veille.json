@@ -3315,6 +3315,35 @@
       "ville": "Saint-Denis",
       "vu_le": "2026-08-14T15:13:20.690716+00:00"
     },
+    "MX-945387": {
+      "acheteur": "Mairie d'Issy les Moulineaux",
+      "correction_humaine": null,
+      "date_limite": "2026-09-30",
+      "date_publication": "2026-08-19",
+      "departement": "92",
+      "lu": false,
+      "notifie_le": "2026-08-19T08:00:43.914459+00:00",
+      "objet": "Prestations traiteur pour les Voeux de la municipalité 2027",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "MAPA",
+      "score": 45.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945387?orgAcronyme=o3m",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945387?orgAcronyme=o3m",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945387?orgAcronyme=o3m",
+      "url_profil_acheteur": "",
+      "ville": "Issy les Moulineaux",
+      "vu_le": "2026-08-19T08:00:42.292760+00:00"
+    },
     "MX-945478": {
       "acheteur": "Ville de Stains",
       "correction_humaine": null,
@@ -3347,7 +3376,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-19T07:13:30.072245+00:00",
+  "maj_le": "2026-08-19T08:00:43.914681+00:00",
   "reglages": {
     "collecte": true
   },
