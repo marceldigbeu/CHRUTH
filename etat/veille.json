@@ -3257,6 +3257,35 @@
       "ville": "poissy",
       "vu_le": "2026-08-12T12:43:52.541916+00:00"
     },
+    "MX-945294": {
+      "acheteur": "Agence des espaces verts de la région d'Ile-de-France - Ile-de-France Nature",
+      "correction_humaine": null,
+      "date_limite": "2026-10-09",
+      "date_publication": "2026-08-19",
+      "departement": "93",
+      "lu": false,
+      "notifie_le": "2026-08-19T14:04:28.520595+00:00",
+      "objet": "Émission, fourniture et livraison de cartes de titres restaurant dématérialisées",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 20.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945294?orgAcronyme=b4g",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945294?orgAcronyme=b4g",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945294?orgAcronyme=b4g",
+      "url_profil_acheteur": "",
+      "ville": "SAINT-OUEN-SUR-SEINE",
+      "vu_le": "2026-08-19T14:04:27.641474+00:00"
+    },
     "MX-945303": {
       "acheteur": "Mairie d'Issy les Moulineaux",
       "correction_humaine": null,
@@ -3376,7 +3405,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-19T13:23:44.135724+00:00",
+  "maj_le": "2026-08-19T14:04:28.520823+00:00",
   "reglages": {
     "collecte": true
   },
