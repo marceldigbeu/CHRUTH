@@ -3488,11 +3488,40 @@
       "url_profil_acheteur": "",
       "ville": "Le Châtelet-en-Brie",
       "vu_le": "2026-08-20T08:03:25.503383+00:00"
+    },
+    "MX-945607": {
+      "acheteur": "Ville d' Épinay-sur-Seine",
+      "correction_humaine": null,
+      "date_limite": "2026-09-22",
+      "date_publication": "2026-08-20",
+      "departement": "93",
+      "lu": false,
+      "notifie_le": "2026-08-20T15:02:22.477888+00:00",
+      "objet": "Prestations d’entretien et de garantie totale des installations et matériels spécifiques des équipements communaux",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 20.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945607?orgAcronyme=h5j",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945607?orgAcronyme=h5j",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945607?orgAcronyme=h5j",
+      "url_profil_acheteur": "",
+      "ville": "Épinay-sur-Seine",
+      "vu_le": "2026-08-20T15:02:21.264781+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-20T14:06:53.687850+00:00",
+  "maj_le": "2026-08-20T15:02:22.478123+00:00",
   "reglages": {
     "collecte": true
   },
