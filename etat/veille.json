@@ -1526,6 +1526,35 @@
       "ville": "Bussy-Saint-Georges",
       "vu_le": "2026-07-23T15:02:18.428414+00:00"
     },
+    "MX-942806": {
+      "acheteur": "Commune de Pavillons-sous-Bois",
+      "correction_humaine": null,
+      "date_limite": "2026-09-25",
+      "date_publication": "2026-08-20",
+      "departement": "93",
+      "lu": false,
+      "notifie_le": "2026-08-20T09:03:52.145490+00:00",
+      "objet": "Prestations juridiques d'assistance, de conseil et de représentation en justice",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "MAPA",
+      "score": 45.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/942806?orgAcronyme=a1k",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/942806?orgAcronyme=a1k",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/942806?orgAcronyme=a1k",
+      "url_profil_acheteur": "",
+      "ville": "Les Pavillons-sous-Bois",
+      "vu_le": "2026-08-20T09:03:51.283686+00:00"
+    },
     "MX-942881": {
       "acheteur": "Ville de Paris",
       "correction_humaine": null,
@@ -3463,7 +3492,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-20T08:03:27.190274+00:00",
+  "maj_le": "2026-08-20T09:03:52.145706+00:00",
   "reglages": {
     "collecte": true
   },
