@@ -3431,6 +3431,35 @@
       "ville": "Stains",
       "vu_le": "2026-08-18T15:00:07.484571+00:00"
     },
+    "MX-945493": {
+      "acheteur": "Ville de Paris",
+      "correction_humaine": null,
+      "date_limite": "2026-09-21",
+      "date_publication": "2026-08-20",
+      "departement": "75",
+      "lu": false,
+      "notifie_le": "2026-08-20T15:56:38.721446+00:00",
+      "objet": "Accompagnement de la Ville de Paris pour l’animation et le déploiement du réseau des relais sobriété énergétique et adaptation",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 30.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945493?orgAcronyme=r8t",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945493?orgAcronyme=r8t",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945493?orgAcronyme=r8t",
+      "url_profil_acheteur": "",
+      "ville": "Paris",
+      "vu_le": "2026-08-20T15:56:37.260550+00:00"
+    },
     "MX-945556": {
       "acheteur": "Office public communautaire de Plaine Commune",
       "correction_humaine": null,
@@ -3521,7 +3550,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-20T15:02:22.478123+00:00",
+  "maj_le": "2026-08-20T15:56:38.721687+00:00",
   "reglages": {
     "collecte": true
   },
