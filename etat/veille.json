@@ -3670,6 +3670,35 @@
       "ville": "Saint-Denis",
       "vu_le": "2026-08-24T09:36:55.135657+00:00"
     },
+    "MX-945705": {
+      "acheteur": "Régie Publique de l'eau et l'assainissement EPT Est-Ensemble",
+      "correction_humaine": null,
+      "date_limite": "2026-09-25",
+      "date_publication": "2026-08-24",
+      "departement": "93",
+      "lu": false,
+      "notifie_le": "2026-08-24T15:08:03.659036+00:00",
+      "objet": "26.AO.RPEA.24 - Prestations de service de gestion des flux sortants de courrier",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 20.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945705?orgAcronyme=a5o",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945705?orgAcronyme=a5o",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945705?orgAcronyme=a5o",
+      "url_profil_acheteur": "",
+      "ville": "Romainville Cedex",
+      "vu_le": "2026-08-24T15:08:02.637693+00:00"
+    },
     "MX-945720": {
       "acheteur": "Ville de Vélizy-Villacoublay",
       "correction_humaine": null,
@@ -3702,7 +3731,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-24T14:11:39.396493+00:00",
+  "maj_le": "2026-08-24T15:08:03.659282+00:00",
   "reglages": {
     "collecte": true
   },
