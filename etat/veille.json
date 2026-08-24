@@ -3438,6 +3438,35 @@
       "ville": "Issy les Moulineaux",
       "vu_le": "2026-08-19T08:00:42.292760+00:00"
     },
+    "MX-945445": {
+      "acheteur": "CD94 - Conseil départemental du Val-de-Marne",
+      "correction_humaine": null,
+      "date_limite": "2026-10-02",
+      "date_publication": "2026-08-24",
+      "departement": "94",
+      "lu": false,
+      "notifie_le": "2026-08-24T11:01:47.001009+00:00",
+      "objet": "Réalisation d analyses microbiologiques alimentaires et prélèvements de surface dans les cuisines et restaurants du Département du Val",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "MAPA",
+      "score": 35.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945445?orgAcronyme=a8z",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945445?orgAcronyme=a8z",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945445?orgAcronyme=a8z",
+      "url_profil_acheteur": "",
+      "ville": "Créteil",
+      "vu_le": "2026-08-24T11:01:45.140465+00:00"
+    },
     "MX-945478": {
       "acheteur": "Ville de Stains",
       "correction_humaine": null,
@@ -3644,7 +3673,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-24T10:28:11.380593+00:00",
+  "maj_le": "2026-08-24T11:01:47.001250+00:00",
   "reglages": {
     "collecte": true
   },
