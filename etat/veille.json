@@ -156,6 +156,35 @@
       "ville": "Stains",
       "vu_le": "2026-07-23T07:18:42.409903+00:00"
     },
+    "MX-937584": {
+      "acheteur": "Commune de Vitry-sur-Seine",
+      "correction_humaine": null,
+      "date_limite": "2026-09-14",
+      "date_publication": "2026-08-24",
+      "departement": "94",
+      "lu": false,
+      "notifie_le": "2026-08-24T17:03:57.737035+00:00",
+      "objet": "ACCOMPAGNEMENT DANS LE CADRE DE L’OPERATION D’INTERET NATIONAL ET ACTUALISATION DE LA PROSPECTIVE FINANCIÈRE (RECONDUCTIBLE 3 FOIS)",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "MAPA",
+      "score": 43.2,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/937584?orgAcronyme=c1f",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/937584?orgAcronyme=c1f",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/937584?orgAcronyme=c1f",
+      "url_profil_acheteur": "",
+      "ville": "Vitry-sur-Seine",
+      "vu_le": "2026-08-24T17:03:56.087959+00:00"
+    },
     "MX-937612": {
       "acheteur": "Communauté d'Agglomération Rambouillet Territoires",
       "correction_humaine": null,
@@ -3731,7 +3760,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-24T16:02:30.770532+00:00",
+  "maj_le": "2026-08-24T17:03:57.737254+00:00",
   "reglages": {
     "collecte": true
   },
