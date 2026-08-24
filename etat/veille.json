@@ -3669,11 +3669,40 @@
       "url_profil_acheteur": "",
       "ville": "Saint-Denis",
       "vu_le": "2026-08-24T09:36:55.135657+00:00"
+    },
+    "MX-945720": {
+      "acheteur": "Ville de Vélizy-Villacoublay",
+      "correction_humaine": null,
+      "date_limite": "2026-09-25",
+      "date_publication": "2026-08-24",
+      "departement": "78",
+      "lu": false,
+      "notifie_le": null,
+      "objet": "Vérification, maintenance, travaux d’entretien et de mise en conformité des ascenseurs, monte-charges et élévateurs P.M.R. des",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 30.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "exclusion metier : ascenseur",
+        "terme": "ascenseur",
+        "verdict": "REJETE"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945720?orgAcronyme=d7j",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945720?orgAcronyme=d7j",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945720?orgAcronyme=d7j",
+      "url_profil_acheteur": "",
+      "ville": "Vélizy-Villacoublay",
+      "vu_le": "2026-08-24T12:26:59.864029+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-24T11:51:14.614027+00:00",
+  "maj_le": "2026-08-24T12:26:59.864237+00:00",
   "reglages": {
     "collecte": true
   },
