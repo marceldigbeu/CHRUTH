@@ -3496,6 +3496,35 @@
       "ville": "Paris",
       "vu_le": "2026-08-20T15:56:37.260550+00:00"
     },
+    "MX-945546": {
+      "acheteur": "Ville de Paris",
+      "correction_humaine": null,
+      "date_limite": "2026-09-21",
+      "date_publication": "2026-08-24",
+      "departement": "75",
+      "lu": false,
+      "notifie_le": "2026-08-24T09:36:57.413783+00:00",
+      "objet": "Marché de Fourniture et services pour l’installation, la dépose et la maintenance curative des matériels d’illuminations de Noel de",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "MAPA",
+      "score": 45.0,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945546?orgAcronyme=r8t",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945546?orgAcronyme=r8t",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945546?orgAcronyme=r8t",
+      "url_profil_acheteur": "",
+      "ville": "Paris",
+      "vu_le": "2026-08-24T09:36:55.137279+00:00"
+    },
     "MX-945556": {
       "acheteur": "Office public communautaire de Plaine Commune",
       "correction_humaine": null,
@@ -3582,11 +3611,40 @@
       "url_profil_acheteur": "",
       "ville": "Épinay-sur-Seine",
       "vu_le": "2026-08-20T15:02:21.264781+00:00"
+    },
+    "MX-945690": {
+      "acheteur": "Commune Nouvelle de Saint-Denis",
+      "correction_humaine": null,
+      "date_limite": "2026-09-25",
+      "date_publication": "2026-08-24",
+      "departement": "93",
+      "lu": false,
+      "notifie_le": "2026-08-24T09:36:56.357214+00:00",
+      "objet": "Capture et ramassage d’animaux errants, et/ou dangereux, et/ou blessés, et/ou morts et leur mise en fourrière",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 20.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945690?orgAcronyme=a6q",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945690?orgAcronyme=a6q",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945690?orgAcronyme=a6q",
+      "url_profil_acheteur": "",
+      "ville": "Saint-Denis",
+      "vu_le": "2026-08-24T09:36:55.135657+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-24T08:36:40.002573+00:00",
+  "maj_le": "2026-08-24T09:36:57.414097+00:00",
   "reglages": {
     "collecte": true
   },
