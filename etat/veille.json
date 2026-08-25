@@ -3756,11 +3756,40 @@
       "url_profil_acheteur": "",
       "ville": "Vélizy-Villacoublay",
       "vu_le": "2026-08-24T12:26:59.864029+00:00"
+    },
+    "MX-945784": {
+      "acheteur": "COMUTITRES",
+      "correction_humaine": null,
+      "date_limite": "2026-09-23",
+      "date_publication": "2026-08-25",
+      "departement": "75",
+      "lu": false,
+      "notifie_le": "2026-08-25T16:06:57.829978+00:00",
+      "objet": "Marché de prestations de services juridiques",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "MAPA",
+      "score": 35.2,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945784?orgAcronyme=a5m",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945784?orgAcronyme=a5m",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945784?orgAcronyme=a5m",
+      "url_profil_acheteur": "",
+      "ville": "Paris",
+      "vu_le": "2026-08-25T16:06:56.073628+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-25T15:13:16.547357+00:00",
+  "maj_le": "2026-08-25T16:06:57.830281+00:00",
   "reglages": {
     "collecte": true
   },
