@@ -134,6 +134,35 @@
       "ville": "Saint-Ouen-sur-Seine",
       "vu_le": "2026-07-28T16:56:49.741073+00:00"
     },
+    "MX-935976": {
+      "acheteur": "Commune de Vitry-sur-Seine",
+      "correction_humaine": null,
+      "date_limite": "2026-10-05",
+      "date_publication": "2026-08-26",
+      "departement": "94",
+      "lu": false,
+      "notifie_le": "2026-08-26T13:35:21.197226+00:00",
+      "objet": "Sécurité des évènements",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "MAPA",
+      "score": 45.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/935976?orgAcronyme=c1f",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/935976?orgAcronyme=c1f",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/935976?orgAcronyme=c1f",
+      "url_profil_acheteur": "",
+      "ville": "Vitry-sur-Seine",
+      "vu_le": "2026-08-26T13:35:20.417046+00:00"
+    },
     "MX-936168": {
       "acheteur": "Ville de Stains",
       "correction_humaine": null,
@@ -3789,7 +3818,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-26T12:29:55.892655+00:00",
+  "maj_le": "2026-08-26T13:35:21.197490+00:00",
   "reglages": {
     "collecte": true
   },
