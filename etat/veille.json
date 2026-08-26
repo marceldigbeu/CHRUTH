@@ -3814,11 +3814,40 @@
       "url_profil_acheteur": "",
       "ville": "Paris",
       "vu_le": "2026-08-25T16:06:56.073628+00:00"
+    },
+    "MX-945873": {
+      "acheteur": "VILLE DE SAINT-OUEN L'AUMONE",
+      "correction_humaine": null,
+      "date_limite": "2026-10-05",
+      "date_publication": "2026-08-26",
+      "departement": "95",
+      "lu": false,
+      "notifie_le": "2026-08-26T16:10:14.102117+00:00",
+      "objet": "26SF13 - Propreté urbaine",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "AOO",
+      "score": 59.0,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "mot-cle coeur dans l'intitule : proprete",
+        "terme": "proprete",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945873?orgAcronyme=d8l",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945873?orgAcronyme=d8l",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945873?orgAcronyme=d8l",
+      "url_profil_acheteur": "",
+      "ville": "Saint-Ouen l'Aumone",
+      "vu_le": "2026-08-26T16:10:12.725075+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-08-26T14:34:40.236975+00:00",
+  "maj_le": "2026-08-26T16:10:14.102329+00:00",
   "reglages": {
     "collecte": true
   },
