@@ -1,7 +1,7 @@
 {
-  "generated_at": "2026-07-03T08:09:26",
-  "root": ".",
-  "log": "logs\\pipeline_unique_20260703_072709.log",
+  "generated_at": "2026-08-26T19:12:39",
+  "root": "C:\\Users\\marce\\CHRUTH",
+  "log": "logs\\pipeline_unique_20260826_191233.log",
   "missions": {
     "1_data_foundation": [
       "output/Base_Prospects_CHRUTH.xlsm",
@@ -38,13 +38,23 @@
     },
     {
       "path": "output\\_message_prospect_segment.txt",
-      "size_bytes": 962,
-      "modified": "2026-07-03T08:08:55"
+      "size_bytes": 1352,
+      "modified": "2026-07-07T10:43:53"
+    },
+    {
+      "path": "output\\Acheteurs_Semaine_CHRUTH.csv",
+      "size_bytes": 148,
+      "modified": "2026-08-17T18:54:21"
+    },
+    {
+      "path": "output\\Acheteurs_Semaine_CHRUTH.xlsx",
+      "size_bytes": 5466,
+      "modified": "2026-08-17T18:54:21"
     },
     {
       "path": "output\\AO_CHRUTH.xlsm",
-      "size_bytes": 251832,
-      "modified": "2026-07-03T07:27:56"
+      "size_bytes": 171570,
+      "modified": "2026-08-26T19:12:38"
     },
     {
       "path": "output\\Base_Prospects_CHRUTH.xlsm",
@@ -73,13 +83,18 @@
     },
     {
       "path": "output\\LIRE_MOI_LIVRABLES.md",
-      "size_bytes": 1033,
-      "modified": "2026-07-02T21:15:40"
+      "size_bytes": 1267,
+      "modified": "2026-07-06T10:16:09"
     },
     {
       "path": "output\\MANIFEST_CHRUTH.json",
-      "size_bytes": 6502,
-      "modified": "2026-07-02T21:15:40"
+      "size_bytes": 6586,
+      "modified": "2026-07-27T12:12:54"
+    },
+    {
+      "path": "output\\messages_ao\\AO_26-63741.md",
+      "size_bytes": 1244,
+      "modified": "2026-07-07T10:29:59"
     },
     {
       "path": "output\\messages_ao\\AO_T1.md",
@@ -88,8 +103,8 @@
     },
     {
       "path": "output\\Modele_Financier_CHRUTH.xlsx",
-      "size_bytes": 14451,
-      "modified": "2026-07-03T08:09:26"
+      "size_bytes": 44046,
+      "modified": "2026-07-06T11:11:03"
     },
     {
       "path": "output\\notion_import_chruth\\CHAUDE.csv",
@@ -223,13 +238,13 @@
     },
     {
       "path": "output\\segments_messages.json",
-      "size_bytes": 971,
-      "modified": "2026-07-03T08:08:55"
+      "size_bytes": 2223,
+      "modified": "2026-08-26T18:14:04"
     },
     {
       "path": "output\\segments_variantes.json",
-      "size_bytes": 20138,
-      "modified": "2026-07-03T07:44:16"
+      "size_bytes": 1858,
+      "modified": "2026-08-26T18:13:26"
     }
   ]
 }
