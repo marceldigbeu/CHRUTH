@@ -4133,11 +4133,40 @@
       "url_profil_acheteur": "",
       "ville": "ALFORTVILLE",
       "vu_le": "2026-08-27T17:04:37.359220+00:00"
+    },
+    "MX-946164": {
+      "acheteur": "VILLE D'ALFORTVILLE",
+      "correction_humaine": null,
+      "date_limite": "2026-10-05",
+      "date_publication": "2026-09-01",
+      "departement": "94",
+      "lu": false,
+      "notifie_le": "2026-09-01T15:18:29.165722+00:00",
+      "objet": "Travaux d'entretien et nettoyage des couvertures, toitures terrasses, gouttières et cheneaux des bâtiments communaux de la ville et CCAS",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "AOO",
+      "score": 64.0,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "mot-cle coeur dans l'intitule : nettoyage",
+        "terme": "nettoyage",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/946164?orgAcronyme=d5e",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/946164?orgAcronyme=d5e",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/946164?orgAcronyme=d5e",
+      "url_profil_acheteur": "",
+      "ville": "ALFORTVILLE",
+      "vu_le": "2026-09-01T15:18:28.342758+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-01T10:45:07.973025+00:00",
+  "maj_le": "2026-09-01T15:18:29.166023+00:00",
   "reglages": {
     "collecte": true
   },
