@@ -1518,28 +1518,6 @@
       "ville": "Beynes",
       "vu_le": "2026-07-23T15:02:18.401191+00:00"
     },
-    "MX-942721": {
-      "acheteur": "SPL Plateforme d'Approvisionnement de la Restauration Scolaire de l'Est Francilien (PARSEF)",
-      "correction_humaine": null,
-      "date_limite": "2026-09-01",
-      "date_publication": "2026-07-06",
-      "departement": "77",
-      "lu": false,
-      "notifie_le": null,
-      "objet": "Prestations de gestion de la paie et d'administration sociale",
-      "priorite": "TIEDE",
-      "procedure": "MAPA",
-      "score": 45,
-      "traitement": "nouveau",
-      "tri": {
-        "etage": "listes",
-        "motif": "exclusion metier : gestion de la paie",
-        "verdict": "REJETE"
-      },
-      "url": "https://marches.maximilien.fr/entreprise/consultation/942721?orgAcronyme=a4f",
-      "ville": "PROVINS",
-      "vu_le": "2026-07-23T15:02:18.418449+00:00"
-    },
     "MX-942797": {
       "acheteur": "Commune de Bussy-Saint-Georges",
       "correction_humaine": null,
@@ -4166,7 +4144,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-01T21:30:29.143130+00:00",
+  "maj_le": "2026-09-02T10:10:03.087497+00:00",
   "reglages": {
     "collecte": true
   },
