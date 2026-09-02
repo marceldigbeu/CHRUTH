@@ -4141,6 +4141,35 @@
       "ville": "ALFORTVILLE",
       "vu_le": "2026-08-27T17:04:37.359220+00:00"
     },
+    "MX-946144": {
+      "acheteur": "Etablissement Public Territorial Est Ensemble",
+      "correction_humaine": null,
+      "date_limite": "2026-10-07",
+      "date_publication": "2026-09-02",
+      "departement": "93",
+      "lu": false,
+      "notifie_le": "2026-09-02T18:13:57.999324+00:00",
+      "objet": "Marché n°26.AO.BA.053 - Réalisation de prestations de mise en propreté et services annexes des locaux et abords immédiats des",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "AOO",
+      "score": 54.0,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "mot-cle coeur dans l'intitule : proprete",
+        "terme": "proprete",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/946144?orgAcronyme=v8x",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/946144?orgAcronyme=v8x",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/946144?orgAcronyme=v8x",
+      "url_profil_acheteur": "",
+      "ville": "ROMAINVILLE",
+      "vu_le": "2026-09-02T18:13:57.046808+00:00"
+    },
     "MX-946164": {
       "acheteur": "VILLE D'ALFORTVILLE",
       "correction_humaine": null,
@@ -4173,7 +4202,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-02T14:35:46.149150+00:00",
+  "maj_le": "2026-09-02T18:13:57.999569+00:00",
   "reglages": {
     "collecte": true
   },
