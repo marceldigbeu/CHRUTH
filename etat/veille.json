@@ -1518,6 +1518,35 @@
       "ville": "Beynes",
       "vu_le": "2026-07-23T15:02:18.401191+00:00"
     },
+    "MX-942721": {
+      "acheteur": "SPL Plateforme d'Approvisionnement de la Restauration Scolaire de l'Est Francilien (PARSEF)",
+      "correction_humaine": null,
+      "date_limite": "2026-09-07",
+      "date_publication": "2026-07-06",
+      "departement": "77",
+      "lu": false,
+      "notifie_le": null,
+      "objet": "Prestations de gestion de la paie et d'administration sociale",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "MAPA",
+      "score": 27.2,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "exclusion metier : gestion de la paie",
+        "terme": "gestion de la paie",
+        "verdict": "REJETE"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/942721?orgAcronyme=a4f",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/942721?orgAcronyme=a4f",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/942721?orgAcronyme=a4f",
+      "url_profil_acheteur": "",
+      "ville": "PROVINS",
+      "vu_le": "2026-09-02T14:35:46.148915+00:00"
+    },
     "MX-942797": {
       "acheteur": "Commune de Bussy-Saint-Georges",
       "correction_humaine": null,
@@ -4144,7 +4173,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-02T10:10:03.087497+00:00",
+  "maj_le": "2026-09-02T14:35:46.149150+00:00",
   "reglages": {
     "collecte": true
   },
