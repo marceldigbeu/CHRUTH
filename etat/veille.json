@@ -3474,6 +3474,35 @@
       "ville": "poissy",
       "vu_le": "2026-08-12T12:43:52.541916+00:00"
     },
+    "MX-945268": {
+      "acheteur": "VALDEVY OFFICE PUBLIC DE L'HABITAT",
+      "correction_humaine": null,
+      "date_limite": "2026-10-05",
+      "date_publication": "2026-09-03",
+      "departement": "94",
+      "lu": false,
+      "notifie_le": "2026-09-03T10:22:08.332034+00:00",
+      "objet": "Astreinte téléphonique & continuité du service relation locataire",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 20.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945268?orgAcronyme=l4y",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945268?orgAcronyme=l4y",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945268?orgAcronyme=l4y",
+      "url_profil_acheteur": "",
+      "ville": "ARCUEIL",
+      "vu_le": "2026-09-03T10:22:04.600863+00:00"
+    },
     "MX-945294": {
       "acheteur": "Agence des espaces verts de la région d'Ile-de-France - Ile-de-France Nature",
       "correction_humaine": null,
@@ -4025,6 +4054,35 @@
       "ville": "Saint-Ouen l'Aumone",
       "vu_le": "2026-08-26T16:10:12.725075+00:00"
     },
+    "MX-945874": {
+      "acheteur": "Commune de Magny le Hongre",
+      "correction_humaine": null,
+      "date_limite": "2026-10-06",
+      "date_publication": "2026-09-03",
+      "departement": "77",
+      "lu": false,
+      "notifie_le": "2026-09-03T10:22:07.198298+00:00",
+      "objet": "FOURNITURE DE TITRES RESTAURANT POUR LES AGENTS DE LA VILLE DE MAGNY LE HONGRE",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 30.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945874?orgAcronyme=a4d",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945874?orgAcronyme=a4d",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945874?orgAcronyme=a4d",
+      "url_profil_acheteur": "",
+      "ville": "Magny-le-Hongre",
+      "vu_le": "2026-09-03T10:22:04.599649+00:00"
+    },
     "MX-945880": {
       "acheteur": "Mairie d'Arcueil",
       "correction_humaine": null,
@@ -4198,11 +4256,40 @@
       "url_profil_acheteur": "",
       "ville": "ALFORTVILLE",
       "vu_le": "2026-09-01T15:18:28.342758+00:00"
+    },
+    "MX-946233": {
+      "acheteur": "COMMUNE D ACHERES",
+      "correction_humaine": null,
+      "date_limite": "2026-10-09",
+      "date_publication": "2026-09-03",
+      "departement": "78",
+      "lu": false,
+      "notifie_le": "2026-09-03T10:22:05.931225+00:00",
+      "objet": "Délégation de service public par affermage pour la gestion et l'exploitation du marché communal d'approvisionnement d'Achères",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AUT",
+      "score": 20.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/946233?orgAcronyme=a5q",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/946233?orgAcronyme=a5q",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/946233?orgAcronyme=a5q",
+      "url_profil_acheteur": "",
+      "ville": "Achères",
+      "vu_le": "2026-09-03T10:22:04.598153+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-02T21:11:11.297276+00:00",
+  "maj_le": "2026-09-03T10:22:08.332273+00:00",
   "reglages": {
     "collecte": true
   },
