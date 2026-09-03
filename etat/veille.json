@@ -3242,6 +3242,35 @@
       "ville": "Grigny",
       "vu_le": "2026-08-07T08:15:31.256190+00:00"
     },
+    "MX-944970": {
+      "acheteur": "Ville de Boulogne-Billancourt",
+      "correction_humaine": null,
+      "date_limite": "2026-09-28",
+      "date_publication": "2026-09-03",
+      "departement": "92",
+      "lu": false,
+      "notifie_le": null,
+      "objet": "26031 Contrôle de l'hygiène et de la sécurité alimentaire des établissements publics assurant un service de restauration collective",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "MAPA",
+      "score": 44.2,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "exclusion metier : restauration collective",
+        "terme": "restauration collective",
+        "verdict": "REJETE"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/944970?orgAcronyme=p8x",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/944970?orgAcronyme=p8x",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/944970?orgAcronyme=p8x",
+      "url_profil_acheteur": "",
+      "ville": "Boulogne-Billancourt",
+      "vu_le": "2026-09-03T14:40:09.097771+00:00"
+    },
     "MX-945004": {
       "acheteur": "SEINE SPORT ET CULTURE",
       "correction_humaine": null,
@@ -4289,7 +4318,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-03T10:22:08.332273+00:00",
+  "maj_le": "2026-09-03T14:40:09.097999+00:00",
   "reglages": {
     "collecte": true
   },
