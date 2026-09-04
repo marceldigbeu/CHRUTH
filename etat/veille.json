@@ -968,6 +968,35 @@
       "ville": "DOMONT",
       "vu_le": "2026-07-23T07:18:46.721781+00:00"
     },
+    "MX-941794": {
+      "acheteur": "Commune Nouvelle de Saint-Denis",
+      "correction_humaine": null,
+      "date_limite": "2026-10-05",
+      "date_publication": "2026-09-04",
+      "departement": "93",
+      "lu": false,
+      "notifie_le": "2026-09-04T10:09:17.277987+00:00",
+      "objet": "Prestations de déménagement, de garde meuble et de nettoyage dans le cadre d’évacuation en application des pouvoirs de polices du",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "AOO",
+      "score": 49.0,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "mot-cle coeur dans l'intitule : nettoyage",
+        "terme": "nettoyage",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/941794?orgAcronyme=a6q",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/941794?orgAcronyme=a6q",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/941794?orgAcronyme=a6q",
+      "url_profil_acheteur": "",
+      "ville": "Saint-Denis",
+      "vu_le": "2026-09-04T10:09:16.446716+00:00"
+    },
     "MX-941866": {
       "acheteur": "Ville de Paris",
       "correction_humaine": null,
@@ -4318,7 +4347,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-03T21:11:43.209570+00:00",
+  "maj_le": "2026-09-04T10:09:17.278262+00:00",
   "reglages": {
     "collecte": true
   },
