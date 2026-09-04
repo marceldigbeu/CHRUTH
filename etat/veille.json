@@ -4315,6 +4315,35 @@
       "ville": "ALFORTVILLE",
       "vu_le": "2026-09-01T15:18:28.342758+00:00"
     },
+    "MX-946227": {
+      "acheteur": "INSTITUT NATIONAL RECHERCHE SECURITE",
+      "correction_humaine": null,
+      "date_limite": "2026-10-15",
+      "date_publication": "2026-09-04",
+      "departement": "75",
+      "lu": false,
+      "notifie_le": "2026-09-04T14:26:52.332145+00:00",
+      "objet": "INRS Services de conseil, de conception d’une campagne de communication, de réalisation des supports associés et de l’achat",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "MAPA",
+      "score": 35.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/946227?orgAcronyme=a4w",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/946227?orgAcronyme=a4w",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/946227?orgAcronyme=a4w",
+      "url_profil_acheteur": "",
+      "ville": "PARIS",
+      "vu_le": "2026-09-04T14:26:51.188121+00:00"
+    },
     "MX-946233": {
       "acheteur": "COMMUNE D ACHERES",
       "correction_humaine": null,
@@ -4343,11 +4372,40 @@
       "url_profil_acheteur": "",
       "ville": "Achères",
       "vu_le": "2026-09-03T10:22:04.598153+00:00"
+    },
+    "MX-946288": {
+      "acheteur": "PREFECTURE DE POLICE DE PARIS",
+      "correction_humaine": null,
+      "date_limite": "2026-10-06",
+      "date_publication": "2026-09-04",
+      "departement": "75",
+      "lu": false,
+      "notifie_le": "2026-09-04T14:26:53.827276+00:00",
+      "objet": "Prestation de service social au profit du personnel de la Brigade de Sapeurs-Pompiers de Paris",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "MAPA",
+      "score": 45.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/946288?orgAcronyme=a2l",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/946288?orgAcronyme=a2l",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/946288?orgAcronyme=a2l",
+      "url_profil_acheteur": "",
+      "ville": "PARIS",
+      "vu_le": "2026-09-04T14:26:51.189500+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-04T10:09:17.278262+00:00",
+  "maj_le": "2026-09-04T14:26:53.827506+00:00",
   "reglages": {
     "collecte": true
   },
