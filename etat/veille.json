@@ -4054,6 +4054,35 @@
       "ville": "Paris",
       "vu_le": "2026-08-25T16:06:56.073628+00:00"
     },
+    "MX-945802": {
+      "acheteur": "Conseil Régional d'Ile-de-France",
+      "correction_humaine": null,
+      "date_limite": "2026-10-05",
+      "date_publication": "2026-09-07",
+      "departement": "93",
+      "lu": false,
+      "notifie_le": "2026-09-07T16:19:37.205845+00:00",
+      "objet": "Programmation, coordination et mise en œuvre opérationnelle de la manifestation « Jardins ouverts » en Île-de-France",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "MAPA",
+      "score": 35.0,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945802?orgAcronyme=t5y",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945802?orgAcronyme=t5y",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945802?orgAcronyme=t5y",
+      "url_profil_acheteur": "",
+      "ville": "Saint-Ouen-sur-Seine",
+      "vu_le": "2026-09-07T16:19:35.433598+00:00"
+    },
     "MX-945862": {
       "acheteur": "Ville de Meaux",
       "correction_humaine": null,
@@ -4257,6 +4286,35 @@
       "ville": "ALFORTVILLE",
       "vu_le": "2026-08-27T17:04:37.359220+00:00"
     },
+    "MX-946135": {
+      "acheteur": "EPT Grand Paris Grand Est",
+      "correction_humaine": null,
+      "date_limite": "2026-10-08",
+      "date_publication": "2026-09-07",
+      "departement": "93",
+      "lu": false,
+      "notifie_le": "2026-09-07T16:19:36.623778+00:00",
+      "objet": "Prestations de suivi et animation d'un guichet de la rénovation et de la lutte contre la précarité énergétique pour le compte de Grand",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 20.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/946135?orgAcronyme=d7o",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/946135?orgAcronyme=d7o",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/946135?orgAcronyme=d7o",
+      "url_profil_acheteur": "",
+      "ville": "Noisy-le-Grand",
+      "vu_le": "2026-09-07T16:19:35.432242+00:00"
+    },
     "MX-946144": {
       "acheteur": "Etablissement Public Territorial Est Ensemble",
       "correction_humaine": null,
@@ -4430,11 +4488,40 @@
       "url_profil_acheteur": "",
       "ville": "PARIS",
       "vu_le": "2026-09-07T11:00:44.712532+00:00"
+    },
+    "MX-946414": {
+      "acheteur": "Commune de Bouafle",
+      "correction_humaine": null,
+      "date_limite": "2026-10-02",
+      "date_publication": "2026-09-07",
+      "departement": "78",
+      "lu": false,
+      "notifie_le": "2026-09-07T16:19:36.103285+00:00",
+      "objet": "ENTRETIEN DES BATIMENTS COMMUNAUX - COMMUNE DE BOUAFLE",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "MAPA",
+      "score": 44.2,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/946414?orgAcronyme=a6n",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/946414?orgAcronyme=a6n",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/946414?orgAcronyme=a6n",
+      "url_profil_acheteur": "",
+      "ville": "BOUAFLE",
+      "vu_le": "2026-09-07T16:19:35.430813+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-07T11:00:46.104716+00:00",
+  "maj_le": "2026-09-07T16:19:37.206121+00:00",
   "reglages": {
     "collecte": true
   },
