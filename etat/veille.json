@@ -4401,11 +4401,40 @@
       "url_profil_acheteur": "",
       "ville": "PARIS",
       "vu_le": "2026-09-04T14:26:51.189500+00:00"
+    },
+    "MX-946323": {
+      "acheteur": "INSTITUT NATIONAL RECHERCHE SECURITE",
+      "correction_humaine": null,
+      "date_limite": "2026-10-05",
+      "date_publication": "2026-09-04",
+      "departement": "75",
+      "lu": false,
+      "notifie_le": "2026-09-07T11:00:46.104460+00:00",
+      "objet": "Nettoyage des locaux et vitrerie du siège social de l'INRS",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "AOO",
+      "score": 53.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "mot-cle coeur dans l'intitule : nettoyage",
+        "terme": "nettoyage",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/946323?orgAcronyme=a4w",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/946323?orgAcronyme=a4w",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/946323?orgAcronyme=a4w",
+      "url_profil_acheteur": "",
+      "ville": "PARIS",
+      "vu_le": "2026-09-07T11:00:44.712532+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-04T20:01:54.159307+00:00",
+  "maj_le": "2026-09-07T11:00:46.104716+00:00",
   "reglages": {
     "collecte": true
   },
