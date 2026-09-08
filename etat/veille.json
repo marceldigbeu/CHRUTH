@@ -4488,11 +4488,40 @@
       "url_profil_acheteur": "",
       "ville": "BOUAFLE",
       "vu_le": "2026-09-07T16:19:35.430813+00:00"
+    },
+    "MX-946515": {
+      "acheteur": "SEMMARIS",
+      "correction_humaine": null,
+      "date_limite": "2026-10-23",
+      "date_publication": "2026-09-08",
+      "departement": "94",
+      "lu": false,
+      "notifie_le": "2026-09-08T14:40:25.299668+00:00",
+      "objet": "Nettoyage des parties communes des bâtiments de vente dont les activités sont soumises à agrément sanitaire au sein du Marché",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "AOR",
+      "score": 54.0,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "mot-cle coeur dans l'intitule : nettoyage",
+        "terme": "nettoyage",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/946515?orgAcronyme=y2p",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/946515?orgAcronyme=y2p",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/946515?orgAcronyme=y2p",
+      "url_profil_acheteur": "",
+      "ville": "Chevilly-Larue",
+      "vu_le": "2026-09-08T14:40:24.213605+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-08T10:16:25.532951+00:00",
+  "maj_le": "2026-09-08T14:40:25.299952+00:00",
   "reglages": {
     "collecte": true
   },
