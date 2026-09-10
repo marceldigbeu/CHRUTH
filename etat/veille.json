@@ -4517,11 +4517,40 @@
       "url_profil_acheteur": "",
       "ville": "Chevilly-Larue",
       "vu_le": "2026-09-08T14:40:24.213605+00:00"
+    },
+    "MX-946618": {
+      "acheteur": "Commune de Fontenay-Trésigny",
+      "correction_humaine": null,
+      "date_limite": "2026-10-23",
+      "date_publication": "2026-09-10",
+      "departement": "77",
+      "lu": false,
+      "notifie_le": null,
+      "objet": "Prestations d'entretien des réseaux d'assainissement",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "MAPA",
+      "score": 45.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "exclusion metier : assainissement",
+        "terme": "assainissement",
+        "verdict": "REJETE"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/946618?orgAcronyme=x6g",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/946618?orgAcronyme=x6g",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/946618?orgAcronyme=x6g",
+      "url_profil_acheteur": "",
+      "ville": "Fontenay-Trésigny",
+      "vu_le": "2026-09-10T10:14:34.041567+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-09T21:03:06.728648+00:00",
+  "maj_le": "2026-09-10T10:14:34.041814+00:00",
   "reglages": {
     "collecte": true
   },
