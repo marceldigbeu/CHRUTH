@@ -2192,28 +2192,6 @@
       "ville": "Saint-Ouen-sur-Seine",
       "vu_le": "2026-07-23T15:02:18.404131+00:00"
     },
-    "MX-943598": {
-      "acheteur": "Etablissement public territorial Grand Paris Seine Ouest",
-      "correction_humaine": null,
-      "date_limite": "2026-09-10",
-      "date_publication": "2026-07-17",
-      "departement": "92",
-      "lu": false,
-      "notifie_le": null,
-      "objet": "Exploitation, maintenance des dispositifs de collecte pneumatique fixes et mobiles des déchets ménagers et transport de ces déchets",
-      "priorite": "FROID",
-      "procedure": "AOO",
-      "score": 20,
-      "traitement": "nouveau",
-      "tri": {
-        "etage": "listes",
-        "motif": "exclusion metier : collecte pneumatique",
-        "verdict": "REJETE"
-      },
-      "url": "https://marches.maximilien.fr/entreprise/consultation/943598?orgAcronyme=f8j",
-      "ville": "Meudon",
-      "vu_le": "2026-07-23T07:18:44.532995+00:00"
-    },
     "MX-943601": {
       "acheteur": "Etablissement Public Territorial Grand-Orly Seine Bièvre",
       "correction_humaine": null,
@@ -2893,35 +2871,6 @@
       "url_profil_acheteur": "",
       "ville": "ORLY AÉROGARE CEDEX",
       "vu_le": "2026-08-04T13:14:11.183922+00:00"
-    },
-    "MX-944721": {
-      "acheteur": "Commune de Bagneux",
-      "correction_humaine": null,
-      "date_limite": "2026-09-10",
-      "date_publication": "2026-08-05",
-      "departement": "92",
-      "lu": false,
-      "notifie_le": null,
-      "objet": "Accord-cadre à bon de commandes de services d'entretien des espaces verts",
-      "plateforme_publication": "",
-      "priorite": "FROID",
-      "procedure": "AOO",
-      "score": 30.5,
-      "source": "MAXIMILIEN",
-      "source_decouverte": "",
-      "traitement": "nouveau",
-      "tri": {
-        "etage": "listes",
-        "motif": "exclusion metier : espaces verts",
-        "terme": "espaces verts",
-        "verdict": "REJETE"
-      },
-      "url": "https://marches.maximilien.fr/entreprise/consultation/944721?orgAcronyme=a6p",
-      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/944721?orgAcronyme=a6p",
-      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/944721?orgAcronyme=a6p",
-      "url_profil_acheteur": "",
-      "ville": "Bagneux",
-      "vu_le": "2026-08-05T10:58:01.413027+00:00"
     },
     "MX-944724": {
       "acheteur": "Office public communautaire de Plaine Commune",
@@ -4518,6 +4467,35 @@
       "ville": "Chevilly-Larue",
       "vu_le": "2026-09-08T14:40:24.213605+00:00"
     },
+    "MX-946585": {
+      "acheteur": "Mairie de Villejuif",
+      "correction_humaine": null,
+      "date_limite": "2026-10-09",
+      "date_publication": "2026-09-11",
+      "departement": "94",
+      "lu": false,
+      "notifie_le": null,
+      "objet": "LOCATION ET MAINTENANCE D’UNE MACHINE DE MISE SOUS PLI MULTI-POCHES, D’UNE MACHINE À AFFRANCHIR, D’UNE MACHINE D’ADRESSAGE ET",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "MAPA",
+      "score": 45.0,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "exclusion metier : adressage",
+        "terme": "adressage",
+        "verdict": "REJETE"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/946585?orgAcronyme=l6e",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/946585?orgAcronyme=l6e",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/946585?orgAcronyme=l6e",
+      "url_profil_acheteur": "",
+      "ville": "Villejuif",
+      "vu_le": "2026-09-11T10:12:08.291995+00:00"
+    },
     "MX-946618": {
       "acheteur": "Commune de Fontenay-Trésigny",
       "correction_humaine": null,
@@ -4550,7 +4528,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-10T20:20:12.040344+00:00",
+  "maj_le": "2026-09-11T10:12:08.292226+00:00",
   "reglages": {
     "collecte": true
   },
