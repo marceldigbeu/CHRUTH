@@ -41,7 +41,6 @@
 Ces fichiers sont conserves pour maintenance, tests ou developpement :
 
 - `tests/`
-- `docs/superpowers/`
 - scripts de creation de templates Excel
 - modules internes appeles par la pipeline
 
