@@ -4467,6 +4467,35 @@
       "ville": "Chevilly-Larue",
       "vu_le": "2026-09-08T14:40:24.213605+00:00"
     },
+    "MX-946557": {
+      "acheteur": "SYCTOM",
+      "correction_humaine": null,
+      "date_limite": "2026-10-12",
+      "date_publication": "2026-09-14",
+      "departement": "75",
+      "lu": false,
+      "notifie_le": "2026-09-14T11:13:09.395454+00:00",
+      "objet": "Transport des ordures ménagères résiduelles (OMR) du Syctom",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 20.0,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "mot-cle coeur dans l'intitule : menage",
+        "terme": "menage",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/946557?orgAcronyme=d8e",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/946557?orgAcronyme=d8e",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/946557?orgAcronyme=d8e",
+      "url_profil_acheteur": "",
+      "ville": "Paris",
+      "vu_le": "2026-09-14T11:13:07.271160+00:00"
+    },
     "MX-946585": {
       "acheteur": "Mairie de Villejuif",
       "correction_humaine": null,
@@ -4644,7 +4673,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-11T20:35:37.668286+00:00",
+  "maj_le": "2026-09-14T11:13:09.395720+00:00",
   "reglages": {
     "collecte": true
   },
