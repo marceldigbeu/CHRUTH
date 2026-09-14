@@ -698,6 +698,35 @@
       "ville": "Meudon",
       "vu_le": "2026-07-23T15:02:18.457987+00:00"
     },
+    "MX-941269": {
+      "acheteur": "Ville de Paris",
+      "correction_humaine": null,
+      "date_limite": "2026-10-20",
+      "date_publication": "2026-09-14",
+      "departement": "75",
+      "lu": false,
+      "notifie_le": "2026-09-14T17:00:10.010720+00:00",
+      "objet": "Transport collectif et individuel d'enfants en situation de handicap en véhicules propres dans le cadre des activités scolaires,",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 30.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/941269?orgAcronyme=r8t",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/941269?orgAcronyme=r8t",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/941269?orgAcronyme=r8t",
+      "url_profil_acheteur": "",
+      "ville": "Paris",
+      "vu_le": "2026-09-14T17:00:05.409251+00:00"
+    },
     "MX-941302": {
       "acheteur": "Commune de Mériel",
       "correction_humaine": null,
@@ -2323,6 +2352,35 @@
       "url": "https://marches.maximilien.fr/entreprise/consultation/943775?orgAcronyme=d5w",
       "ville": "Antony",
       "vu_le": "2026-07-23T15:02:18.414437+00:00"
+    },
+    "MX-943828": {
+      "acheteur": "Ville de Vincennes",
+      "correction_humaine": null,
+      "date_limite": "2026-10-13",
+      "date_publication": "2026-09-14",
+      "departement": "94",
+      "lu": false,
+      "notifie_le": "2026-09-14T17:00:06.952121+00:00",
+      "objet": "Blanchisserie, nettoyage et livraison d'articles textiles et voilages pour les services municipaux",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "AOO",
+      "score": 63.8,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "mot-cle coeur dans l'intitule : nettoyage",
+        "terme": "nettoyage",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/943828?orgAcronyme=d8c",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/943828?orgAcronyme=d8c",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/943828?orgAcronyme=d8c",
+      "url_profil_acheteur": "",
+      "ville": "Vincennes",
+      "vu_le": "2026-09-14T17:00:05.405131+00:00"
     },
     "MX-943968": {
       "acheteur": "Ville de Boulogne-Billancourt",
@@ -4669,11 +4727,40 @@
       "url_profil_acheteur": "",
       "ville": "Paris",
       "vu_le": "2026-09-11T14:31:47.356645+00:00"
+    },
+    "MX-946752": {
+      "acheteur": "Etablissement public territorial Grand Paris Seine Ouest",
+      "correction_humaine": null,
+      "date_limite": "2026-11-04",
+      "date_publication": "2026-09-14",
+      "departement": "92",
+      "lu": false,
+      "notifie_le": null,
+      "objet": "Concession de service public pour la gestion de l'assainissement sur le territoire de GPSO",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "MAPA",
+      "score": 35.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "exclusion metier : assainissement",
+        "terme": "assainissement",
+        "verdict": "REJETE"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/946752?orgAcronyme=f8j",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/946752?orgAcronyme=f8j",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/946752?orgAcronyme=f8j",
+      "url_profil_acheteur": "",
+      "ville": "Meudon",
+      "vu_le": "2026-09-14T17:00:05.409643+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-14T11:13:09.395720+00:00",
+  "maj_le": "2026-09-14T17:00:10.010953+00:00",
   "reglages": {
     "collecte": true
   },
