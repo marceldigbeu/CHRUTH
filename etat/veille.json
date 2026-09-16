@@ -4467,6 +4467,35 @@
       "ville": "PARIS",
       "vu_le": "2026-09-07T11:00:44.712532+00:00"
     },
+    "MX-946330": {
+      "acheteur": "CD94 - Conseil départemental du Val-de-Marne",
+      "correction_humaine": null,
+      "date_limite": "2026-10-21",
+      "date_publication": "2026-09-16",
+      "departement": "94",
+      "lu": false,
+      "notifie_le": "2026-09-16T10:28:46.704686+00:00",
+      "objet": "Médecine de prévention pour les agents du Département du Val-de-Marne",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "MAPA",
+      "score": 35.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/946330?orgAcronyme=a8z",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/946330?orgAcronyme=a8z",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/946330?orgAcronyme=a8z",
+      "url_profil_acheteur": "",
+      "ville": "Créteil",
+      "vu_le": "2026-09-16T10:28:44.764768+00:00"
+    },
     "MX-946414": {
       "acheteur": "Commune de Bouafle",
       "correction_humaine": null,
@@ -4760,7 +4789,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-15T22:23:01.521423+00:00",
+  "maj_le": "2026-09-16T10:28:46.704905+00:00",
   "reglages": {
     "collecte": true
   },
