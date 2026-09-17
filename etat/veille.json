@@ -4843,11 +4843,40 @@
       "url_profil_acheteur": "",
       "ville": "Paris",
       "vu_le": "2026-09-17T10:38:10.270656+00:00"
+    },
+    "MX-947031": {
+      "acheteur": "Ville de Puteaux",
+      "correction_humaine": null,
+      "date_limite": "2026-10-23",
+      "date_publication": "2026-09-17",
+      "departement": "92",
+      "lu": false,
+      "notifie_le": "2026-09-17T19:08:19.239932+00:00",
+      "objet": "Prestations de blanchissage du linge de vêtements professionnels, de produits textiles pour les services municipaux et du linge de",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 30.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/947031?orgAcronyme=a5f",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/947031?orgAcronyme=a5f",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/947031?orgAcronyme=a5f",
+      "url_profil_acheteur": "",
+      "ville": "PUTEAUX",
+      "vu_le": "2026-09-17T19:08:17.985860+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-17T15:22:18.321009+00:00",
+  "maj_le": "2026-09-17T19:08:19.240175+00:00",
   "reglages": {
     "collecte": true
   },
