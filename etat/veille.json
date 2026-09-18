@@ -2221,28 +2221,6 @@
       "ville": "Saint-Ouen-sur-Seine",
       "vu_le": "2026-07-23T15:02:18.404131+00:00"
     },
-    "MX-943601": {
-      "acheteur": "Etablissement Public Territorial Grand-Orly Seine Bièvre",
-      "correction_humaine": null,
-      "date_limite": "2026-09-17",
-      "date_publication": "2026-07-17",
-      "departement": "94",
-      "lu": false,
-      "notifie_le": null,
-      "objet": "Assistance à Maitrise d’Ouvrage de la direction Générale Adjointe de l’Espace Public pour l’eau et l’assainissement",
-      "priorite": "FROID",
-      "procedure": "AOO",
-      "score": 20,
-      "traitement": "nouveau",
-      "tri": {
-        "etage": "listes",
-        "motif": "exclusion metier : assainissement",
-        "verdict": "REJETE"
-      },
-      "url": "https://marches.maximilien.fr/entreprise/consultation/943601?orgAcronyme=l8b",
-      "ville": "ORLY AÉROGARE CEDEX",
-      "vu_le": "2026-07-23T15:02:18.399807+00:00"
-    },
     "MX-943693": {
       "acheteur": "SEMMARIS",
       "correction_humaine": null,
@@ -4786,6 +4764,35 @@
       "ville": "Meudon",
       "vu_le": "2026-09-14T17:00:05.409643+00:00"
     },
+    "MX-946798": {
+      "acheteur": "Mery-sur-Oise",
+      "correction_humaine": null,
+      "date_limite": "2026-10-20",
+      "date_publication": "2026-09-18",
+      "departement": "95",
+      "lu": false,
+      "notifie_le": "2026-09-18T10:14:15.850577+00:00",
+      "objet": "Prestations d'entretien et de nettoyage des locaux",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "AOO",
+      "score": 54.0,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "mot-cle coeur dans l'intitule : nettoyage",
+        "terme": "nettoyage",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/946798?orgAcronyme=e9j",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/946798?orgAcronyme=e9j",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/946798?orgAcronyme=e9j",
+      "url_profil_acheteur": "",
+      "ville": "Mery-sur-Oise",
+      "vu_le": "2026-09-18T10:14:14.371324+00:00"
+    },
     "MX-946948": {
       "acheteur": "Ville de Saint-Ouen",
       "correction_humaine": null,
@@ -4876,7 +4883,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-17T22:18:17.501247+00:00",
+  "maj_le": "2026-09-18T10:14:15.850845+00:00",
   "reglages": {
     "collecte": true
   },
