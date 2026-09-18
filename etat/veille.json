@@ -4764,6 +4764,35 @@
       "ville": "Meudon",
       "vu_le": "2026-09-14T17:00:05.409643+00:00"
     },
+    "MX-946758": {
+      "acheteur": "Nanterre Coop Habitat",
+      "correction_humaine": null,
+      "date_limite": "2026-10-20",
+      "date_publication": "2026-09-18",
+      "departement": "92",
+      "lu": false,
+      "notifie_le": "2026-09-18T14:34:56.461244+00:00",
+      "objet": "Prestation de services d'assurance",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 20.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/946758?orgAcronyme=a3v",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/946758?orgAcronyme=a3v",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/946758?orgAcronyme=a3v",
+      "url_profil_acheteur": "",
+      "ville": "NANTERRE",
+      "vu_le": "2026-09-18T14:34:53.241468+00:00"
+    },
     "MX-946798": {
       "acheteur": "Mery-sur-Oise",
       "correction_humaine": null,
@@ -4792,6 +4821,35 @@
       "url_profil_acheteur": "",
       "ville": "Mery-sur-Oise",
       "vu_le": "2026-09-18T10:14:14.371324+00:00"
+    },
+    "MX-946905": {
+      "acheteur": "Ville d'Aubervilliers",
+      "correction_humaine": null,
+      "date_limite": "2026-10-30",
+      "date_publication": "2026-09-18",
+      "departement": "93",
+      "lu": false,
+      "notifie_le": "2026-09-18T14:34:54.982009+00:00",
+      "objet": "PRESTATIONS DE SERVICES D'ASSURANCE CONSTRUCTION POUR LA COMMUNE D’AUBERVILLIERS",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 20.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/946905?orgAcronyme=j4k",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/946905?orgAcronyme=j4k",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/946905?orgAcronyme=j4k",
+      "url_profil_acheteur": "",
+      "ville": "Aubervilliers",
+      "vu_le": "2026-09-18T14:34:53.240178+00:00"
     },
     "MX-946948": {
       "acheteur": "Ville de Saint-Ouen",
@@ -4883,7 +4941,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-18T10:14:15.850845+00:00",
+  "maj_le": "2026-09-18T14:34:56.461471+00:00",
   "reglages": {
     "collecte": true
   },
