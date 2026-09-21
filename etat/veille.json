@@ -3357,6 +3357,35 @@
       "ville": "Saint Cloud",
       "vu_le": "2026-08-21T14:05:39.734178+00:00"
     },
+    "MX-945183": {
+      "acheteur": "Ville de Neuilly-sur-Seine",
+      "correction_humaine": null,
+      "date_limite": "2026-10-19",
+      "date_publication": "2026-09-21",
+      "departement": "92",
+      "lu": false,
+      "notifie_le": "2026-09-21T17:08:31.404442+00:00",
+      "objet": "Prestations de service d'entretien et de maintenance préventive et curative des bornes de gonflage de la Ville de Neuilly-sur-Seine",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "MAPA",
+      "score": 45.0,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/945183?orgAcronyme=b4a",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/945183?orgAcronyme=b4a",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/945183?orgAcronyme=b4a",
+      "url_profil_acheteur": "",
+      "ville": "Neuilly-sur-Seine",
+      "vu_le": "2026-09-21T17:08:29.291345+00:00"
+    },
     "MX-945213": {
       "acheteur": "Nanterre Coop Habitat",
       "correction_humaine": null,
@@ -4897,7 +4926,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-21T11:24:30.780631+00:00",
+  "maj_le": "2026-09-21T17:08:31.404675+00:00",
   "reglages": {
     "collecte": true
   },
