@@ -4988,6 +4988,35 @@
       "ville": "Villetaneuse",
       "vu_le": "2026-09-21T11:24:28.010585+00:00"
     },
+    "MX-947131": {
+      "acheteur": "RESAH",
+      "correction_humaine": null,
+      "date_limite": "2026-10-30",
+      "date_publication": "2026-09-22",
+      "departement": "75",
+      "lu": false,
+      "notifie_le": "2026-09-22T15:15:41.620240+00:00",
+      "objet": "FOURNITURE DE PLATEFORME DE TELERADIOLOGIE ET PRESTATIONS MEDICALES D'INTERPRETATIONS D'IMAGES",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 20.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/947131?orgAcronyme=a0z",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/947131?orgAcronyme=a0z",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/947131?orgAcronyme=a0z",
+      "url_profil_acheteur": "",
+      "ville": "Paris",
+      "vu_le": "2026-09-22T15:15:39.084096+00:00"
+    },
     "MX-947160": {
       "acheteur": "Commune de Vitry-sur-Seine",
       "correction_humaine": null,
@@ -5020,7 +5049,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-22T10:33:45.471516+00:00",
+  "maj_le": "2026-09-22T15:15:41.620512+00:00",
   "reglages": {
     "collecte": true
   },
