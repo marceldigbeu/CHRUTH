@@ -478,6 +478,35 @@
       "ville": "Paris",
       "vu_le": "2026-07-23T15:02:18.453561+00:00"
     },
+    "MX-940135": {
+      "acheteur": "Ville de Fresnes",
+      "correction_humaine": null,
+      "date_limite": "2026-10-26",
+      "date_publication": "2026-09-22",
+      "departement": "94",
+      "lu": false,
+      "notifie_le": "2026-09-22T10:33:45.471244+00:00",
+      "objet": "PRESTATIONS DE NETTOYAGE ET D’ENTRETIEN DES TOITURES DES BATIMENTS COMMUNAUX",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "AOO",
+      "score": 64.0,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "mot-cle coeur dans l'intitule : nettoyage",
+        "terme": "nettoyage",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/940135?orgAcronyme=d5f",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/940135?orgAcronyme=d5f",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/940135?orgAcronyme=d5f",
+      "url_profil_acheteur": "",
+      "ville": "FRESNES",
+      "vu_le": "2026-09-22T10:33:41.126663+00:00"
+    },
     "MX-940147": {
       "acheteur": "CD94 - Conseil départemental du Val-de-Marne",
       "correction_humaine": null,
@@ -2220,28 +2249,6 @@
       "url": "https://marches.maximilien.fr/entreprise/consultation/943717?orgAcronyme=a1u",
       "ville": "CHAUX",
       "vu_le": "2026-07-24T10:32:20.711577+00:00"
-    },
-    "MX-943721": {
-      "acheteur": "Ville de Clichy",
-      "correction_humaine": null,
-      "date_limite": "2026-09-21",
-      "date_publication": "2026-07-22",
-      "departement": "92",
-      "lu": false,
-      "notifie_le": null,
-      "objet": "MEDECINE PROFESSIONNELLE ET PREVENTIVE",
-      "priorite": "TIEDE",
-      "procedure": "MAPA",
-      "score": 45,
-      "traitement": "nouveau",
-      "tri": {
-        "etage": "listes",
-        "motif": "exclusion metier : medecine professionnelle",
-        "verdict": "REJETE"
-      },
-      "url": "https://marches.maximilien.fr/entreprise/consultation/943721?orgAcronyme=d7m",
-      "ville": "Clichy",
-      "vu_le": "2026-07-23T15:02:18.456317+00:00"
     },
     "MX-943757": {
       "acheteur": "Centre Hospitalier Intercommunal de Poissy saint Germain",
@@ -4459,6 +4466,35 @@
       "ville": "BOUAFLE",
       "vu_le": "2026-09-07T16:19:35.430813+00:00"
     },
+    "MX-946500": {
+      "acheteur": "Commune de Coignières",
+      "correction_humaine": null,
+      "date_limite": "2026-10-29",
+      "date_publication": "2026-09-22",
+      "departement": "78",
+      "lu": false,
+      "notifie_le": "2026-09-22T10:33:44.404291+00:00",
+      "objet": "Entretien ménager et nettoyage des surfaces vitrées des bâtiments communaux",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "AOO",
+      "score": 64.0,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "mot-cle coeur dans l'intitule : nettoyage",
+        "terme": "nettoyage",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/946500?orgAcronyme=l2e",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/946500?orgAcronyme=l2e",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/946500?orgAcronyme=l2e",
+      "url_profil_acheteur": "",
+      "ville": "Coignières",
+      "vu_le": "2026-09-22T10:33:41.126365+00:00"
+    },
     "MX-946515": {
       "acheteur": "SEMMARIS",
       "correction_humaine": null,
@@ -4749,6 +4785,35 @@
       "ville": "NANTERRE",
       "vu_le": "2026-09-18T14:34:53.241468+00:00"
     },
+    "MX-946794": {
+      "acheteur": "Ville de Clichy",
+      "correction_humaine": null,
+      "date_limite": "2026-11-02",
+      "date_publication": "2026-09-22",
+      "departement": "92",
+      "lu": false,
+      "notifie_le": "2026-09-22T10:33:43.196241+00:00",
+      "objet": "NETTOYAGE DES SOLS DE SECURITE",
+      "plateforme_publication": "",
+      "priorite": "TIEDE",
+      "procedure": "AOO",
+      "score": 59.0,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "mot-cle coeur dans l'intitule : nettoyage",
+        "terme": "nettoyage",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/946794?orgAcronyme=d7m",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/946794?orgAcronyme=d7m",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/946794?orgAcronyme=d7m",
+      "url_profil_acheteur": "",
+      "ville": "Clichy",
+      "vu_le": "2026-09-22T10:33:41.126042+00:00"
+    },
     "MX-946798": {
       "acheteur": "Mery-sur-Oise",
       "correction_humaine": null,
@@ -4922,11 +4987,40 @@
       "url_profil_acheteur": "",
       "ville": "Villetaneuse",
       "vu_le": "2026-09-21T11:24:28.010585+00:00"
+    },
+    "MX-947160": {
+      "acheteur": "Commune de Vitry-sur-Seine",
+      "correction_humaine": null,
+      "date_limite": "2026-10-23",
+      "date_publication": "2026-09-22",
+      "departement": "94",
+      "lu": false,
+      "notifie_le": null,
+      "objet": "Contrôle et suivi de la délégation de service public de chauffage urbain de Choisy-Vitry",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 30.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "exclusion metier : chauffage",
+        "terme": "chauffage",
+        "verdict": "REJETE"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/947160?orgAcronyme=c1f",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/947160?orgAcronyme=c1f",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/947160?orgAcronyme=c1f",
+      "url_profil_acheteur": "",
+      "ville": "Vitry-sur-Seine",
+      "vu_le": "2026-09-22T10:33:41.126874+00:00"
     }
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-21T21:09:53.157080+00:00",
+  "maj_le": "2026-09-22T10:33:45.471516+00:00",
   "reglages": {
     "collecte": true
   },
