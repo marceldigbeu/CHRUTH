@@ -4843,6 +4843,35 @@
       "ville": "Mery-sur-Oise",
       "vu_le": "2026-09-18T10:14:14.371324+00:00"
     },
+    "MX-946816": {
+      "acheteur": "Commune de Lognes",
+      "correction_humaine": null,
+      "date_limite": "2026-10-30",
+      "date_publication": "2026-09-22",
+      "departement": "77",
+      "lu": false,
+      "notifie_le": "2026-09-22T19:01:04.697574+00:00",
+      "objet": "Services de traiteurs pour diverses manifestations municipales",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 30.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/946816?orgAcronyme=e9v",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/946816?orgAcronyme=e9v",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/946816?orgAcronyme=e9v",
+      "url_profil_acheteur": "",
+      "ville": "Lognes",
+      "vu_le": "2026-09-22T19:01:00.774921+00:00"
+    },
     "MX-946905": {
       "acheteur": "Ville d'Aubervilliers",
       "correction_humaine": null,
@@ -5049,7 +5078,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-22T15:15:41.620512+00:00",
+  "maj_le": "2026-09-22T19:01:04.697802+00:00",
   "reglages": {
     "collecte": true
   },
