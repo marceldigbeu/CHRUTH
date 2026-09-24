@@ -4553,6 +4553,35 @@
       "ville": "Paris",
       "vu_le": "2026-09-14T11:13:07.271160+00:00"
     },
+    "MX-946558": {
+      "acheteur": "SYCTOM",
+      "correction_humaine": null,
+      "date_limite": "2026-10-29",
+      "date_publication": "2026-09-24",
+      "departement": "75",
+      "lu": false,
+      "notifie_le": "2026-09-24T10:43:54.398118+00:00",
+      "objet": "TRANSPORT DES OMR DEPUIS LE CENTRE DE TRANSFERT DE ROMAINVILLE VERS LES INSTALLATIONS DE TRAITEMENT DESIGNEES PAR LE SYCTOM",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 20.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/946558?orgAcronyme=d8e",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/946558?orgAcronyme=d8e",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/946558?orgAcronyme=d8e",
+      "url_profil_acheteur": "",
+      "ville": "Paris",
+      "vu_le": "2026-09-24T10:43:53.574322+00:00"
+    },
     "MX-946585": {
       "acheteur": "Mairie de Villejuif",
       "correction_humaine": null,
@@ -5078,7 +5107,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-23T22:24:16.001242+00:00",
+  "maj_le": "2026-09-24T10:43:54.398367+00:00",
   "reglages": {
     "collecte": true
   },
