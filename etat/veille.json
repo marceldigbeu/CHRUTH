@@ -1275,6 +1275,35 @@
       "ville": "Villenoy",
       "vu_le": "2026-07-23T07:18:51.265561+00:00"
     },
+    "MX-942295": {
+      "acheteur": "Ville de Paris",
+      "correction_humaine": null,
+      "date_limite": "2026-11-03",
+      "date_publication": "2026-09-24",
+      "departement": "75",
+      "lu": false,
+      "notifie_le": "2026-09-24T15:35:55.350263+00:00",
+      "objet": "Prestations de mise à disposition d’un outil de réservation, achat et émission de titres de transports ferroviaires pour les besoins",
+      "plateforme_publication": "",
+      "priorite": "FROID",
+      "procedure": "AOO",
+      "score": 30.5,
+      "source": "MAXIMILIEN",
+      "source_decouverte": "",
+      "traitement": "nouveau",
+      "tri": {
+        "etage": "listes",
+        "motif": "ambigu, tri IA indisponible",
+        "terme": "",
+        "verdict": "PERTINENT"
+      },
+      "url": "https://marches.maximilien.fr/entreprise/consultation/942295?orgAcronyme=r8t",
+      "url_avis": "https://marches.maximilien.fr/entreprise/consultation/942295?orgAcronyme=r8t",
+      "url_dce": "https://marches.maximilien.fr/entreprise/consultation/942295?orgAcronyme=r8t",
+      "url_profil_acheteur": "",
+      "ville": "Paris",
+      "vu_le": "2026-09-24T15:35:53.318798+00:00"
+    },
     "MX-942305": {
       "acheteur": "Ville de Boulogne-Billancourt",
       "correction_humaine": null,
@@ -5107,7 +5136,7 @@
   },
   "corrections_memoire": [],
   "guide_messages": "",
-  "maj_le": "2026-09-24T10:43:54.398367+00:00",
+  "maj_le": "2026-09-24T15:35:55.350488+00:00",
   "reglages": {
     "collecte": true
   },
